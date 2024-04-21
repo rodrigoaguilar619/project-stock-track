@@ -1,0 +1,43 @@
+package project.stock.track.app.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import project.stock.track.app.beans.entity.ConfigControlEntity;
+import project.stock.track.app.beans.entity.ConfigControlEntity_;
+
+@Repository
+public class ConfigControlRepositoryImpl {
+
+	EntityManager em;
+	
+	@Autowired
+	public ConfigControlRepositoryImpl(EntityManager em) {
+		this.em = em;
+	}
+	
+	public ConfigControlEntity getParameterValue(String reference) {
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<ConfigControlEntity> cq = cb.createQuery(ConfigControlEntity.class);
+		Root<ConfigControlEntity> root = cq.from(ConfigControlEntity.class);
+				
+		List<Predicate> predicatesAnd = new ArrayList<>();
+		predicatesAnd.add(cb.like(root.get(ConfigControlEntity_.reference), reference));
+		
+		cq.where( predicatesAnd.toArray(new Predicate[0]) );
+		
+		List<ConfigControlEntity> resultList = em.createQuery(cq).setMaxResults(1).getResultList();
+		return (resultList.isEmpty()) ? null : resultList.get(0);
+
+	}
+}

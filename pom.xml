@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<groupId>com.parent.project.web</groupId>
+		<artifactId>lib-parent-project-web</artifactId>
+		<version>3.0.0</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>project.stock.track</groupId>
+	<artifactId>project-stock-track</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>${prop.packaging.type}</packaging>
+	<name>project-stock-track</name>
+	<description>Stock track project</description>
+
+	<properties>
+		<jar.name>${server.servlet.context-path}</jar.name>
+		<project.build.main.class>project.finantial.track.config.starter.AppFinantialTrack</project.build.main.class>
+		<prop.main.class>project.finantial.track.config.starter.AppFinantialTrack</prop.main.class>
+		<prop.main.class.heroku>project.finantial.track.config.starter.AppFinantialTrackDisablingServices</prop.main.class.heroku>
+		<prop.main.class.heliohost>project.finantial.track.config.starter.AppFinantialTrackDisablingServices</prop.main.class.heliohost>
+		<test.skip>true</test.skip>
+	</properties>
+
+	<dependencies>
+	
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-csv</artifactId>
+		    <version>1.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.smattme</groupId>
+		    <artifactId>mysql-backup4j</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.hamcrest</groupId>
+		  <artifactId>hamcrest-library</artifactId>
+		  <scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+	</build>
+
+</project>

@@ -1,0 +1,73 @@
+package project.stock.track.modules.controller.issues;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import lib.base.backend.enumerators.CrudOptionsEnum;
+import lib.base.backend.exception.data.BusinessException;
+import lib.base.backend.utils.RestUtil;
+import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
+import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
+import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;
+import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequestPojo;
+import project.stock.track.app.beans.pojos.petition.request.GetIssuesMovementsListRequestPojo;
+import project.stock.track.app.vo.catalogs.CatalogsUri;
+import project.stock.track.modules.business.issues.IssuesMovementsBusiness;
+import project.stock.track.modules.business.issues.IssuesMovementsCrudBusiness;
+
+@RestController
+public class IssuesMovementsController {
+
+	IssuesMovementsBusiness issuesMovementsBusiness;
+	
+	IssuesMovementsCrudBusiness issuesMovementsCrudBusiness;
+	
+	@Autowired
+	public IssuesMovementsController(IssuesMovementsBusiness issuesMovementsBusiness, IssuesMovementsCrudBusiness issuesMovementsCrudBusiness) {
+		this.issuesMovementsBusiness = issuesMovementsBusiness;
+		this.issuesMovementsCrudBusiness = issuesMovementsCrudBusiness;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_LIST_GET, consumes = "application/json", produces = "application/json")
+	public ResponseEntity getIssuesMovementsList(@RequestBody GetIssuesMovementsListRequestPojo requestPojo) {
+		
+		GetIssuesMovementsListDataPojo dataPojo = issuesMovementsBusiness.executeGetIssuesMovements(requestPojo);
+		return new RestUtil().buildResponseSuccess(dataPojo, "Issues movements list getted");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_GET, consumes = "application/json", produces = "application/json")
+	public ResponseEntity getIssueMovement(@RequestBody GetIssueMovementRequestPojo requestPojo) {
+		
+		GetIssueMovementDataPojo dataPojo = issuesMovementsCrudBusiness.executeGetIssueMovement(requestPojo);
+		return new RestUtil().buildResponseSuccess(dataPojo, "Issue movement data getted");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_SAVE, consumes = "application/json", produces = "application/json")
+	public ResponseEntity saveIssueMovement(@RequestBody AddEditIssueMovementRequestPojo requestPojo) throws BusinessException {
+		
+		issuesMovementsCrudBusiness.executeManageAddEditIssueMovement(requestPojo, CrudOptionsEnum.SAVE);
+		return new RestUtil().buildResponseSuccess("", "Issue movement data saved");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_UPDATE, consumes = "application/json", produces = "application/json")
+	public ResponseEntity updateIssueMovement(@RequestBody AddEditIssueMovementRequestPojo requestPojo) throws BusinessException {
+		
+		issuesMovementsCrudBusiness.executeManageAddEditIssueMovement(requestPojo, CrudOptionsEnum.UPDATE);
+		return new RestUtil().buildResponseSuccess("", "Issue movement data updated");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_INACTIVATE, consumes = "application/json", produces = "application/json")
+	public ResponseEntity inactivateIssueMovement(@RequestBody GetIssueMovementRequestPojo requestPojo) {
+		
+		issuesMovementsCrudBusiness.executeInactivateIssueMovement(requestPojo);
+		return new RestUtil().buildResponseSuccess("", "Inactivate issue movement processed");
+	}
+}
