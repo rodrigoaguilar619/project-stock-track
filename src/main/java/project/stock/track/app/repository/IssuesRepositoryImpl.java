@@ -3,6 +3,8 @@ package project.stock.track.app.repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
@@ -134,7 +136,7 @@ public class IssuesRepositoryImpl {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<CatalogIssuesEntity> findAllWithStatusActive() {
+	public List<CatalogIssuesEntity> findAllWithStatusActive(boolean isGetWithHistoricalNull) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
@@ -150,8 +152,11 @@ public class IssuesRepositoryImpl {
 		cq.multiselect(root, joinIssuesManager);
 		
 		List<Predicate> predicatesOr = new ArrayList<>();
-		predicatesOr.add(cb.equal(joinIssuesManager.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate), sub));
-		predicatesOr.add(cb.isNull(sub));
+		
+		if(isGetWithHistoricalNull)
+			predicatesOr.add(cb.isNull(sub));
+		else
+			predicatesOr.add(cb.equal(joinIssuesManager.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate), sub));
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		predicatesAnd.add(cb.and(cb.equal(root.get(CatalogIssuesEntity_.idStatusIssue), CatalogsEntity.CatalogStatusIssue.ACTIVE), cb.or(predicatesOr.toArray(new Predicate[0]))));
@@ -172,6 +177,10 @@ public class IssuesRepositoryImpl {
 		}
 		
 		return catalogIssuesEntities;
+	}
+	
+	public List<CatalogIssuesEntity> findAllWithStatusActive() {
+		 return Stream.concat(findAllWithStatusActive(true).stream(), findAllWithStatusActive(false).stream()).collect(Collectors.toList());
 	}
 
 }

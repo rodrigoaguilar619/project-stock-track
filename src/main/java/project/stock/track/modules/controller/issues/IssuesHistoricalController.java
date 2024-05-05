@@ -48,7 +48,7 @@ public class IssuesHistoricalController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@GetMapping(CatalogsUri.API_ISSUES_HISTORICAL_LIST_UPDATE)
+	@PostMapping(CatalogsUri.API_ISSUES_HISTORICAL_LIST_UPDATE)
 	public ResponseEntity updateIssueHistorical() throws BusinessException {
 		
 		UpdateIssuesHistoricalDataPojo dataPojo = updateIssuesManagerHistoricalBusiness.executeUpdateIssuesHistoricals();

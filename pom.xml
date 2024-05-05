@@ -20,10 +20,8 @@
 
 	<properties>
 		<jar.name>${server.servlet.context-path}</jar.name>
-		<project.build.main.class>project.finantial.track.config.starter.AppFinantialTrack</project.build.main.class>
-		<prop.main.class>project.finantial.track.config.starter.AppFinantialTrack</prop.main.class>
-		<prop.main.class.heroku>project.finantial.track.config.starter.AppFinantialTrackDisablingServices</prop.main.class.heroku>
-		<prop.main.class.heliohost>project.finantial.track.config.starter.AppFinantialTrackDisablingServices</prop.main.class.heliohost>
+		<project.build.main.class>project.stock.track.config.starter.AppStockTrack</project.build.main.class>
+		<prop.main.class>project.stock.track.config.starter.AppStockTrack</prop.main.class>
 		<test.skip>true</test.skip>
 	</properties>
 
