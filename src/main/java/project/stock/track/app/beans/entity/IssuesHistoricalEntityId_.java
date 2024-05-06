@@ -10,8 +10,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesHistoricalEntityId.class)
 public abstract class IssuesHistoricalEntityId_ {
 
-	public static volatile SingularAttribute<IssuesHistoricalEntityId, Integer> idIssue;
-	public static volatile SingularAttribute<IssuesHistoricalEntityId, Date> idDate;
+	public static SingularAttribute<IssuesHistoricalEntityId, Integer> idIssue;
+	public static SingularAttribute<IssuesHistoricalEntityId, Date> idDate;
 
 	public static final String ID_ISSUE = "idIssue";
 	public static final String ID_DATE = "idDate";

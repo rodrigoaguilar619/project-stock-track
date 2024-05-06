@@ -11,19 +11,19 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(CatalogIssuesEntity.class)
 public abstract class CatalogIssuesEntity_ {
 
-	public static volatile SingularAttribute<CatalogIssuesEntity, Integer> id;
-	public static volatile SingularAttribute<CatalogIssuesEntity, String> description;
-	public static volatile SingularAttribute<CatalogIssuesEntity, String> initials;
-	public static volatile SingularAttribute<CatalogIssuesEntity, Date> historicalStartDate;
-	public static volatile SingularAttribute<CatalogIssuesEntity, Boolean> isSp500;
-	public static volatile SingularAttribute<CatalogIssuesEntity, Integer> idSector;
-	public static volatile SingularAttribute<CatalogIssuesEntity, Integer> idStatusIssue;
-	public static volatile SingularAttribute<CatalogIssuesEntity, Integer> idTypeStock;
-	public static volatile SingularAttribute<CatalogIssuesEntity, CatalogSectorEntity> catalogSectorEntity;
-	public static volatile SingularAttribute<CatalogIssuesEntity, CatalogStatusIssueEntity> catalogStatusIssueEntity;
-	public static volatile SingularAttribute<CatalogIssuesEntity, CatalogTypeStockEntity> catalogTypeStockEntity;
-	public static volatile SingularAttribute<CatalogIssuesEntity, IssuesLastPriceTmpEntity> tempIssuesLastPriceEntity;
-	public static volatile ListAttribute<CatalogIssuesEntity, IssuesHistoricalEntity> issuesHistoricalEntities;
+	public static SingularAttribute<CatalogIssuesEntity, Integer> id;
+	public static SingularAttribute<CatalogIssuesEntity, String> description;
+	public static SingularAttribute<CatalogIssuesEntity, String> initials;
+	public static SingularAttribute<CatalogIssuesEntity, Date> historicalStartDate;
+	public static SingularAttribute<CatalogIssuesEntity, Boolean> isSp500;
+	public static SingularAttribute<CatalogIssuesEntity, Integer> idSector;
+	public static SingularAttribute<CatalogIssuesEntity, Integer> idStatusIssue;
+	public static SingularAttribute<CatalogIssuesEntity, Integer> idTypeStock;
+	public static SingularAttribute<CatalogIssuesEntity, CatalogSectorEntity> catalogSectorEntity;
+	public static SingularAttribute<CatalogIssuesEntity, CatalogStatusIssueEntity> catalogStatusIssueEntity;
+	public static SingularAttribute<CatalogIssuesEntity, CatalogTypeStockEntity> catalogTypeStockEntity;
+	public static SingularAttribute<CatalogIssuesEntity, IssuesLastPriceTmpEntity> tempIssuesLastPriceEntity;
+	public static ListAttribute<CatalogIssuesEntity, IssuesHistoricalEntity> issuesHistoricalEntities;
 
 	public static final String ID = "id";
 	public static final String DESCRIPTION = "description";

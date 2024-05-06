@@ -11,25 +11,25 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(TransactionIssueEntity.class)
 public abstract class TransactionIssueEntity_ {
 
-	public static volatile SingularAttribute<TransactionIssueEntity, Integer> id;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> sellGainLossTotal;
-	public static volatile SingularAttribute<TransactionIssueEntity, CatalogBrokerEntity> catalogBrokerEntity;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> priceBuy;
-	public static volatile SingularAttribute<TransactionIssueEntity, Date> idDate;
-	public static volatile SingularAttribute<TransactionIssueEntity, IssuesLastPriceTmpEntity> issuesLastPriceTmpEntity;
-	public static volatile SingularAttribute<TransactionIssueEntity, IssuesManagerEntity> issuesManagerEntity;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> commisionPercentage;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> priceSell;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> sellTaxesPercentage;
-	public static volatile SingularAttribute<TransactionIssueEntity, Integer> idIssue;
-	public static volatile SingularAttribute<TransactionIssueEntity, Integer> idUser;
-	public static volatile SingularAttribute<TransactionIssueEntity, Integer> idBroker;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> sellCommisionPercentage;
-	public static volatile SingularAttribute<TransactionIssueEntity, String> idTypeCurrency;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalBuy;
-	public static volatile SingularAttribute<TransactionIssueEntity, Date> sellDate;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalSell;
-	public static volatile SingularAttribute<TransactionIssueEntity, BigDecimal> sellGainLossPercentage;
+	public static SingularAttribute<TransactionIssueEntity, Integer> id;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> sellGainLossTotal;
+	public static SingularAttribute<TransactionIssueEntity, CatalogBrokerEntity> catalogBrokerEntity;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceBuy;
+	public static SingularAttribute<TransactionIssueEntity, Date> idDate;
+	public static SingularAttribute<TransactionIssueEntity, IssuesLastPriceTmpEntity> issuesLastPriceTmpEntity;
+	public static SingularAttribute<TransactionIssueEntity, IssuesManagerEntity> issuesManagerEntity;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> commisionPercentage;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceSell;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> sellTaxesPercentage;
+	public static SingularAttribute<TransactionIssueEntity, Integer> idIssue;
+	public static SingularAttribute<TransactionIssueEntity, Integer> idUser;
+	public static SingularAttribute<TransactionIssueEntity, Integer> idBroker;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> sellCommisionPercentage;
+	public static SingularAttribute<TransactionIssueEntity, String> idTypeCurrency;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalBuy;
+	public static SingularAttribute<TransactionIssueEntity, Date> sellDate;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalSell;
+	public static SingularAttribute<TransactionIssueEntity, BigDecimal> sellGainLossPercentage;
 
 	public static final String ID = "id";
 	public static final String SELL_GAIN_LOSS_TOTAL = "sellGainLossTotal";

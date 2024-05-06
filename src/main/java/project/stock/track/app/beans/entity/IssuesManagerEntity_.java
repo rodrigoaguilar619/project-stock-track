@@ -9,14 +9,14 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesManagerEntity.class)
 public abstract class IssuesManagerEntity_ {
 
-	public static volatile SingularAttribute<IssuesManagerEntity, IssuesManagerEntityPk> id;
-	public static volatile SingularAttribute<IssuesManagerEntity, String> idStatusIssueTrading;
-	public static volatile SingularAttribute<IssuesManagerEntity, CatalogStatusIssueEntity> catalogStatusIssueTradingEntity;
-	public static volatile SingularAttribute<IssuesManagerEntity, String> idStatusIssueQuick;
-	public static volatile SingularAttribute<IssuesManagerEntity, CatalogIssuesEntity> catalogIssueEntity;
-	public static volatile SingularAttribute<IssuesManagerEntity, CatalogStatusIssueEntity> catalogStatusIssueQuickEntity;
-	public static volatile SingularAttribute<IssuesManagerEntity, IssuesManagerTrackPropertiesEntity> issuesManagerTrackPropertiesEntity;
-	public static volatile ListAttribute<IssuesManagerEntity, TransactionIssueEntity> transactionIssueEntities;
+	public static SingularAttribute<IssuesManagerEntity, IssuesManagerEntityPk> id;
+	public static SingularAttribute<IssuesManagerEntity, String> idStatusIssueTrading;
+	public static SingularAttribute<IssuesManagerEntity, CatalogStatusIssueEntity> catalogStatusIssueTradingEntity;
+	public static SingularAttribute<IssuesManagerEntity, String> idStatusIssueQuick;
+	public static SingularAttribute<IssuesManagerEntity, CatalogIssuesEntity> catalogIssueEntity;
+	public static SingularAttribute<IssuesManagerEntity, CatalogStatusIssueEntity> catalogStatusIssueQuickEntity;
+	public static SingularAttribute<IssuesManagerEntity, IssuesManagerTrackPropertiesEntity> issuesManagerTrackPropertiesEntity;
+	public static ListAttribute<IssuesManagerEntity, TransactionIssueEntity> transactionIssueEntities;
 	
 	public static final String ID = "id";
 	public static final String TRANSACTION_ISSUE_ENTITIES = "transactionIssueEntities";

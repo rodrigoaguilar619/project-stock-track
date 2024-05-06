@@ -10,13 +10,13 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesHistoricalEntity.class)
 public abstract class IssuesHistoricalEntity_ {
 
-	public static volatile SingularAttribute<IssuesHistoricalEntity, BigDecimal> volume;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, IssuesHistoricalEntityId> issuesHistoricalEntityId;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, BigDecimal> high;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, BigDecimal> low;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, BigDecimal> close;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, BigDecimal> open;
-	public static volatile SingularAttribute<IssuesHistoricalEntity, CatalogIssuesEntity> catalogIssuesEntity;
+	public static SingularAttribute<IssuesHistoricalEntity, BigDecimal> volume;
+	public static SingularAttribute<IssuesHistoricalEntity, IssuesHistoricalEntityId> issuesHistoricalEntityId;
+	public static SingularAttribute<IssuesHistoricalEntity, BigDecimal> high;
+	public static SingularAttribute<IssuesHistoricalEntity, BigDecimal> low;
+	public static SingularAttribute<IssuesHistoricalEntity, BigDecimal> close;
+	public static SingularAttribute<IssuesHistoricalEntity, BigDecimal> open;
+	public static SingularAttribute<IssuesHistoricalEntity, CatalogIssuesEntity> catalogIssuesEntity;
 
 	public static final String VOLUME = "volume";
 	public static final String ISSUES_HISTORICAL_ENTITY_ID = "issuesHistoricalEntityId";

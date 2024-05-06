@@ -8,8 +8,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(CatalogTypeCurrencyEntity.class)
 public abstract class CatalogTypeCurrencyEntity_ {
 
-	public static volatile SingularAttribute<CatalogTypeCurrencyEntity, Integer> id;
-	public static volatile SingularAttribute<CatalogTypeCurrencyEntity, String> description;
+	public static SingularAttribute<CatalogTypeCurrencyEntity, Integer> id;
+	public static SingularAttribute<CatalogTypeCurrencyEntity, String> description;
 
 	public static final String ID = "id";
 	public static final String DESCRIPTION = "description";

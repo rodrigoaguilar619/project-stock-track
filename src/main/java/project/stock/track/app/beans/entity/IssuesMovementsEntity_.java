@@ -11,15 +11,15 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesMovementsEntity.class)
 public abstract class IssuesMovementsEntity_ {
 
-	public static volatile SingularAttribute<IssuesMovementsEntity, Integer> id;
-	public static volatile SingularAttribute<IssuesMovementsEntity, Integer> idIssue;
-	public static volatile SingularAttribute<IssuesMovementsEntity, Integer> idUser;
-	public static volatile SingularAttribute<IssuesMovementsEntity, String> idStatus;
-	public static volatile ListAttribute<IssuesMovementsEntity, IssuesMovementsBuyEntity> issuesMovementsBuys;
-	public static volatile SingularAttribute<IssuesMovementsEntity, CatalogStatusIssueMovementEntity> catalogStatusIssueMovementEntity;
-	public static volatile SingularAttribute<IssuesMovementsEntity, BigDecimal> priceMovement;
-	public static volatile SingularAttribute<IssuesMovementsEntity, CatalogBrokerEntity> catalogBroker;
-	public static volatile SingularAttribute<IssuesMovementsEntity, IssuesManagerEntity> issuesManagerEntity;
+	public static SingularAttribute<IssuesMovementsEntity, Integer> id;
+	public static SingularAttribute<IssuesMovementsEntity, Integer> idIssue;
+	public static SingularAttribute<IssuesMovementsEntity, Integer> idUser;
+	public static SingularAttribute<IssuesMovementsEntity, String> idStatus;
+	public static ListAttribute<IssuesMovementsEntity, IssuesMovementsBuyEntity> issuesMovementsBuys;
+	public static SingularAttribute<IssuesMovementsEntity, CatalogStatusIssueMovementEntity> catalogStatusIssueMovementEntity;
+	public static SingularAttribute<IssuesMovementsEntity, BigDecimal> priceMovement;
+	public static SingularAttribute<IssuesMovementsEntity, CatalogBrokerEntity> catalogBroker;
+	public static SingularAttribute<IssuesMovementsEntity, IssuesManagerEntity> issuesManagerEntity;
 
 	public static final String ID = "id";
 	public static final String ID_ISSUE = "id_issue";

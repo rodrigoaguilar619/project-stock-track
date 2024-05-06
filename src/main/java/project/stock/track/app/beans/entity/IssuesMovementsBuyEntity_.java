@@ -11,12 +11,12 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesMovementsBuyEntity.class)
 public abstract class IssuesMovementsBuyEntity_ {
 
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, IssuesMovementsBuyEntityPk> id;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> sellPrice;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, Date> sellDate;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> buyPrice;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, Date> buyDate;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntity, IssuesMovementsEntity> issuesMovementsEntity;
+	public static SingularAttribute<IssuesMovementsBuyEntity, IssuesMovementsBuyEntityPk> id;
+	public static SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> sellPrice;
+	public static SingularAttribute<IssuesMovementsBuyEntity, Date> sellDate;
+	public static SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> buyPrice;
+	public static SingularAttribute<IssuesMovementsBuyEntity, Date> buyDate;
+	public static SingularAttribute<IssuesMovementsBuyEntity, IssuesMovementsEntity> issuesMovementsEntity;
 
 	public static final String ID = "id";
 	public static final String SELL_PRICE = "sellPrice";

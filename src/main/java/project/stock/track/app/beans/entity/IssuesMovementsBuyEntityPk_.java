@@ -8,8 +8,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesMovementsBuyEntityPk.class)
 public abstract class IssuesMovementsBuyEntityPk_ {
 
-	public static volatile SingularAttribute<IssuesMovementsBuyEntityPk, Integer> idIssueMovement;
-	public static volatile SingularAttribute<IssuesMovementsBuyEntityPk, Integer> buyTransactionNumber;
+	public static SingularAttribute<IssuesMovementsBuyEntityPk, Integer> idIssueMovement;
+	public static SingularAttribute<IssuesMovementsBuyEntityPk, Integer> buyTransactionNumber;
 
 	public static final String ID_ISSUE_MOVEMENT = "idIssueMovement";
 	public static final String BUY_TRANSACTION_NUMBER = "buyTransactionNumber";

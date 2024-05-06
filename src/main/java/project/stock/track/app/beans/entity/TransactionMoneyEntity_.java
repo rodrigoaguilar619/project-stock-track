@@ -13,17 +13,17 @@ import lib.base.backend.modules.security.jwt.entity.UserEntity;
 @StaticMetamodel(TransactionMoneyEntity.class)
 public abstract class TransactionMoneyEntity_ {
 
-	public static volatile SingularAttribute<TransactionMoneyEntity, Integer> id;
-	public static volatile SingularAttribute<TransactionMoneyEntity, BigDecimal> valueMxn;
-	public static volatile SingularAttribute<TransactionMoneyEntity, BigDecimal> amount;
-	public static volatile SingularAttribute<TransactionMoneyEntity, Integer> idBroker;
-	public static volatile SingularAttribute<TransactionMoneyEntity, Integer> idUser;
-	public static volatile SingularAttribute<TransactionMoneyEntity, Integer> idTypeMovement;
-	public static volatile SingularAttribute<TransactionMoneyEntity, String> currency;
-	public static volatile SingularAttribute<TransactionMoneyEntity, Date> dateTransaction;
-	public static volatile SingularAttribute<TransactionMoneyEntity, CatalogBrokerEntity> catalogBrokerEntity;
-	public static volatile SingularAttribute<TransactionMoneyEntity, CatalogTypeMovementEntity> catalogTypeMovementEntity;
-	public static volatile SingularAttribute<TransactionMoneyEntity, UserEntity> userEntity;
+	public static SingularAttribute<TransactionMoneyEntity, Integer> id;
+	public static SingularAttribute<TransactionMoneyEntity, BigDecimal> valueMxn;
+	public static SingularAttribute<TransactionMoneyEntity, BigDecimal> amount;
+	public static SingularAttribute<TransactionMoneyEntity, Integer> idBroker;
+	public static SingularAttribute<TransactionMoneyEntity, Integer> idUser;
+	public static SingularAttribute<TransactionMoneyEntity, Integer> idTypeMovement;
+	public static SingularAttribute<TransactionMoneyEntity, String> currency;
+	public static SingularAttribute<TransactionMoneyEntity, Date> dateTransaction;
+	public static SingularAttribute<TransactionMoneyEntity, CatalogBrokerEntity> catalogBrokerEntity;
+	public static SingularAttribute<TransactionMoneyEntity, CatalogTypeMovementEntity> catalogTypeMovementEntity;
+	public static SingularAttribute<TransactionMoneyEntity, UserEntity> userEntity;
 
 	public static final String ID = "id";
 	public static final String VALUE_MXN = "valueMxn";

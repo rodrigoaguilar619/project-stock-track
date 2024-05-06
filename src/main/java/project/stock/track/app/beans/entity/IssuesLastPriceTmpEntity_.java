@@ -11,15 +11,15 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesLastPriceTmpEntity.class)
 public abstract class IssuesLastPriceTmpEntity_ {
 
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> volume;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, Date> lastSaleTimestamp;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> high;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, Integer> idIssue;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> last;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> open;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> prevClose;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, Date> timestamp;
-	public static volatile SingularAttribute<IssuesLastPriceTmpEntity, CatalogIssuesEntity> catalogIssuesEntity;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> volume;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, Date> lastSaleTimestamp;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> high;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, Integer> idIssue;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> last;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> open;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, BigDecimal> prevClose;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, Date> timestamp;
+	public static SingularAttribute<IssuesLastPriceTmpEntity, CatalogIssuesEntity> catalogIssuesEntity;
 
 	public static final String VOLUME = "volume";
 	public static final String LAST_SALE_TIMESTAMP = "lastSaleTimestamp";

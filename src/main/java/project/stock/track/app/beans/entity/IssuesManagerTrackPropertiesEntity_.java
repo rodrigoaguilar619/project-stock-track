@@ -10,13 +10,13 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesManagerTrackPropertiesEntity.class)
 public abstract class IssuesManagerTrackPropertiesEntity_ {
 
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, Boolean> isInvest;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idIssue;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idUser;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackSellPrice;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> fairValue;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackBuyPrice;
-	public static volatile SingularAttribute<IssuesManagerTrackPropertiesEntity, IssuesManagerEntity> issuesManagerEntity;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Boolean> isInvest;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idIssue;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idUser;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackSellPrice;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> fairValue;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackBuyPrice;
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, IssuesManagerEntity> issuesManagerEntity;
 
 	public static final String IS_INVEST = "isInvest";
 	public static final String ID_ISSUE = "idIssue";

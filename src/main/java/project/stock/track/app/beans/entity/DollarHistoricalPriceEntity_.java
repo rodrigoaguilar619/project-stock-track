@@ -11,8 +11,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(DollarHistoricalPriceEntity.class)
 public abstract class DollarHistoricalPriceEntity_ {
 
-	public static volatile SingularAttribute<DollarHistoricalPriceEntity, BigDecimal> price;
-	public static volatile SingularAttribute<DollarHistoricalPriceEntity, Date> idDate;
+	public static SingularAttribute<DollarHistoricalPriceEntity, BigDecimal> price;
+	public static SingularAttribute<DollarHistoricalPriceEntity, Date> idDate;
 
 	public static final String PRICE = "price";
 	public static final String ID_DATE = "idDate";
