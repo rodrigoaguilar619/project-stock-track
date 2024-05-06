@@ -2,7 +2,7 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import lib.base.backend.entity.generic.GenericStatusEntity;
 

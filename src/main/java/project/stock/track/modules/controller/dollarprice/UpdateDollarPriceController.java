@@ -2,7 +2,7 @@ package project.stock.track.modules.controller.dollarprice;
 
 import java.text.ParseException;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

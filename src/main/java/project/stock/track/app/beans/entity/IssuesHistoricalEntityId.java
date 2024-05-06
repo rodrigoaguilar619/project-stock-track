@@ -3,8 +3,8 @@ package project.stock.track.app.beans.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class IssuesHistoricalEntityId implements Serializable {

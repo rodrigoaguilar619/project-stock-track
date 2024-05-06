@@ -3,12 +3,12 @@ package project.stock.track.app.beans.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 @Entity(name = "issues_manager_track_properties")
 public class IssuesManagerTrackPropertiesEntity implements Serializable {

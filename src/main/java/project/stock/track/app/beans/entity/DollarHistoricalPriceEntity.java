@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity(name = "dollar_historical_price")
 public class DollarHistoricalPriceEntity implements Serializable {

@@ -2,8 +2,8 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the issues_movements_buy database table.
