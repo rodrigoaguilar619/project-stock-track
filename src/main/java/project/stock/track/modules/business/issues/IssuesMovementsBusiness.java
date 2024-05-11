@@ -146,7 +146,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 			List<IssueMovementBuyEntityPojo> issueMovementBuysPojosList = buildIssueMovementBuy(issueMovementEntity);
 			
 			IssuesManagerEntity managerIssuesEntity = issueMovementEntity.getIssuesManagerEntity();
-			IssueCurrentPricePojo currentPriceData = issueUtil.getCurrentPrice(managerIssuesEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity(), issuesHistoricalRepository.findLastRecord(issueMovementEntity.getIssuesManagerEntity().getId().getIdIssue()));
+			IssueCurrentPricePojo currentPriceData = issueUtil.getCurrentPrice(managerIssuesEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity(), null);
 			
 			IssueMovementResumePojo issueMovementPojo = buildIssueMovementData(issueMovementEntity, issueMovementBuysPojosList, currentPriceData);
 			issueMovementPojos.add(issueMovementPojo);

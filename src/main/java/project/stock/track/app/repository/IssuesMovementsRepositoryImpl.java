@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -14,6 +15,8 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import project.stock.track.app.beans.entity.CatalogBrokerEntity;
+import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
@@ -61,10 +64,23 @@ public class IssuesMovementsRepositoryImpl {
 			return null;
 	}
 	
-	public Predicate buildPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Integer idUser, IssuesMovementsFiltersPojo filters) {
+	public Predicate buildPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Integer idUser, IssuesMovementsFiltersPojo filters, boolean isCountRows) {
 		
 		Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY, JoinType.LEFT);
 		Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues = joinIssuesManager.join(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY, JoinType.LEFT);
+		
+		if(!isCountRows) {
+			root.fetch(IssuesMovementsEntity_.CATALOG_STATUS_ISSUE_MOVEMENT_ENTITY);
+			root.fetch(IssuesMovementsEntity_.MOVEMENTS_ISSUE_BUYS);
+			
+			Fetch<IssuesMovementsEntity, CatalogBrokerEntity> fetchBroker = root.fetch(IssuesMovementsEntity_.CATALOG_BROKER_ENTITY);
+			Fetch<IssuesMovementsEntity, IssuesManagerEntity> fetchIssuesManager = root.fetch(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY);
+			Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = fetchIssuesManager.fetch(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY);
+			fetchIssuesManager.fetch(IssuesManagerEntity_.ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY);
+			fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_SECTOR_ENTITY);
+			fetchIssues.fetch(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY);
+			fetchBroker.fetch(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY);
+		}
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		
@@ -75,7 +91,7 @@ public class IssuesMovementsRepositoryImpl {
 			if (filters.getIdSector() != null)
 				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
 			if (filters.getIdBroker() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.CATALOG_BROKER), filters.getIdBroker()));
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.CATALOG_BROKER_ENTITY), filters.getIdBroker()));
 			if (filters.getIdStatusIssueMovement() != null)
 				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
 		}
@@ -89,7 +105,7 @@ public class IssuesMovementsRepositoryImpl {
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		Root<IssuesMovementsEntity> root = cq.from(IssuesMovementsEntity.class);
 		
-		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters);
+		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters, true);
 		
 		cq.where( predicateAnd );
 		cq.groupBy(root.get(IssuesMovementsEntity_.id));
@@ -104,7 +120,14 @@ public class IssuesMovementsRepositoryImpl {
 		CriteriaQuery<IssuesMovementsEntity> cq = cb.createQuery(IssuesMovementsEntity.class);
 		Root<IssuesMovementsEntity> root = cq.from(IssuesMovementsEntity.class);
 		
-		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters);
+		//root.join(IssuesMovementsEntity_.issuesMovementsBuys);
+		//root.join(IssuesMovementsEntity_.catalogBroker);
+		//root.fetch(IssuesMovementsEntity_.catalogStatusIssueMovementEntity);
+		
+		//Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.issuesManagerEntity, JoinType.LEFT);
+		//joinIssuesManager.join(IssuesManagerEntity_.catalogIssueEntity);
+		
+		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters, false);
 		
 		cq.where( predicateAnd );
 

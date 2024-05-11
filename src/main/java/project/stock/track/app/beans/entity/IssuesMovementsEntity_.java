@@ -18,7 +18,7 @@ public abstract class IssuesMovementsEntity_ {
 	public static ListAttribute<IssuesMovementsEntity, IssuesMovementsBuyEntity> issuesMovementsBuys;
 	public static SingularAttribute<IssuesMovementsEntity, CatalogStatusIssueMovementEntity> catalogStatusIssueMovementEntity;
 	public static SingularAttribute<IssuesMovementsEntity, BigDecimal> priceMovement;
-	public static SingularAttribute<IssuesMovementsEntity, CatalogBrokerEntity> catalogBroker;
+	public static SingularAttribute<IssuesMovementsEntity, CatalogBrokerEntity> catalogBrokerEntity;
 	public static SingularAttribute<IssuesMovementsEntity, IssuesManagerEntity> issuesManagerEntity;
 
 	public static final String ID = "id";
@@ -28,7 +28,7 @@ public abstract class IssuesMovementsEntity_ {
 	public static final String MOVEMENTS_ISSUE_BUYS = "issuesMovementsBuys";
 	public static final String CATALOG_STATUS_ISSUE_MOVEMENT_ENTITY = "catalogStatusIssueMovementEntity";
 	public static final String PRICE_MOVEMENT = "priceMovement";
-	public static final String CATALOG_BROKER = "catalogBroker";
+	public static final String CATALOG_BROKER_ENTITY = "catalogBrokerEntity";
 	public static final String ISSUES_MANAGER_ENTITY = "issuesManagerEntity";
 
 }

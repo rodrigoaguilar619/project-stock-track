@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import lib.base.backend.utils.DataUtil;
 import lib.base.backend.utils.date.DateUtil;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
@@ -27,6 +28,9 @@ public class IssueHistoricalUtil {
 	
 	@Autowired
 	DateUtil dateUtil;
+	
+	@Autowired
+	DataUtil dataUtil;
 	
 	@Autowired
 	IssuesManagerRepositoryImpl issuesManagerRepository;
@@ -78,7 +82,7 @@ public class IssueHistoricalUtil {
 		if (issuesLastPriceTmpEntity != null) {
 			
 			issueHistoricalTrackResumenPojo.setCurrentPrice(issuesLastPriceTmpEntity.getLast());
-			issueHistoricalTrackResumenPojo.setCurrentPriceDate(issuesLastPriceTmpEntity.getTimestamp().getTime());
+			issueHistoricalTrackResumenPojo.setCurrentPriceDate(dataUtil.getValueOrNull(issuesLastPriceTmpEntity.getTimestamp(), Date::getTime));
 		}
 		if (!issuesHistoricalEntities.isEmpty()) {
 			
