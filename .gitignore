@@ -8,6 +8,7 @@ target_prod_demo/
 !**/src/main/**
 !**/src/test/**
 /src/main/resources/templates/**
+/src/main/resources/static/**
 
 ### STS ###
 .apt_generated
