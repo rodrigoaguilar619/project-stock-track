@@ -13,6 +13,7 @@ import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.pojo.datatable.DataTablePojo;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogSectorEntity;
+import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity;
 import project.stock.track.app.beans.entity.IssuesMovementsEntity;
@@ -27,6 +28,7 @@ import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
+import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -72,23 +74,26 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 	}
 	
-	private String getAlertOverFairValue(BigDecimal currentPrice, BigDecimal fairValue) {
+	private String getAlertSell(BigDecimal currentPrice, BigDecimal lastBuyPrice) {
 		
 		if (currentPrice == null)
 			return null;
 		
-		BigDecimal percentageDifference = calculatorUtil.calculatePercentageUpDown(fairValue, currentPrice).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal percentageDifference = calculatorUtil.calculatePercentageUpDown(lastBuyPrice, currentPrice).setScale(2, RoundingMode.HALF_UP);
 		
-		return percentageDifference.compareTo(BigDecimal.valueOf(20)) >= 0 ? "SELL: Current price is " + percentageDifference + " % over fair value (" + fairValue + ")" : null; 
+		return percentageDifference.compareTo(BigDecimal.valueOf(20)) >= 0 ? "SELL: Current price is " + percentageDifference + " % over last buy price (" + lastBuyPrice + ")" : null; 
 	}
 	
-	private String getAlerts(List<IssueMovementBuyEntityPojo> issueMovementBuysPojos, BigDecimal currentPrice, BigDecimal fairValue) {
+	private String getAlerts(List<IssueMovementBuyEntityPojo> issueMovementBuysPojos, BigDecimal currentPrice) {
+		
+		if(issueMovementBuysPojos.isEmpty())
+			return null;
 		
 		String alert = null; 
 		
-		if (fairValue != null && getAlertOverFairValue(currentPrice, fairValue) != null) {
+		if (getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice()) != null) {
 			
-			alert = getAlertOverFairValue(currentPrice, fairValue);
+			alert = getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice());
 		}
 		else {
 			
@@ -98,12 +103,18 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		return alert;
 	}
 	
-	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, IssueCurrentPricePojo currentPriceData) {
+	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, IssueCurrentPricePojo currentPriceData) {
 		
 		IssuesManagerEntity managerIssuesEntity = issueMovement.getIssuesManagerEntity();
 		CatalogIssuesEntity catalogIssuesEntity = managerIssuesEntity.getCatalogIssueEntity();
 		CatalogSectorEntity catalogSectorEntity = catalogIssuesEntity.getCatalogSectorEntity();
+		
 		BigDecimal fairValue = dataUtil.getValueOrNull(managerIssuesEntity.getIssuesManagerTrackPropertiesEntity(), IssuesManagerTrackPropertiesEntity::getFairValue);
+		BigDecimal currentPriceCurrency = null;
+		
+		if(currentPriceData.getCurrentPrice() != null)
+			currentPriceCurrency = issueMovement.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? dollarHistoricalPriceEntity.getPrice().multiply(currentPriceData.getCurrentPrice()) : currentPriceData.getCurrentPrice();
+		
 		
 		IssueMovementResumePojo issueMovementPojo = new IssueMovementResumePojo();
 		issueMovementPojo.setIdIssueMovement(issueMovement.getId());
@@ -113,7 +124,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setIssueMovementBuysList(issueMovementBuysPojoList);
 		issueMovementPojo.setCurrentPrice(currentPriceData.getCurrentPrice());
 		issueMovementPojo.setCurrentPriceDate(currentPriceData.getDate());
-		issueMovementPojo.setAlert(getAlerts(issueMovementBuysPojoList, currentPriceData.getCurrentPrice() != null ? currentPriceData.getCurrentPrice() : null, fairValue));
+		issueMovementPojo.setAlert(getAlerts(issueMovementBuysPojoList, currentPriceCurrency));
 		issueMovementPojo.setIdBroker(issueMovement.getCatalogBrokerEntity().getId());
 		issueMovementPojo.setDescriptionBroker(issueMovement.getCatalogBrokerEntity().getAcronym());
 		issueMovementPojo.setDescriptionCurrency(issueMovement.getCatalogBrokerEntity().getCatalogTypeCurrencyEntity().getDescription());
@@ -124,7 +135,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setPriceMovement(issueMovement.getPriceMovement());
 		
 		if (!issueMovementBuysPojoList.isEmpty() && currentPriceData.getCurrentPrice() != null)
-			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(issueMovementBuysPojoList.get(0).getBuyPrice(), currentPriceData.getCurrentPrice()).toPlainString() );
+			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(issueMovementBuysPojoList.getLast().getBuyPrice(), currentPriceCurrency).toPlainString());
 	
 		return issueMovementPojo;
 	}
@@ -138,6 +149,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 		List<IssuesMovementsEntity> issuesMovements = issuesMovementsRepository.findAllIssuesMovements(idUser, dataTableConfig.getFilters());
 		Long totalIssuesMovements = issuesMovementsRepository.findCountIssuesMovements(idUser, dataTableConfig.getFilters());
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
 		List<IssueMovementResumePojo> issueMovementPojos = new ArrayList<>();
 		
@@ -148,7 +160,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 			IssuesManagerEntity managerIssuesEntity = issueMovementEntity.getIssuesManagerEntity();
 			IssueCurrentPricePojo currentPriceData = issueUtil.getCurrentPrice(managerIssuesEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity(), null);
 			
-			IssueMovementResumePojo issueMovementPojo = buildIssueMovementData(issueMovementEntity, issueMovementBuysPojosList, currentPriceData);
+			IssueMovementResumePojo issueMovementPojo = buildIssueMovementData(issueMovementEntity, issueMovementBuysPojosList, dollarHistoricalPriceEntity, currentPriceData);
 			issueMovementPojos.add(issueMovementPojo);
 		}
 		
