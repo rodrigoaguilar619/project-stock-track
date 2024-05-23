@@ -40,6 +40,8 @@ public class IssueMovementResumePojo {
 	private BigDecimal priceMovement;
 	
 	private List<IssueMovementBuyEntityPojo> issueMovementBuysList;
+	
+	private IssueMovementTransactionPojo issueMovementTransactionNotSold;
 
 	public Integer getIdIssueMovement() {
 		return idIssueMovement;

@@ -19,6 +19,7 @@ import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity;
 import project.stock.track.app.beans.entity.IssuesMovementsEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssueCurrentPricePojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueMovementResumePojo;
+import project.stock.track.app.beans.pojos.business.issues.IssueMovementTransactionPojo;
 import project.stock.track.app.beans.pojos.business.issues.IssuesMovementsFiltersPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
@@ -101,6 +102,25 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		}
 		
 		return alert;
+	}
+	
+	private IssueMovementTransactionPojo buildIssueMovementTransaction(List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, boolean isForSold) {
+		
+		Integer totalShares;
+		BigDecimal totalCost;
+		BigDecimal avgCostByShare;
+		BigDecimal performanceTotal;
+		BigDecimal performancePercentage;
+		
+		/*for (IssueMovementBuyEntityPojo issueMovementBuyPojo : issueMovementBuysPojoList) {
+			if (isForSold)
+				return issueMovementBuyPojo.getSellTransaction();
+			else
+				return issueMovementBuyPojo.getBuyTransaction();
+		}*/
+		
+		return null;
+		
 	}
 	
 	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, IssueCurrentPricePojo currentPriceData) {
