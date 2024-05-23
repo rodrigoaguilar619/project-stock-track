@@ -258,6 +258,9 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		List<String> messages = new ArrayList<>();
 			
 			for (TransactionIssueFilePojo transactionIssueFilePojo: transactionIssueFilePojos) {
+				
+				if (transactionIssueFilePojo.getTypeTransaction() == null)
+					continue;
 					
 				if (transactionIssueFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_BUY))
 					messages.addAll(registerIssueTransactionBuys(userEntity, catalogBrokerEntity, transactionIssueFilePojo));

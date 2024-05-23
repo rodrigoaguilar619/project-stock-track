@@ -46,8 +46,10 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 		
 		if (transactionDescription.contains("Venta"))
 			return TYPE_TRANSACTION_SELL;
-		else
+		else if (transactionDescription.contains("Compra de Acciones."))
 			return TYPE_TRANSACTION_BUY; 
+		else
+			return null;
 	}
 	
 	private String buildIssue(String issueDescription) {
@@ -97,7 +99,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			transactionIssueFileDataPojo.setIssue(buildIssue(rowRecord.get(0)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(1) + " " +rowRecord.get(2), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(3)));
-			transactionIssueFileDataPojo.setTitles(Integer.parseInt(rowRecord.get(4)));
+			transactionIssueFileDataPojo.setTitles(Integer.parseInt(rowRecord.get(4).replace(",", "")));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
 			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.MXN);
 			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.GBM_HOMBROKER);
