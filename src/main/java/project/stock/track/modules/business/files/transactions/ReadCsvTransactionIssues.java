@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import lib.base.backend.utils.NumberDataUtil;
 import lib.base.backend.utils.date.DateFormatUtil;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
+import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
 
 public abstract class ReadCsvTransactionIssues {
 
 	ReadCsvFileUtil readCsvFileUtil = new ReadCsvFileUtil();
 	DateFormatUtil dateFormatUtil = new DateFormatUtil();
+	NumberDataUtil numberDataUtil = new NumberDataUtil();
+	CustomArraysUtil customArraysUtil = new CustomArraysUtil();
 	
 	public static final String TYPE_TRANSACTION_BUY = "BUY";
 	public static final String TYPE_TRANSACTION_SELL = "SELL";

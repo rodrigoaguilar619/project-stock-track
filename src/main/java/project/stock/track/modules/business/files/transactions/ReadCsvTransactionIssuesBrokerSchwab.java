@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 
 public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssues {
 	
@@ -45,13 +46,15 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 	public List<TransactionIssueFilePojo> readCsvFile(List<List<String>> records) throws ParseException, IOException {
 		
 		List<TransactionIssueFilePojo> issueTransactionDataPojos = new ArrayList<>();
-		int rowCount = 0;
 		int timeSeconds = 0;
+		boolean isRowHeader = false;
 		
 		for (List<String> rowRecord: records) {
 			
-			rowCount ++;
-			if (rowCount < 3 || determineSkipRow(rowRecord))
+			if (!isRowHeader && customArraysUtil.compareList(rowRecord, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB))
+				isRowHeader = true;
+				
+			if (!isRowHeader || determineSkipRow(rowRecord))
 				continue;
 			
 			TransactionIssueFilePojo transactionIssueFileDataPojo = new TransactionIssueFilePojo();
@@ -64,6 +67,7 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.USD);
 			transactionIssueFileDataPojo.setComissionPercentage(BigDecimal.valueOf(0));
 			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB);
+			transactionIssueFileDataPojo.setIsSlice(numberDataUtil.hasFractionalPart(transactionIssueFileDataPojo.getTitles()));
 			
 			issueTransactionDataPojos.add(transactionIssueFileDataPojo);
 		}

@@ -12,7 +12,7 @@ public class IssueTransactionResumeTuplePojo {
 	
 	private String descriptionTypeCurrency;
 	
-	private Long totalShares;
+	private BigDecimal totalShares;
 	
 	private BigDecimal priceBuy;
 	
@@ -62,11 +62,11 @@ public class IssueTransactionResumeTuplePojo {
 		this.descriptionTypeCurrency = descriptionTypeCurrency;
 	}
 
-	public Long getTotalShares() {
+	public BigDecimal getTotalShares() {
 		return totalShares;
 	}
 
-	public void setTotalShares(Long totalShares) {
+	public void setTotalShares(BigDecimal totalShares) {
 		this.totalShares = totalShares;
 	}
 

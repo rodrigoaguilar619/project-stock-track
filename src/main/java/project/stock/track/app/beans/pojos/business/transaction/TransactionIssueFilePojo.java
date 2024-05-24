@@ -20,6 +20,8 @@ public class TransactionIssueFilePojo {
 	
 	private Integer typeCurrency;
 	
+	private Boolean isSlice;
+	
 	private int broker;
 
 	public String getIssue() {
@@ -92,6 +94,14 @@ public class TransactionIssueFilePojo {
 
 	public void setBroker(int broker) {
 		this.broker = broker;
+	}
+
+	public Boolean getIsSlice() {
+		return isSlice;
+	}
+
+	public void setIsSlice(Boolean isSlice) {
+		this.isSlice = isSlice;
 	}
 	
 }
