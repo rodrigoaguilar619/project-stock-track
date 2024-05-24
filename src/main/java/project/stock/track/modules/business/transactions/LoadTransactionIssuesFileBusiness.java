@@ -55,6 +55,24 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	private static final String MSG_ISSUE_NOT_REGISTERED = "Issue not registered issue: ";
 	private static final String MSG_DATE = " date: ";
 	
+	private TransactionIssueEntity buildTransactionIssueEntity(UserEntity userEntity, CatalogIssuesEntity catalogIssuesEntityVerify, TransactionIssueFilePojo transactionIssueFilePojo) {
+		
+		BigDecimal priceTotalBuy = transactionIssueFilePojo.getPrice().multiply(new BigDecimal(transactionIssueFilePojo.getTitles()));
+		
+		TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
+		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
+		transactionIssueEntity.setIdUser(userEntity.getId());
+		transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
+		transactionIssueEntity.setPriceBuy(transactionIssueFilePojo.getPrice());
+		transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
+		transactionIssueEntity.setPriceTotalBuy(priceTotalBuy.multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(priceTotalBuy));
+		transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
+		transactionIssueEntity.setIsSlice(transactionIssueFilePojo.getIsSlice());
+		transactionIssueEntity.setTotalShares(transactionIssueFilePojo.getIsSlice() ? new BigDecimal(transactionIssueFilePojo.getTitles()) : new BigDecimal(1));
+		
+		return transactionIssueEntity;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<String> registerIssueTransactionBuys(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionIssueFilePojo transactionIssueFilePojo) throws BusinessException {
 		
@@ -77,7 +95,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 				return messages;
 			}
 			
-			if (transactionIssueFilePojo.getTitles() % 1 == 0) {
+			if (!transactionIssueFilePojo.getIsSlice()) {
 			
 				List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssueShortSells(userEntity.getId(), catalogIssuesEntityVerify.getId(), transactionIssueFilePojo.getBroker());
 	
@@ -98,17 +116,14 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 						continue;
 					}
 				
-					TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
-					transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
-					transactionIssueEntity.setIdUser(userEntity.getId());
-					transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
-					transactionIssueEntity.setPriceBuy(transactionIssueFilePojo.getPrice());
-					transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
-					transactionIssueEntity.setPriceTotalBuy(transactionIssueFilePojo.getPrice().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(transactionIssueFilePojo.getPrice()));
-					transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
-					
+					TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo);
 					genericCustomPersistance.save(transactionIssueEntity);
 				}
+			}
+			else {
+				
+				TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo);
+				genericCustomPersistance.save(transactionIssueEntity);
 			}
 			
 			genericCustomPersistance.commitTransaction();
@@ -278,6 +293,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	public LoadTransactionIssuesFileDataPojo storeTransactionIssues(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, MultipartFile transactionIssuesFile) throws BusinessException, ParseException, IOException {
 		
 		List<List<String>> csvData = new ReadCsvFileUtil().readCsvFile(transactionIssuesFile);
+		validateFileFormat(catalogBrokerEntity.getId(), csvData);
 		ReadCsvTransactionIssues readCsvTransactionIssues = getReadTransactionIssues(catalogBrokerEntity.getId());
 		
 		List<TransactionIssueFilePojo> transactionIssueFilePojos = readCsvTransactionIssues.readCsvFile(csvData);

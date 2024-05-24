@@ -35,6 +35,9 @@ public class IssuesMovementsBuyEntity implements Serializable {
 	
 	@Column(name = "sell_date")
 	private Date sellDate;
+	
+	@Column(name="total_shares")
+	private BigDecimal totalShares;
 
 	//bi-directional many-to-one association to IssuesMovements
 	@ManyToOne
@@ -87,5 +90,13 @@ public class IssuesMovementsBuyEntity implements Serializable {
 
 	public void setIssuesMovementsEntity(IssuesMovementsEntity issueMovementsEntity) {
 		this.issuesMovementsEntity = issueMovementsEntity;
+	}
+
+	public BigDecimal getTotalShares() {
+		return totalShares;
+	}
+
+	public void setTotalShares(BigDecimal totalShares) {
+		this.totalShares = totalShares;
 	}
 }

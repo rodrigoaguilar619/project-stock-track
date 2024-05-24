@@ -99,10 +99,11 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			transactionIssueFileDataPojo.setIssue(buildIssue(rowRecord.get(0)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(1) + " " +rowRecord.get(2), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(3)));
-			transactionIssueFileDataPojo.setTitles(Integer.parseInt(rowRecord.get(4).replace(",", "")));
+			transactionIssueFileDataPojo.setTitles(Double.parseDouble(rowRecord.get(4).replace(",", "")));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
 			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.MXN);
 			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.GBM_HOMBROKER);
+			transactionIssueFileDataPojo.setIsSlice(numberDataUtil.hasFractionalPart(transactionIssueFileDataPojo.getTitles()));
 			
 			BigDecimal comissionPercentage = buildPrice(rowRecord.get(10)).divide(BigDecimal.valueOf(transactionIssueFileDataPojo.getTitles()), 5, RoundingMode.HALF_UP);
 			BigDecimal comissionPercentageTotal = comissionPercentage.multiply(BigDecimal.valueOf(16)).divide(BigDecimal.valueOf(100));

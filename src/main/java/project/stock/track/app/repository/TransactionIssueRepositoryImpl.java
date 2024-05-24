@@ -136,7 +136,7 @@ public class TransactionIssueRepositoryImpl {
 		cq.multiselect(joinBroker.get(CatalogBrokerEntity_.ID), joinBroker.get(CatalogBrokerEntity_.ACRONYM),
 				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.ID),
 				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.DESCRIPTION),
-				cb.count(root.get(TransactionIssueEntity_.idIssue)), root.get(TransactionIssueEntity_.priceTotalBuy),
+				cb.sum(root.get(TransactionIssueEntity_.totalShares)), root.get(TransactionIssueEntity_.priceTotalBuy),
 				cb.sum(root.get(TransactionIssueEntity_.priceTotalBuy)),
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000),
 				root.get(TransactionIssueEntity_.priceTotalSell),
@@ -169,7 +169,7 @@ public class TransactionIssueRepositoryImpl {
 			issueTransactionResumeTuplePojo.setDescriptionBroker((String) tuple.get(1));
 			issueTransactionResumeTuplePojo.setIdTypeCurrency((Integer) tuple.get(2));
 			issueTransactionResumeTuplePojo.setDescriptionTypeCurrency((String) tuple.get(3));
-			issueTransactionResumeTuplePojo.setTotalShares((Long) tuple.get(4));
+			issueTransactionResumeTuplePojo.setTotalShares((BigDecimal) tuple.get(4));
 			issueTransactionResumeTuplePojo.setPriceBuy((BigDecimal) tuple.get(5));
 			issueTransactionResumeTuplePojo.setSumPriceBuy((BigDecimal) tuple.get(6));
 			issueTransactionResumeTuplePojo.setBuyDate((Long) tuple.get(7));

@@ -65,6 +65,12 @@ public class TransactionIssueEntity implements Serializable {
 	@Column(name = "id_broker")
 	private Integer idBroker;
 	
+	@Column(name = "total_shares")
+	private BigDecimal totalShares;
+	
+	@Column(name = "is_slice")
+	private Boolean isSlice;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_issue", referencedColumnName = "id_issue", insertable = false, updatable = false)
 	@JoinColumn(name = "id_user", referencedColumnName = "id_user", insertable = false, updatable = false)
@@ -220,5 +226,21 @@ public class TransactionIssueEntity implements Serializable {
 
 	public void setIssuesLastPriceTmpEntity(IssuesLastPriceTmpEntity issuesLastPriceTmpEntity) {
 		this.issuesLastPriceTmpEntity = issuesLastPriceTmpEntity;
+	}
+
+	public BigDecimal getTotalShares() {
+		return totalShares;
+	}
+
+	public void setTotalShares(BigDecimal totalShares) {
+		this.totalShares = totalShares;
+	}
+
+	public Boolean getIsSlice() {
+		return isSlice;
+	}
+
+	public void setIsSlice(Boolean isSlice) {
+		this.isSlice = isSlice;
 	}
 }

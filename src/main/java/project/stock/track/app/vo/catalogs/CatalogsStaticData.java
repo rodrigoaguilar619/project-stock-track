@@ -59,7 +59,7 @@ public class CatalogsStaticData {
 		 }
 		
 		public static final List<String> CSV_HEADER_HOMEBROKER = Collections.unmodifiableList(Arrays.asList("﻿\"Emisora\"","Fecha","Hora","Descripción","Títulos","Precio","Tasa","Plazo","Intereses","Impuestos","Comisión","Importe","Saldo"));
-		public static final List<String> CSV_HEADER_CHARLES_SCHWAB = Collections.unmodifiableList(Arrays.asList("Date","Action","Symbol","Description","Quantity","Price","Fees & Comm","Amount", ""));
+		public static final List<String> CSV_HEADER_CHARLES_SCHWAB = Collections.unmodifiableList(Arrays.asList("Date","Action","Symbol","Description","Quantity","Price","Fees & Comm","Amount"));
 	}
 	
 	public final class ServiceTiingo {
