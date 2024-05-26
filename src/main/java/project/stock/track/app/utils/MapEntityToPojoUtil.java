@@ -85,6 +85,7 @@ public class MapEntityToPojoUtil {
 		issueMovementBuyPojo.setBuyDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getBuyDate(), Date::getTime));
 		issueMovementBuyPojo.setSellDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getSellDate(), Date::getTime));
 		issueMovementBuyPojo.setBuyTransactionNumber(issueMovementBuyEntity.getId().getBuyTransactionNumber());
+		issueMovementBuyPojo.setTotalShares(issueMovementBuyEntity.getTotalShares());
 		
 		return issueMovementBuyPojo;
 	}

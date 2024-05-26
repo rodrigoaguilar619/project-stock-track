@@ -20,6 +20,7 @@ import project.stock.track.app.beans.entity.IssuesMovementsEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssueCurrentPricePojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueMovementResumePojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueMovementTransactionPojo;
+import project.stock.track.app.beans.pojos.business.issues.IssueMovementTransactionTotalResumePojo;
 import project.stock.track.app.beans.pojos.business.issues.IssuesMovementsFiltersPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
@@ -104,23 +105,94 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		return alert;
 	}
 	
-	private IssueMovementTransactionPojo buildIssueMovementTransaction(List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, boolean isForSold) {
+	private IssueMovementTransactionPojo buildIssueMovementTransactionPojo(BigDecimal currentPrice, BigDecimal totalShares, BigDecimal totalSellPrice, BigDecimal totalBuyPrice, boolean isForSold) {
 		
-		Integer totalShares;
-		BigDecimal totalCost;
 		BigDecimal avgCostByShare;
+		BigDecimal performanceByShare;
 		BigDecimal performanceTotal;
 		BigDecimal performancePercentage;
 		
-		/*for (IssueMovementBuyEntityPojo issueMovementBuyPojo : issueMovementBuysPojoList) {
-			if (isForSold)
-				return issueMovementBuyPojo.getSellTransaction();
-			else
-				return issueMovementBuyPojo.getBuyTransaction();
-		}*/
+		if (isForSold) {
+			avgCostByShare = (totalSellPrice.compareTo(BigDecimal.ZERO) == 0 || totalShares.compareTo(BigDecimal.ZERO) == 0) ? BigDecimal.ZERO : totalSellPrice.divide(totalShares);
+			performanceTotal = totalSellPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalSellPrice.subtract(totalBuyPrice);
+			performanceByShare = (totalSellPrice.compareTo(BigDecimal.ZERO) == 0 || totalShares.compareTo(BigDecimal.ZERO) == 0) ? BigDecimal.ZERO : performanceTotal.divide(totalShares);
+			performancePercentage = totalSellPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calculatorUtil.calculatePercentageUpDown(totalBuyPrice, totalSellPrice);
+		}
+		else {
+			avgCostByShare = totalBuyPrice.divide(totalShares);
+			performanceTotal = (currentPrice.multiply(totalShares)).subtract(totalBuyPrice);
+			performanceByShare = performanceTotal.divide(totalShares);
+			performancePercentage = calculatorUtil.calculatePercentageUpDown(totalBuyPrice, currentPrice.multiply(totalShares));
+		}
 		
-		return null;
+		IssueMovementTransactionPojo issueMovementTransactionPojo = new IssueMovementTransactionPojo();
+		issueMovementTransactionPojo.setTotalShares(totalShares);
+		issueMovementTransactionPojo.setAvgCostByShare(avgCostByShare);
+		issueMovementTransactionPojo.setPerformanceByShare(performanceByShare);
+		issueMovementTransactionPojo.setPerformanceTotal(performanceTotal);
+		issueMovementTransactionPojo.setPerformancePercentage(performancePercentage);
+		issueMovementTransactionPojo.setCurrentPriceByShare(currentPrice);
 		
+		return issueMovementTransactionPojo;
+	}
+	
+	private IssueMovementTransactionPojo buildIssueMovementTransaction(List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, BigDecimal currentPrice, boolean isForSold) {
+		
+		BigDecimal totalShares = BigDecimal.ZERO;
+		BigDecimal totalSellPrice = BigDecimal.ZERO;
+		BigDecimal totalBuyPrice = BigDecimal.ZERO;
+		
+		for (IssueMovementBuyEntityPojo issueMovementBuyPojo : issueMovementBuysPojoList) {
+			
+			totalBuyPrice = totalBuyPrice.add((issueMovementBuyPojo.getBuyPrice().multiply(issueMovementBuyPojo.getTotalShares())));
+			
+			if (isForSold && issueMovementBuyPojo.getSellPrice() != null) {
+				totalShares = totalShares.add(issueMovementBuyPojo.getTotalShares());
+				totalSellPrice = totalShares.add(issueMovementBuyPojo.getSellPrice());
+			}
+			else if (!isForSold){
+				totalShares = totalShares.add(issueMovementBuyPojo.getTotalShares());
+			}
+		}
+		
+		return buildIssueMovementTransactionPojo(currentPrice, totalShares, totalSellPrice, totalBuyPrice, isForSold);
+		
+	}
+	
+	private IssueMovementTransactionTotalResumePojo buildIssueMovementTransactionTotal(List<IssueMovementResumePojo> issueMovementResumePojos, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, boolean isForSold) {
+		
+		BigDecimal totalCurrentPrice = BigDecimal.ZERO;
+		BigDecimal totalBuyPrice = BigDecimal.ZERO;
+		BigDecimal totalCurrentPriceSet;
+		BigDecimal totalBuyPriceSet;
+		
+		for (IssueMovementResumePojo issueMovementResumePojo : issueMovementResumePojos) {
+			
+			if (isForSold) {
+				totalCurrentPriceSet = issueMovementResumePojo.getIssueMovementTransactionSold().getCurrentPriceByShare().multiply(issueMovementResumePojo.getIssueMovementTransactionSold().getTotalShares());
+				totalBuyPriceSet = issueMovementResumePojo.getIssueMovementTransactionSold().getAvgCostByShare().multiply(issueMovementResumePojo.getIssueMovementTransactionSold().getTotalShares());
+			}
+			else {
+				totalCurrentPriceSet = issueMovementResumePojo.getIssueMovementTransactionNotSold().getCurrentPriceByShare().multiply(issueMovementResumePojo.getIssueMovementTransactionNotSold().getTotalShares());
+				totalBuyPriceSet = issueMovementResumePojo.getIssueMovementTransactionNotSold().getAvgCostByShare().multiply(issueMovementResumePojo.getIssueMovementTransactionNotSold().getTotalShares());
+			}
+			
+			if(issueMovementResumePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER)) {
+				totalCurrentPriceSet = totalCurrentPriceSet.divide(dollarHistoricalPriceEntity.getPrice());
+				totalBuyPriceSet = totalBuyPriceSet.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalBuyPriceSet.divide(dollarHistoricalPriceEntity.getPrice(), 5, RoundingMode.HALF_DOWN);
+			}
+			
+			totalCurrentPrice = totalCurrentPrice.add(totalCurrentPriceSet);
+			totalBuyPrice = totalBuyPrice.add(totalBuyPriceSet);
+		}
+		
+		IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalResumePojo = new IssueMovementTransactionTotalResumePojo();
+		issueMovementTransactionTotalResumePojo.setTotalCurrentPrice(totalCurrentPrice);
+		issueMovementTransactionTotalResumePojo.setTotalBuyPrice(totalBuyPrice);
+		issueMovementTransactionTotalResumePojo.setPerformancePercentage(totalCurrentPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calculatorUtil.calculatePercentageUpDown(totalBuyPrice, totalCurrentPrice));
+		issueMovementTransactionTotalResumePojo.setPerformanceTotal(totalCurrentPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalCurrentPrice.subtract(totalBuyPrice));
+		
+		return issueMovementTransactionTotalResumePojo;
 	}
 	
 	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, IssueCurrentPricePojo currentPriceData) {
@@ -153,6 +225,8 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setDescriptionSector(dataUtil.getValueOrNull(catalogSectorEntity, CatalogSectorEntity::getDescription));
 		issueMovementPojo.setFairValue(fairValue != null ? fairValue.toPlainString() : null);
 		issueMovementPojo.setPriceMovement(issueMovement.getPriceMovement());
+		issueMovementPojo.setIssueMovementTransactionNotSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceCurrency, false));
+		issueMovementPojo.setIssueMovementTransactionSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceCurrency, true));
 		
 		if (!issueMovementBuysPojoList.isEmpty() && currentPriceData.getCurrentPrice() != null)
 			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(issueMovementBuysPojoList.getLast().getBuyPrice(), currentPriceCurrency).toPlainString());
@@ -187,6 +261,8 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		GetIssuesMovementsListDataPojo dataPojo = new GetIssuesMovementsListDataPojo();
 		dataPojo.setIssuesMovementsList(issueMovementPojos);
 		dataPojo.setTotalIssuesMovements(totalIssuesMovements);
+		dataPojo.setIssueMovementTransactionTotalSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, true));
+		dataPojo.setIssueMovementTransactionTotalNotSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, false));
 		
 		return dataPojo;
 	}

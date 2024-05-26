@@ -4,30 +4,32 @@ import java.math.BigDecimal;
 
 public class IssueMovementTransactionPojo {
 
-	private Integer totalShares;
+	private BigDecimal totalShares;
 	
-	private BigDecimal totalCost;
+	private BigDecimal currentPriceByShare;
 	
 	private BigDecimal avgCostByShare;
+	
+	private BigDecimal performanceByShare;
 	
 	private BigDecimal performanceTotal;
 	
 	private BigDecimal performancePercentage;
 
-	public Integer getTotalShares() {
+	public BigDecimal getTotalShares() {
 		return totalShares;
 	}
 
-	public void setTotalShares(Integer totalShares) {
+	public void setTotalShares(BigDecimal totalShares) {
 		this.totalShares = totalShares;
 	}
 
-	public BigDecimal getTotalCost() {
-		return totalCost;
+	public BigDecimal getCurrentPriceByShare() {
+		return currentPriceByShare;
 	}
 
-	public void setTotalCost(BigDecimal totalCost) {
-		this.totalCost = totalCost;
+	public void setCurrentPriceByShare(BigDecimal currentPriceByShare) {
+		this.currentPriceByShare = currentPriceByShare;
 	}
 
 	public BigDecimal getAvgCostByShare() {
@@ -36,6 +38,14 @@ public class IssueMovementTransactionPojo {
 
 	public void setAvgCostByShare(BigDecimal avgCostByShare) {
 		this.avgCostByShare = avgCostByShare;
+	}
+
+	public BigDecimal getPerformanceByShare() {
+		return performanceByShare;
+	}
+
+	public void setPerformanceByShare(BigDecimal performanceByShare) {
+		this.performanceByShare = performanceByShare;
 	}
 
 	public BigDecimal getPerformanceTotal() {

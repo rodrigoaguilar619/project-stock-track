@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.stock.track.app.beans.pojos.business.issues.IssueMovementResumePojo;
+import project.stock.track.app.beans.pojos.business.issues.IssueMovementTransactionTotalResumePojo;
 
 public class GetIssuesMovementsListDataPojo {
 
 	private List<IssueMovementResumePojo> issuesMovementsList = new ArrayList<>();
+	
+	private IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalNotSold;
+	
+	private IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalSold;
 
 	private Long totalIssuesMovements;
 
@@ -25,5 +30,21 @@ public class GetIssuesMovementsListDataPojo {
 
 	public void setTotalIssuesMovements(Long totalIssuesMovements) {
 		this.totalIssuesMovements = totalIssuesMovements;
+	}
+
+	public IssueMovementTransactionTotalResumePojo getIssueMovementTransactionTotalNotSold() {
+		return issueMovementTransactionTotalNotSold;
+	}
+
+	public void setIssueMovementTransactionTotalNotSold(IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalNotSold) {
+		this.issueMovementTransactionTotalNotSold = issueMovementTransactionTotalNotSold;
+	}
+
+	public IssueMovementTransactionTotalResumePojo getIssueMovementTransactionTotalSold() {
+		return issueMovementTransactionTotalSold;
+	}
+
+	public void setIssueMovementTransactionTotalSold(IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalSold) {
+		this.issueMovementTransactionTotalSold = issueMovementTransactionTotalSold;
 	}
 }

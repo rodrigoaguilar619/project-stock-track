@@ -13,6 +13,8 @@ public class IssueMovementBuyEntityPojo {
 	private BigDecimal sellPrice;
 	
 	private Long sellDate;
+	
+	private BigDecimal totalShares;
 
 	public Integer getBuyTransactionNumber() {
 		return buyTransactionNumber;
@@ -52,5 +54,13 @@ public class IssueMovementBuyEntityPojo {
 
 	public void setSellDate(Long sellDate) {
 		this.sellDate = sellDate;
+	}
+
+	public BigDecimal getTotalShares() {
+		return totalShares;
+	}
+
+	public void setTotalShares(BigDecimal totalShares) {
+		this.totalShares = totalShares;
 	}
 }

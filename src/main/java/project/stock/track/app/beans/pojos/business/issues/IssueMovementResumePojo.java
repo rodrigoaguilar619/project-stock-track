@@ -42,6 +42,8 @@ public class IssueMovementResumePojo {
 	private List<IssueMovementBuyEntityPojo> issueMovementBuysList;
 	
 	private IssueMovementTransactionPojo issueMovementTransactionNotSold;
+	
+	private IssueMovementTransactionPojo issueMovementTransactionSold;
 
 	public Integer getIdIssueMovement() {
 		return idIssueMovement;
@@ -177,6 +179,22 @@ public class IssueMovementResumePojo {
 
 	public void setIssueMovementBuysList(List<IssueMovementBuyEntityPojo> issueMovementBuysList) {
 		this.issueMovementBuysList = issueMovementBuysList;
+	}
+
+	public IssueMovementTransactionPojo getIssueMovementTransactionNotSold() {
+		return issueMovementTransactionNotSold;
+	}
+
+	public void setIssueMovementTransactionNotSold(IssueMovementTransactionPojo issueMovementTransactionNotSold) {
+		this.issueMovementTransactionNotSold = issueMovementTransactionNotSold;
+	}
+
+	public IssueMovementTransactionPojo getIssueMovementTransactionSold() {
+		return issueMovementTransactionSold;
+	}
+
+	public void setIssueMovementTransactionSold(IssueMovementTransactionPojo issueMovementTransactionSold) {
+		this.issueMovementTransactionSold = issueMovementTransactionSold;
 	}
 	
 }
