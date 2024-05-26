@@ -91,7 +91,7 @@ public class IssuesMovementsRepositoryImpl {
 			if (filters.getIdSector() != null)
 				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
 			if (filters.getIdBroker() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.CATALOG_BROKER_ENTITY), filters.getIdBroker()));
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_BROKER), filters.getIdBroker()));
 			if (filters.getIdStatusIssueMovement() != null)
 				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
 		}
@@ -119,13 +119,6 @@ public class IssuesMovementsRepositoryImpl {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<IssuesMovementsEntity> cq = cb.createQuery(IssuesMovementsEntity.class);
 		Root<IssuesMovementsEntity> root = cq.from(IssuesMovementsEntity.class);
-		
-		//root.join(IssuesMovementsEntity_.issuesMovementsBuys);
-		//root.join(IssuesMovementsEntity_.catalogBroker);
-		//root.fetch(IssuesMovementsEntity_.catalogStatusIssueMovementEntity);
-		
-		//Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.issuesManagerEntity, JoinType.LEFT);
-		//joinIssuesManager.join(IssuesManagerEntity_.catalogIssueEntity);
 		
 		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters, false);
 		

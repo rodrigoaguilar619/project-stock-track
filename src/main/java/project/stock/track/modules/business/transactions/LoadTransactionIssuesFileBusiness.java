@@ -57,7 +57,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	
 	private TransactionIssueEntity buildTransactionIssueEntity(UserEntity userEntity, CatalogIssuesEntity catalogIssuesEntityVerify, TransactionIssueFilePojo transactionIssueFilePojo) {
 		
-		BigDecimal priceTotalBuy = transactionIssueFilePojo.getPrice().multiply(new BigDecimal(transactionIssueFilePojo.getTitles()));
+		BigDecimal priceTotalBuy = transactionIssueFilePojo.getPrice().multiply(BigDecimal.valueOf(transactionIssueFilePojo.getTitles()));
 		
 		TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
 		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
@@ -68,7 +68,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		transactionIssueEntity.setPriceTotalBuy(priceTotalBuy.multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(priceTotalBuy));
 		transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
 		transactionIssueEntity.setIsSlice(transactionIssueFilePojo.getIsSlice());
-		transactionIssueEntity.setTotalShares(transactionIssueFilePojo.getIsSlice() ? new BigDecimal(transactionIssueFilePojo.getTitles()) : new BigDecimal(1));
+		transactionIssueEntity.setTotalShares(transactionIssueFilePojo.getIsSlice() ? BigDecimal.valueOf(transactionIssueFilePojo.getTitles()) : new BigDecimal(1));
 		
 		return transactionIssueEntity;
 	}

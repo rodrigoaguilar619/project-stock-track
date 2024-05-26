@@ -3,7 +3,6 @@ package project.stock.track.app.repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.persistence.EntityManager;
@@ -115,7 +114,6 @@ public class IssuesRepositoryImpl {
 		Root<CatalogIssuesEntity> root = cq.from(CatalogIssuesEntity.class);
 
 		List<Predicate> predicatesAnd = new ArrayList<>();
-		// condition for id issue
 		predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.ID), idIssue));
 
 		cq.select(cb.count(root)).where(predicatesAnd.toArray(new Predicate[0]));
@@ -180,7 +178,7 @@ public class IssuesRepositoryImpl {
 	}
 	
 	public List<CatalogIssuesEntity> findAllWithStatusActive() {
-		 return Stream.concat(findAllWithStatusActive(true).stream(), findAllWithStatusActive(false).stream()).collect(Collectors.toList());
+		 return Stream.concat(findAllWithStatusActive(true).stream(), findAllWithStatusActive(false).stream()).toList();
 	}
 
 }

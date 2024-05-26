@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import lib.base.backend.utils.DataParseUtil;
 import lib.base.backend.utils.JpaUtil;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
@@ -49,11 +50,14 @@ public class TransactionIssueRepositoryImpl {
 	
 	private CalculatorUtil calculatorUtil;
 	
+	private DataParseUtil dataParseUtil;
+	
 	@Autowired
-	public TransactionIssueRepositoryImpl(EntityManager em, JpaUtil jpaUtil, CalculatorUtil calculatorUtil) {
+	public TransactionIssueRepositoryImpl(EntityManager em, JpaUtil jpaUtil, CalculatorUtil calculatorUtil, DataParseUtil dataParseUtil) {
 		this.em = em;
 		this.jpaUtil = jpaUtil;
 		this.calculatorUtil = calculatorUtil;
+		this.dataParseUtil = dataParseUtil;
 	}
 	
 	public TransactionIssueEntity findTransactionIssueBuy(Integer idUser, Integer idIssue, Integer idBroker, Date date) {
@@ -230,6 +234,8 @@ public class TransactionIssueRepositoryImpl {
 	@SuppressWarnings("unchecked")
 	public List<PorfolioIssuePojo> findPortfolioIssues(Integer idUser, Integer idBroker, BigDecimal dollarPrice/*, Integer statusIssue*/) {
 		
+		final String JOIN_TRANSACTION_ISSUE = " LEFT JOIN transactionIssue.";
+		
 		List<String> parameterslist = Arrays.asList(
 			"transactionIssue." + TransactionIssueEntity_.ID_ISSUE,
 			"catalogBroker." + CatalogBrokerEntity_.ID_TYPE_CURRENCY,
@@ -249,9 +255,9 @@ public class TransactionIssueRepositoryImpl {
 		
 		Query query = em.createQuery(StringEscapeUtils.escapeSql("SELECT " + String.join(", ", parameterslist) +
     		" FROM " + jpaUtil.getTableMetaModel(TransactionIssueEntity_.class) + " transactionIssue" +
-    		" LEFT JOIN transactionIssue." + TransactionIssueEntity_.ISSUES_LAST_PRICE_TMP_ENTITY + " issuesLastPriceTmp" +
-    		" LEFT JOIN transactionIssue." + TransactionIssueEntity_.ISSUES_MANAGER_ENTITY + " managerIssues" +
-    		" LEFT JOIN transactionIssue." + TransactionIssueEntity_.CATALOG_BROKER_ENTITY + " catalogBroker" +
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.ISSUES_LAST_PRICE_TMP_ENTITY + " issuesLastPriceTmp" +
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.ISSUES_MANAGER_ENTITY + " managerIssues" +
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.CATALOG_BROKER_ENTITY + " catalogBroker" +
     		" LEFT JOIN managerIssues." + IssuesManagerEntity_.CATALOG_ISSUES_ENTITY + " catalogIssues" +
     		" WHERE transactionIssue." + TransactionIssueEntity_.PRICE_TOTAL_SELL + " IS NULL" +
     		" AND transactionIssue." + TransactionIssueEntity_.ID_USER + " = :idUser" +
@@ -270,15 +276,15 @@ public class TransactionIssueRepositoryImpl {
 			PorfolioIssuePojo porfolioIssueEntityPojo = new PorfolioIssuePojo();
 			
 			porfolioIssueEntityPojo.setIdIssue(Integer.parseInt(result[0].toString()));
-			porfolioIssueEntityPojo.setIdTypeCurrency(result[1] != null ? Integer.parseInt(result[1].toString()) : null );
+			porfolioIssueEntityPojo.setIdTypeCurrency(dataParseUtil.parseInteger(result[1]));
 			porfolioIssueEntityPojo.setTitles(Integer.valueOf(result[2].toString()));
-			porfolioIssueEntityPojo.setCostAvgBuyPerTitle(new BigDecimal(result[3].toString()));
-			porfolioIssueEntityPojo.setCostAvgSellPerTitle(result[4] != null ? new BigDecimal(result[4].toString()) : null);
-			porfolioIssueEntityPojo.setCostAvgSellPerTitleMxn(result[5] != null ? new BigDecimal(result[5].toString()) : null);
-			porfolioIssueEntityPojo.setCostTotalBuy(result[6] != null ? new BigDecimal(result[6].toString()) : null);
-			porfolioIssueEntityPojo.setCostTotalSell(result[7] != null ? new BigDecimal(result[7].toString()) : null);
-			porfolioIssueEntityPojo.setCostTotalSellMxn(result[8] != null ? new BigDecimal(result[8].toString()) : null);
-			porfolioIssueEntityPojo.setLastUpdate(result[9] != null ? ((Date)(result[9])).getTime() : null);
+			porfolioIssueEntityPojo.setCostAvgBuyPerTitle(dataParseUtil.parseBigDecimal(result[3]));
+			porfolioIssueEntityPojo.setCostAvgSellPerTitle(dataParseUtil.parseBigDecimal(result[4]));
+			porfolioIssueEntityPojo.setCostAvgSellPerTitleMxn(dataParseUtil.parseBigDecimal(result[5]));
+			porfolioIssueEntityPojo.setCostTotalBuy(dataParseUtil.parseBigDecimal(result[6]));
+			porfolioIssueEntityPojo.setCostTotalSell(dataParseUtil.parseBigDecimal(result[7]));
+			porfolioIssueEntityPojo.setCostTotalSellMxn(dataParseUtil.parseBigDecimal(result[8]));
+			porfolioIssueEntityPojo.setLastUpdate(dataParseUtil.parseDate(result[9]));
 			porfolioIssueEntityPojo.setInitials(result[10].toString());
 			
 			BigDecimal costAvgSellPerTitle = porfolioIssueEntityPojo.getIdTypeCurrency().equals(CatalogsEntity.CatalogTypeCurrency.MXN) ? porfolioIssueEntityPojo.getCostAvgSellPerTitleMxn() : porfolioIssueEntityPojo.getCostAvgSellPerTitle();
