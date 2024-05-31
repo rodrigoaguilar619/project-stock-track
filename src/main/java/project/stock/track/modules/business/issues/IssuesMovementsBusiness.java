@@ -107,22 +107,25 @@ public class IssuesMovementsBusiness extends MainBusiness {
 	
 	private IssueMovementTransactionPojo buildIssueMovementTransactionPojo(BigDecimal currentPrice, BigDecimal totalShares, BigDecimal totalSellPrice, BigDecimal totalBuyPrice, boolean isForSold) {
 		
-		BigDecimal avgCostByShare;
-		BigDecimal performanceByShare;
-		BigDecimal performanceTotal;
-		BigDecimal performancePercentage;
+		BigDecimal avgCostByShare = BigDecimal.ZERO;
+		BigDecimal performanceByShare = BigDecimal.ZERO;
+		BigDecimal performanceTotal = BigDecimal.ZERO;
+		BigDecimal performancePercentage = BigDecimal.ZERO;
+		BigDecimal currentPriceValue = BigDecimal.ZERO;
 		
 		if (isForSold) {
-			avgCostByShare = (totalSellPrice.compareTo(BigDecimal.ZERO) == 0 || totalShares.compareTo(BigDecimal.ZERO) == 0) ? BigDecimal.ZERO : totalSellPrice.divide(totalShares);
+			avgCostByShare = totalShares.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalBuyPrice.divide(totalShares, 5, RoundingMode.HALF_DOWN);
 			performanceTotal = totalSellPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalSellPrice.subtract(totalBuyPrice);
-			performanceByShare = (totalSellPrice.compareTo(BigDecimal.ZERO) == 0 || totalShares.compareTo(BigDecimal.ZERO) == 0) ? BigDecimal.ZERO : performanceTotal.divide(totalShares);
+			performanceByShare = (totalSellPrice.compareTo(BigDecimal.ZERO) == 0 || totalShares.compareTo(BigDecimal.ZERO) == 0) ? BigDecimal.ZERO : performanceTotal.divide(totalShares, 5, RoundingMode.HALF_DOWN);
 			performancePercentage = totalSellPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calculatorUtil.calculatePercentageUpDown(totalBuyPrice, totalSellPrice);
+			currentPriceValue = totalSellPrice.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalSellPrice.divide(totalShares, 5, RoundingMode.HALF_DOWN);
 		}
-		else {
-			avgCostByShare = totalBuyPrice.divide(totalShares);
+		else if(totalShares.compareTo(BigDecimal.ZERO) != 0) {
+			avgCostByShare = totalBuyPrice.divide(totalShares, 5, RoundingMode.HALF_DOWN);
 			performanceTotal = (currentPrice.multiply(totalShares)).subtract(totalBuyPrice);
-			performanceByShare = performanceTotal.divide(totalShares);
+			performanceByShare = performanceTotal.divide(totalShares, 5, RoundingMode.HALF_DOWN);
 			performancePercentage = calculatorUtil.calculatePercentageUpDown(totalBuyPrice, currentPrice.multiply(totalShares));
+			currentPriceValue = currentPrice;
 		}
 		
 		IssueMovementTransactionPojo issueMovementTransactionPojo = new IssueMovementTransactionPojo();
@@ -131,7 +134,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementTransactionPojo.setPerformanceByShare(performanceByShare);
 		issueMovementTransactionPojo.setPerformanceTotal(performanceTotal);
 		issueMovementTransactionPojo.setPerformancePercentage(performancePercentage);
-		issueMovementTransactionPojo.setCurrentPriceByShare(currentPrice);
+		issueMovementTransactionPojo.setCurrentPriceByShare(currentPriceValue);
 		
 		return issueMovementTransactionPojo;
 	}
@@ -148,9 +151,9 @@ public class IssuesMovementsBusiness extends MainBusiness {
 			
 			if (isForSold && issueMovementBuyPojo.getSellPrice() != null) {
 				totalShares = totalShares.add(issueMovementBuyPojo.getTotalShares());
-				totalSellPrice = totalShares.add(issueMovementBuyPojo.getSellPrice());
+				totalSellPrice = totalSellPrice.add(issueMovementBuyPojo.getSellPrice().multiply(issueMovementBuyPojo.getTotalShares()));
 			}
-			else if (!isForSold){
+			else if (!isForSold && issueMovementBuyPojo.getSellPrice() == null) {
 				totalShares = totalShares.add(issueMovementBuyPojo.getTotalShares());
 			}
 		}
@@ -178,7 +181,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 			}
 			
 			if(issueMovementResumePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER)) {
-				totalCurrentPriceSet = totalCurrentPriceSet.divide(dollarHistoricalPriceEntity.getPrice());
+				totalCurrentPriceSet = totalCurrentPriceSet.divide(dollarHistoricalPriceEntity.getPrice(), 5, RoundingMode.HALF_DOWN);
 				totalBuyPriceSet = totalBuyPriceSet.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalBuyPriceSet.divide(dollarHistoricalPriceEntity.getPrice(), 5, RoundingMode.HALF_DOWN);
 			}
 			
@@ -249,6 +252,11 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 		for (IssuesMovementsEntity issueMovementEntity: issuesMovements) {
 			
+			if(issueMovementEntity.getIssuesManagerEntity().getCatalogIssueEntity().getInitials().equals("VTR"))
+			{
+				System.out.println("VTR");
+			}
+			
 			List<IssueMovementBuyEntityPojo> issueMovementBuysPojosList = buildIssueMovementBuy(issueMovementEntity);
 			
 			IssuesManagerEntity managerIssuesEntity = issueMovementEntity.getIssuesManagerEntity();
@@ -263,6 +271,13 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		dataPojo.setTotalIssuesMovements(totalIssuesMovements);
 		dataPojo.setIssueMovementTransactionTotalSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, true));
 		dataPojo.setIssueMovementTransactionTotalNotSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, false));
+		
+		IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalResumePojo = new IssueMovementTransactionTotalResumePojo();
+		issueMovementTransactionTotalResumePojo.setTotalCurrentPrice(dataPojo.getIssueMovementTransactionTotalNotSold().getTotalCurrentPrice().add(dataPojo.getIssueMovementTransactionTotalSold().getTotalCurrentPrice()));
+		issueMovementTransactionTotalResumePojo.setTotalBuyPrice(dataPojo.getIssueMovementTransactionTotalNotSold().getTotalBuyPrice().add(dataPojo.getIssueMovementTransactionTotalSold().getTotalBuyPrice()));
+		issueMovementTransactionTotalResumePojo.setPerformanceTotal(issueMovementTransactionTotalResumePojo.getTotalCurrentPrice().subtract(issueMovementTransactionTotalResumePojo.getTotalBuyPrice()));
+		issueMovementTransactionTotalResumePojo.setPerformancePercentage((issueMovementTransactionTotalResumePojo.getPerformanceTotal().divide(issueMovementTransactionTotalResumePojo.getTotalBuyPrice(), 5, RoundingMode.HALF_DOWN).multiply(new BigDecimal(100))));
+		dataPojo.setIssueMovementTransactionTotal(issueMovementTransactionTotalResumePojo);
 		
 		return dataPojo;
 	}

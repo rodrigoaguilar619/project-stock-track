@@ -13,6 +13,8 @@ public class GetIssuesMovementsListDataPojo {
 	private IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalNotSold;
 	
 	private IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalSold;
+	
+	private IssueMovementTransactionTotalResumePojo issueMovementTransactionTotal;
 
 	private Long totalIssuesMovements;
 
@@ -46,5 +48,13 @@ public class GetIssuesMovementsListDataPojo {
 
 	public void setIssueMovementTransactionTotalSold(IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalSold) {
 		this.issueMovementTransactionTotalSold = issueMovementTransactionTotalSold;
+	}
+
+	public IssueMovementTransactionTotalResumePojo getIssueMovementTransactionTotal() {
+		return issueMovementTransactionTotal;
+	}
+
+	public void setIssueMovementTransactionTotal(IssueMovementTransactionTotalResumePojo issueMovementTransactionTotal) {
+		this.issueMovementTransactionTotal = issueMovementTransactionTotal;
 	}
 }

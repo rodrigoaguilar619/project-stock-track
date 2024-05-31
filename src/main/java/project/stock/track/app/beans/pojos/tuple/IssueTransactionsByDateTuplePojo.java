@@ -6,15 +6,18 @@ public class IssueTransactionsByDateTuplePojo {
 
 	private Long date;
 	
-	private Long totalShares;
+	private BigDecimal totalShares;
 	
 	private BigDecimal price;
+	
+	private String brokerDescription;
 
-	public IssueTransactionsByDateTuplePojo(Long date, Long totalShares, BigDecimal price) {
+	public IssueTransactionsByDateTuplePojo(Long date, BigDecimal totalShares, BigDecimal price, String brokerDescription) {
 		super();
 		this.date = date;
 		this.totalShares = totalShares;
 		this.price = price;
+		this.brokerDescription = brokerDescription;
 	}
 
 	public Long getDate() {
@@ -25,11 +28,11 @@ public class IssueTransactionsByDateTuplePojo {
 		this.date = date;
 	}
 
-	public Long getTotalShares() {
+	public BigDecimal getTotalShares() {
 		return totalShares;
 	}
 
-	public void setTotalShares(Long totalShares) {
+	public void setTotalShares(BigDecimal totalShares) {
 		this.totalShares = totalShares;
 	}
 
@@ -39,5 +42,13 @@ public class IssueTransactionsByDateTuplePojo {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getBrokerDescription() {
+		return brokerDescription;
+	}
+
+	public void setBrokerDescription(String brokerDescription) {
+		this.brokerDescription = brokerDescription;
 	}
 }

@@ -116,7 +116,9 @@ public class TransactionIssueRepositoryImpl {
 		
 		cq.select(cb.construct(IssueTransactionsByDateTuplePojo.class,
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000),
-				cb.count(root.get(TransactionIssueEntity_.idIssue)), root.get(TransactionIssueEntity_.priceTotalBuy)));
+				cb.sum(root.get(TransactionIssueEntity_.totalShares)),
+				root.get(TransactionIssueEntity_.priceTotalBuy),
+				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.acronym)));
 
 		cq.groupBy(root.get(TransactionIssueEntity_.idDate), root.get(TransactionIssueEntity_.priceTotalBuy));
 		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.idDate)));

@@ -79,8 +79,10 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		issueMovementBuyEntity.setId(pk);
 		issueMovementBuyEntity.setBuyPrice(issueMovementBuyEntityPojo.getBuyPrice());
 		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
+		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
 		issueMovementBuyEntity.setSellPrice(issueMovementBuyEntityPojo.getSellPrice());
 		issueMovementBuyEntity.setSellDate(issueMovementBuyEntityPojo.getSellDate() != null ? new Date(issueMovementBuyEntityPojo.getSellDate()) : null);
+		issueMovementBuyEntity.setTotalShares(issueMovementBuyEntityPojo.getTotalShares());
 		
 		genericPersistance.save(issueMovementBuyEntity);
 	}
