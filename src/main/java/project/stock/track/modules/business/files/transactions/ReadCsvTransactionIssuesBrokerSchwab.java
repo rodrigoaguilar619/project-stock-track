@@ -51,7 +51,9 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 		
 		for (List<String> rowRecord: records) {
 			
-			if (!isRowHeader && customArraysUtil.compareList(rowRecord, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB))
+			if (!isRowHeader && 
+					(customArraysUtil.compareList(rowRecord, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB)
+					|| customArraysUtil.compareList(rowRecord, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_2)) )
 				isRowHeader = true;
 				
 			if (!isRowHeader || determineSkipRow(rowRecord))

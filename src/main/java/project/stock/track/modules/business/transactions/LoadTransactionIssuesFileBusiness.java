@@ -254,7 +254,10 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		CatalogBrokerEntity catalogBrokerEntity = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, idBroker);
 		
 		if ((idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) && !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER)) ||
-				(idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB) && !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB)))
+				(idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB) && 
+				(!customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
+				 !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_2)
+			)))
 			throw new BusinessException("Bad header format for broker " + catalogBrokerEntity.getAcronym());
 	}
 	
