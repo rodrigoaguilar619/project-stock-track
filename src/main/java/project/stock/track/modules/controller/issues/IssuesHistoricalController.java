@@ -1,6 +1,7 @@
 package project.stock.track.modules.controller.issues;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +32,7 @@ public class IssuesHistoricalController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_HISTORICAL_INDVIDUAL_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_HISTORICAL_INDVIDUAL_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssueHistorical(@RequestBody GetIssueHistoricalRequestPojo requestPojo) {
 		
 		GetIssueHistoricalDataPojo dataPojo = issuesHistoricalBusiness.executeGetIssueHistorical(requestPojo);
@@ -39,7 +40,7 @@ public class IssuesHistoricalController {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_HISTORICAL_LIST_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_HISTORICAL_LIST_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssuesHistorical(@RequestBody GetIssuesHistoricalRequestPojo requestPojo) {
 		
 		GetIssuesHistoricalDataPojo dataPojo = issuesHistoricalBusiness.executeGetIssuesHistorical(requestPojo);

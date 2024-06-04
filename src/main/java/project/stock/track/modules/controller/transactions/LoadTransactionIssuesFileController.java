@@ -30,7 +30,7 @@ public class LoadTransactionIssuesFileController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_TRANSACION_ISSUES_FILE_LOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_TRANSACION_ISSUES_FILE_LOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity registerIssueTransactions(HttpServletResponse httpResponse, @ModelAttribute LoadTransactionIssuesFileRequestPojo requestPojo) throws IOException, BusinessException, ParseException {
 		
 		LoadTransactionIssuesFileDataPojo dataPojo = loadTransactionIssuesFileBusiness.executeRegisterTransactionIssuesFromFile(requestPojo);

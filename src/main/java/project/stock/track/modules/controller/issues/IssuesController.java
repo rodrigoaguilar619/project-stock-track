@@ -1,6 +1,7 @@
 package project.stock.track.modules.controller.issues;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class IssuesController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_LIST_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_LIST_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssuesList(@RequestBody GetIssuesListRequestPojo requestPojo) {
 		
 		GetIssuesListDataPojo dataPojo = issuesBusiness.executeGetIssuesList(requestPojo);
@@ -37,7 +38,7 @@ public class IssuesController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_INDIVIDUAL_UPDATE, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_INDIVIDUAL_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateIssueData(@RequestBody UpdateIssueRequestPojo requestPojo) throws BusinessException {
 		
 		UpdateIssueDataPojo dataPojo = issuesBusiness.executeUpdateIssue(requestPojo);
@@ -45,7 +46,7 @@ public class IssuesController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MULTIPLE_ADD, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MULTIPLE_ADD, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity addMultipleIssuesData(@RequestBody AddMultipleIssuesRequestPojo requestPojo) throws BusinessException {
 		
 		issuesBusiness.executeAddMultipleIssues(requestPojo);
@@ -53,7 +54,7 @@ public class IssuesController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_INDIVIDUAL_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_INDIVIDUAL_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssue(@RequestBody GetIssueRequestPojo requestPojo) throws BusinessException {
 		
 		GetIssueDataPojo dataPojo = issuesBusiness.executeGetIssue(requestPojo);

@@ -1,6 +1,7 @@
 package project.stock.track.modules.controller.issues;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class IssuesLastPriceController {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_LAST_PRICES_TEMP_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_LAST_PRICES_TEMP_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssuesLastPrice() {
 		
 		GetTempIssuesLastPriceDataPojo dataPojo = issuesLastPriceBusiness.executeGetIssuesLastPrice();
@@ -29,7 +30,7 @@ public class IssuesLastPriceController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_LAST_PRICES_TEMP_UPDATE, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_LAST_PRICES_TEMP_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateTempLastPrices() {
 		
 		issuesLastPriceBusiness.executeStoreIssuesLastPrice();

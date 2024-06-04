@@ -1,6 +1,7 @@
 package project.stock.track.modules.controller.transactions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class TransactionIssuesController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_TRANSACION_ISSUES_TRACK_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_TRANSACION_ISSUES_TRACK_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getTransactionIssuesTrack(@RequestBody GetTransactionIssuestrackRequestPojo requestPojo) {
 		
 		GetTransactionIssuestrackDataPojo dataPojo = portfolioBusiness.executeGetTransactionIssuesTrack(requestPojo);

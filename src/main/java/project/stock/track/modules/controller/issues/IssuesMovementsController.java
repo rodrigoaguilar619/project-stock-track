@@ -1,6 +1,7 @@
 package project.stock.track.modules.controller.issues;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,7 @@ public class IssuesMovementsController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_LIST_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_LIST_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssuesMovementsList(@RequestBody GetIssuesMovementsListRequestPojo requestPojo) {
 		
 		GetIssuesMovementsListDataPojo dataPojo = issuesMovementsBusiness.executeGetIssuesMovements(requestPojo);
@@ -40,7 +41,7 @@ public class IssuesMovementsController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_GET, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity getIssueMovement(@RequestBody GetIssueMovementRequestPojo requestPojo) {
 		
 		GetIssueMovementDataPojo dataPojo = issuesMovementsCrudBusiness.executeGetIssueMovement(requestPojo);
@@ -48,7 +49,7 @@ public class IssuesMovementsController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_SAVE, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_SAVE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity saveIssueMovement(@RequestBody AddEditIssueMovementRequestPojo requestPojo) throws BusinessException {
 		
 		issuesMovementsCrudBusiness.executeManageAddEditIssueMovement(requestPojo, CrudOptionsEnum.SAVE);
@@ -56,7 +57,7 @@ public class IssuesMovementsController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_UPDATE, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateIssueMovement(@RequestBody AddEditIssueMovementRequestPojo requestPojo) throws BusinessException {
 		
 		issuesMovementsCrudBusiness.executeManageAddEditIssueMovement(requestPojo, CrudOptionsEnum.UPDATE);
@@ -64,7 +65,7 @@ public class IssuesMovementsController {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_INACTIVATE, consumes = "application/json", produces = "application/json")
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_INACTIVATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity inactivateIssueMovement(@RequestBody GetIssueMovementRequestPojo requestPojo) {
 		
 		issuesMovementsCrudBusiness.executeInactivateIssueMovement(requestPojo);
