@@ -252,11 +252,6 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 		for (IssuesMovementsEntity issueMovementEntity: issuesMovements) {
 			
-			if(issueMovementEntity.getIssuesManagerEntity().getCatalogIssueEntity().getInitials().equals("VTR"))
-			{
-				System.out.println("VTR");
-			}
-			
 			List<IssueMovementBuyEntityPojo> issueMovementBuysPojosList = buildIssueMovementBuy(issueMovementEntity);
 			
 			IssuesManagerEntity managerIssuesEntity = issueMovementEntity.getIssuesManagerEntity();
@@ -276,7 +271,13 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementTransactionTotalResumePojo.setTotalCurrentPrice(dataPojo.getIssueMovementTransactionTotalNotSold().getTotalCurrentPrice().add(dataPojo.getIssueMovementTransactionTotalSold().getTotalCurrentPrice()));
 		issueMovementTransactionTotalResumePojo.setTotalBuyPrice(dataPojo.getIssueMovementTransactionTotalNotSold().getTotalBuyPrice().add(dataPojo.getIssueMovementTransactionTotalSold().getTotalBuyPrice()));
 		issueMovementTransactionTotalResumePojo.setPerformanceTotal(issueMovementTransactionTotalResumePojo.getTotalCurrentPrice().subtract(issueMovementTransactionTotalResumePojo.getTotalBuyPrice()));
+		
+		if (issueMovementTransactionTotalResumePojo.getTotalBuyPrice().compareTo(BigDecimal.ZERO) != 0) {
 		issueMovementTransactionTotalResumePojo.setPerformancePercentage((issueMovementTransactionTotalResumePojo.getPerformanceTotal().divide(issueMovementTransactionTotalResumePojo.getTotalBuyPrice(), 5, RoundingMode.HALF_DOWN).multiply(new BigDecimal(100))));
+		}
+		else {
+			issueMovementTransactionTotalResumePojo.setPerformancePercentage(BigDecimal.ZERO);
+		}
 		dataPojo.setIssueMovementTransactionTotal(issueMovementTransactionTotalResumePojo);
 		
 		return dataPojo;
