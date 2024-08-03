@@ -10,6 +10,7 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesManagerTrackPropertiesEntity.class)
 public abstract class IssuesManagerTrackPropertiesEntity_ {
 
+	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, IssuesManagerEntityPk> id;
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Boolean> isInvest;
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idIssue;
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, Integer> idUser;
@@ -18,6 +19,7 @@ public abstract class IssuesManagerTrackPropertiesEntity_ {
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackBuyPrice;
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, IssuesManagerEntity> issuesManagerEntity;
 
+	public static final String ID = "id";
 	public static final String IS_INVEST = "isInvest";
 	public static final String ID_ISSUE = "idIssue";
 	public static final String ID_USER = "idUser";

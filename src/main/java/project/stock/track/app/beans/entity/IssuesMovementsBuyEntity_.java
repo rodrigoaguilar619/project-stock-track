@@ -16,6 +16,7 @@ public abstract class IssuesMovementsBuyEntity_ {
 	public static SingularAttribute<IssuesMovementsBuyEntity, Date> sellDate;
 	public static SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> buyPrice;
 	public static SingularAttribute<IssuesMovementsBuyEntity, Date> buyDate;
+	public static SingularAttribute<IssuesMovementsBuyEntity, BigDecimal> totalShares;
 	public static SingularAttribute<IssuesMovementsBuyEntity, IssuesMovementsEntity> issuesMovementsEntity;
 
 	public static final String ID = "id";
@@ -23,6 +24,7 @@ public abstract class IssuesMovementsBuyEntity_ {
 	public static final String SELL_DATE = "sellDate";
 	public static final String BUY_PRICE = "buyPrice";
 	public static final String BUY_DATE = "buyDate";
+	public static final String TOTAL_SHARES = "totalShares";
 	public static final String ISSUEs_MOVEMENTS_ENTITY = "issuesMovementsEntity";
 
 }

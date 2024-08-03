@@ -22,9 +22,6 @@ public class TransactionMoneyEntity implements Serializable {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "id_type_currency")
-	private Integer idTypeCurrency;
-	
 	@Column(name = "amount")
 	private BigDecimal amount;
 	
@@ -61,14 +58,6 @@ public class TransactionMoneyEntity implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Integer getIdTypeCurrency() {
-		return idTypeCurrency;
-	}
-
-	public void setIdTypeCurrency(Integer idTypeCurrency) {
-		this.idTypeCurrency = idTypeCurrency;
 	}
 
 	public void setIdBroker(Integer idBroker) {
