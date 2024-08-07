@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.ForeignKey; 
 
 @Table(name = "transaction_issue")
 @Entity
@@ -77,7 +78,7 @@ public class TransactionIssueEntity implements Serializable {
 	private IssuesManagerEntity issuesManagerEntity;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_issue", insertable = false, updatable= false)
+	@JoinColumn(name = "id_issue", foreignKey = @ForeignKey(name = "none"), insertable = false, updatable= false)
 	IssuesLastPriceTmpEntity issuesLastPriceTmpEntity;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
