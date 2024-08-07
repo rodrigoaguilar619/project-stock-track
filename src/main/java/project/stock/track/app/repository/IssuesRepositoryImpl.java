@@ -67,6 +67,7 @@ public class IssuesRepositoryImpl {
 		root.fetch(CatalogIssuesEntity_.catalogTypeStockEntity, JoinType.LEFT);
 		root.fetch(CatalogIssuesEntity_.catalogSectorEntity, JoinType.LEFT);
 		root.fetch(CatalogIssuesEntity_.catalogStatusIssueEntity, JoinType.LEFT);
+		root.fetch(CatalogIssuesEntity_.tempIssuesLastPriceEntity, JoinType.LEFT);
 
 		List<Predicate> predicatesAnd = new ArrayList<>();
 
