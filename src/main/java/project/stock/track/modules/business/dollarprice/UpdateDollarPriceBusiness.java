@@ -17,12 +17,8 @@ import project.stock.track.services.dollarprice.DollarPriceService;
 @Component
 public class UpdateDollarPriceBusiness extends MainBusiness {
 	
-	DollarPriceService dollarPriceService;
-	
 	@Autowired
-	public UpdateDollarPriceBusiness(DollarPriceService dollarPriceService) {
-		this.dollarPriceService = dollarPriceService;
-	}
+	DollarPriceService dollarPriceService;
 
 	@SuppressWarnings({ "unchecked" })
 	@Transactional(rollbackFor = Exception.class)
