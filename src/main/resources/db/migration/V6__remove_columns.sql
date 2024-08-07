@@ -1,0 +1,2 @@
+ALTER TABLE transaction_money DROP FOREIGN KEY fk_transaction_money_type_currency;
+ALTER TABLE transaction_money DROP COLUMN id_type_currency;

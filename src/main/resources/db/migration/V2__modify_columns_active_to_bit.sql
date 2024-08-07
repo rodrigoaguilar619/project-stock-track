@@ -1,5 +1,5 @@
 ALTER TABLE catalog_broker MODIFY COLUMN is_active BIT NOT NULL;
-ALTER TABLE catalog_issues MODIFY COLUMN is_SP_500 BIT NULL;
+ALTER TABLE catalog_issues MODIFY COLUMN is_sp_500 BIT NULL;
 ALTER TABLE catalog_sector MODIFY COLUMN is_active BIT NOT NULL;
 ALTER TABLE catalog_status_issue MODIFY COLUMN is_active BIT NOT NULL;
 ALTER TABLE catalog_status_issue_movement MODIFY COLUMN is_active BIT NOT NULL;
