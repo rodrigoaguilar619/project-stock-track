@@ -115,7 +115,7 @@ public class TransactionIssueRepositoryImpl {
 		predicatesAnd.add(cb.greaterThanOrEqualTo(root.get(TransactionIssueEntity_.idDate), startDate));
 		
 		cq.select(cb.construct(IssueTransactionsByDateTuplePojo.class,
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)),
 				root.get(TransactionIssueEntity_.priceTotalBuy),
 				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.acronym)));
@@ -144,10 +144,10 @@ public class TransactionIssueRepositoryImpl {
 				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.DESCRIPTION),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)), root.get(TransactionIssueEntity_.priceTotalBuy),
 				cb.sum(root.get(TransactionIssueEntity_.priceTotalBuy)),
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
 				root.get(TransactionIssueEntity_.priceTotalSell),
 				cb.sum(root.get(TransactionIssueEntity_.priceTotalSell)),
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000L),
 				root.get(TransactionIssueEntity_.SELL_GAIN_LOSS_PERCENTAGE),
 				root.get(TransactionIssueEntity_.SELL_GAIN_LOSS_TOTAL));
 
