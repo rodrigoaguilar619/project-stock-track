@@ -68,6 +68,26 @@ public class CatalogsEntity {
 		public static final Integer INACTIVE = 2;
 	}
 	
+	public static final class CatalogSector {
+		
+		private CatalogSector() {
+		 }
+		
+		public static final Integer FINANCIALS = 1;
+		public static final Integer TECHNOLOGY = 2;
+		public static final Integer HEALTHCARE = 3;
+		public static final Integer MATERIALS = 4;
+		public static final Integer REAL_ESTATE = 5;
+		public static final Integer CONSUMER_STAPLES = 6;
+		public static final Integer CONSUMER_DISCRETIONARY = 7;
+		public static final Integer UTILITIES = 8;
+		public static final Integer ENERGY = 9;
+		public static final Integer INDUSTRIALS = 10;
+		public static final Integer CONSUMER_SERVICES = 11;
+		public static final Integer CONSUMER_CYCLICAL = 12;
+		public static final Integer CONSUMER_DEFENSIVE = 13;
+	}
+	
 	public static final class StatusIssueMovement {
 		
 		private StatusIssueMovement() {
