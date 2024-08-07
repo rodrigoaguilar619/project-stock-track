@@ -30,6 +30,7 @@ import project.stock.track.app.beans.pojos.petition.request.GetIssuesManagerList
 import project.stock.track.app.beans.pojos.petition.request.UpdateIssueManagerRequestPojo;
 import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
+import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -124,7 +125,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 		UserEntity userEntity = userRepository.findByUserName(requestPojo.getUserName());
 		
 		if (!issuesManagerRepository.existsIssueManager(requestPojo.getIssueManagerData().getIdIssue(), userEntity.getId()))
-			throw new BusinessException("Manager issue doesn't registered");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueNotRegistered());
 		
 		IssuesManagerEntity issuesManagerEntity = (IssuesManagerEntity) genericPersistance.findById(IssuesManagerEntity.class, new IssuesManagerEntityPk(requestPojo.getIssueManagerData().getIdIssue(), userEntity.getId()));
 			
@@ -146,7 +147,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 		IssuesManagerEntity issuesManagerEntity = (IssuesManagerEntity) genericPersistance.findById(IssuesManagerEntity.class, pk);
 		
 		if(issuesManagerEntity == null)
-			throw new BusinessException("Manager issue doesn't exist");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueNotRegistered());
 		
 		IssuesManagerTrackPropertiesEntity issuesManagerTrackPropertiesEntity = issuesManagerEntity.getIssuesManagerTrackPropertiesEntity();
 		

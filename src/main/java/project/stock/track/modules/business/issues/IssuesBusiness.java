@@ -26,6 +26,7 @@ import project.stock.track.app.beans.pojos.petition.request.UpdateIssueRequestPo
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusQuick;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusTrading;
+import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -91,7 +92,7 @@ public class IssuesBusiness extends MainBusiness {
 	public UpdateIssueDataPojo executeUpdateIssue(UpdateIssueRequestPojo requestPojo) throws BusinessException {
 		
 		if (!issuesRepository.existsIssue(requestPojo.getIssueData().getIdIssue()))
-			throw new BusinessException("Issue doesn't registered");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueNotRegistered());
 		
 		CatalogIssuesEntity catalogIssuesEntity = (CatalogIssuesEntity) genericPersistance.findById(CatalogIssuesEntity.class, requestPojo.getIssueData().getIdIssue());
 			
@@ -115,7 +116,7 @@ public class IssuesBusiness extends MainBusiness {
 		}
 		
 		if (!issuesRegitered.isEmpty())
-			throw new BusinessException("issues " + String.join(", ", issuesRegitered) + " already registered");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssuesRegistered(String.join(", ", issuesRegitered)));
 		
 		List<UserEntity> userEntities = userRepository.findAllStatusActive();
 		
@@ -144,7 +145,7 @@ public class IssuesBusiness extends MainBusiness {
 		CatalogIssuesEntity catalogIssuesEntity = (CatalogIssuesEntity) genericPersistance.findById(CatalogIssuesEntity.class, requestPojo.getIdIssue());
 		
 		if(catalogIssuesEntity == null)
-			throw new BusinessException("Issue doesn't exist");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueNotRegistered());
 		
 		CatalogIssuesEntityPojo catalogIssuesEntityPojo = mapEntityToPojoUtil.mapCatalogIssue(catalogIssuesEntity, null);
 		

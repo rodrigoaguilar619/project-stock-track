@@ -34,6 +34,7 @@ import project.stock.track.app.beans.rest.exchangetrade.service.tiingo.ShareHist
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
 import project.stock.track.app.utils.DateFinantialUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
@@ -122,7 +123,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 			if (!validateRangeDate(map.get("startDate").get(0), (map.get("endDate").get(0))))
 					return null;
 		} catch (ParseException e) {
-			throw new BusinessException("Error validating range date on service consume for issue: " + issueHistoricQueryPojo.getIssue());
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgExchangeTradeBadRangeDate(issueHistoricQueryPojo.getIssue(), map.get("startDate").get(0), map.get("endDate").get(0)));
 		}
 	    
 	    Map<String, Object> mapIssuesData = getIssueHistorical(map, issueHistoricQueryPojo);

@@ -26,6 +26,7 @@ import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssues;
@@ -84,9 +85,8 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			
 			CatalogIssuesEntity catalogIssuesEntityVerify =  issuesRepository.findByInitials(transactionIssueFilePojo.getIssue());
 		
-			if (catalogIssuesEntityVerify == null) {
-				throw new BusinessException(MSG_ISSUE_NOT_REGISTERED + transactionIssueFilePojo.getIssue());
-			}
+			if (catalogIssuesEntityVerify == null)
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 			
 			TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
 			
@@ -134,7 +134,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			if (ex instanceof BusinessException)
 				throw ex;
 			else
-				throw new BusinessException("Error registering buy transaction", ex);
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBuyTransactionRegister(), ex);
 		}
 		finally {
 			genericCustomPersistance.closeEntityManager();
@@ -149,17 +149,14 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		
 		CatalogIssuesEntity catalogIssuesEntityVerify =  issuesRepository.findByInitials(transactionIssueFilePojo.getIssue());
 		
-		if (catalogIssuesEntityVerify == null) {
-			throw new BusinessException(MSG_ISSUE_NOT_REGISTERED + transactionIssueFilePojo.getIssue());
-		}
-		else {
+		if (catalogIssuesEntityVerify == null)
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 		
-			TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
-			
-			if (issuesFundsTransactionsEntityVerify != null && issuesFundsTransactionsEntityVerify.getSellDate() != null) {
-				messages.add("Issue transaction sell found issue: " + catalogIssuesEntityVerify.getInitials() + MSG_DATE + issuesFundsTransactionsEntityVerify.getSellDate());
-				return messages;
-			}
+		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
+		
+		if (issuesFundsTransactionsEntityVerify != null && issuesFundsTransactionsEntityVerify.getSellDate() != null) {
+			messages.add("Issue transaction sell found issue: " + catalogIssuesEntityVerify.getInitials() + MSG_DATE + issuesFundsTransactionsEntityVerify.getSellDate());
+			return messages;
 		}
 		
 		try {
@@ -187,7 +184,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		}
 		catch(Exception ex) {
 			genericCustomPersistance.rollBackTransaction();
-			throw new BusinessException("Error registering sell transaction from issue: " + transactionIssueFilePojo.getIssue(), ex);
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileSellTransactionRegister(transactionIssueFilePojo.getIssue()), ex);
 		}
 		finally {
 			genericCustomPersistance.closeEntityManager();
@@ -236,7 +233,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			}
 			catch(Exception ex) {
 				genericCustomPersistance.rollBackTransaction();
-				throw new BusinessException("Error registering issue transaction short sell", ex);
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileSellTransactionRegister(transactionIssueFilePojo.getIssue()), ex);
 			}
 			finally {
 				genericCustomPersistance.closeEntityManager();
@@ -249,7 +246,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	public void validateFileFormat(Integer idBroker, List<List<String>> csvFileData) throws BusinessException {
 		
 		if (csvFileData.isEmpty())
-			throw new BusinessException("File is empty");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileEmpty());
 		
 		CatalogBrokerEntity catalogBrokerEntity = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, idBroker);
 		
@@ -258,7 +255,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 				(!customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
 				 !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_2)
 			)))
-			throw new BusinessException("Bad header format for broker " + catalogBrokerEntity.getAcronym());
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBadHeaderFormat(catalogBrokerEntity.getAcronym()));
 	}
 	
 	public ReadCsvTransactionIssues getReadTransactionIssues(Integer idBroker) throws BusinessException {
@@ -268,7 +265,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		else if (idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB))
 			return new ReadCsvTransactionIssuesBrokerSchwab();
 		else
-			throw new BusinessException("Broker not managed");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBrokerNotRegistered());
 	}
 	
 	public LoadTransactionIssuesFileDataPojo registerTransactionIssuesFromFile(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, List<TransactionIssueFilePojo> transactionIssueFilePojos) throws BusinessException {

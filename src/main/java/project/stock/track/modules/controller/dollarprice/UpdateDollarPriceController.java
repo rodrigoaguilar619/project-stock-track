@@ -26,7 +26,7 @@ public class UpdateDollarPriceController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(CatalogsUri.API_SERVICE_DOLLAR_UPDATE)
-	public ResponseEntity updateDollarPrice(HttpServletResponse httpResponse) throws ParseException {
+	public ResponseEntity updateDollarPrice(/*HttpServletResponse httpResponse*/) throws ParseException {
 		
 		UpdateDollarPriceDataPojo dataPojo = updateDollarPriceBusiness.executeUpdateDollarPrice();
 		return new RestUtil().buildResponseSuccess(dataPojo, "Dollar price updated");

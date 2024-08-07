@@ -28,6 +28,7 @@ import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
+import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -139,14 +140,14 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		CatalogIssuesEntity catalogIssuesEntity = issuesRepository.findByInitials(requestPojo.getIssue());
 		
 		if (catalogIssuesEntity == null)
-			throw new BusinessException(String.format("Issue %s not exist", requestPojo.getIssue()));
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueDescriptionNotRegistered(requestPojo.getIssue()));
 		
 		IssuesManagerEntityPk pk = new IssuesManagerEntityPk(catalogIssuesEntity.getId(), userEntity.getId());
 		
 		IssuesManagerEntity issuesManagerEntity = (IssuesManagerEntity) genericPersistance.findById(IssuesManagerEntity.class, pk);
 		
 		if (issuesManagerEntity == null)
-			throw new BusinessException("Issue not exist");
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueManagerNotRegistered());
 		
 		IssuesMovementsEntity issuesMovementsEntity = crudOptionsEnum == CrudOptionsEnum.SAVE
 				? new IssuesMovementsEntity()
