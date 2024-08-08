@@ -9,24 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import lib.base.backend.test.assessment.Assessment;
 import lib.base.backend.utils.ExecuteMethodUtil;
-import project.stock.track.ProjectMainTest;
+import project.stock.track.ProjectJpaTest;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionResumeTuplePojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
 
-class TransactionIssueRepositoryImplTest extends ProjectMainTest {
+class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 
 	@Autowired
 	private TransactionIssueRepositoryImpl transactionIssueRepository;
 	
-	//@Test
+	@Test
 	void testFindIssueTransactionsBuys() throws Throwable {
 		
 		ExecuteMethodUtil.execute("EXECUTING testFindIssueTransactionsBuys", () -> {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Integer idUser = 1;
-			Integer idIssue = 111;
-			Date date = sdf.parse("2020-01-01");
+			Integer idIssue = 4;
+			Date date = sdf.parse("2021-02-18");
 			
 			List<IssueTransactionsByDateTuplePojo> issueTransactionsByDateTuplePojos = transactionIssueRepository.findIssueTransactionsBuys(idUser, idIssue, date);
 			
@@ -39,7 +39,7 @@ class TransactionIssueRepositoryImplTest extends ProjectMainTest {
 		
 		ExecuteMethodUtil.executeAndCatch("EXECUTING testFindIssueTransactionsResumes", () -> {
 			
-			Integer idIssue = 111;
+			Integer idIssue = 4;
 			Integer idUser = 1;
 			List<IssueTransactionResumeTuplePojo> issueTransactionResumeTuplePojos = transactionIssueRepository.findIssueTransactionsResume(idUser, idIssue);
 			

@@ -6,14 +6,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import lib.base.backend.test.assessment.Assessment;
 import lib.base.backend.utils.ExecuteMethodUtil;
-import project.stock.track.ProjectMainTest;
+import project.stock.track.ProjectJpaTest;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssuesFiltersPojo;
 
-class IssuesRepositoryImplTest extends ProjectMainTest {
+class IssuesRepositoryImplTest extends ProjectJpaTest {
 	
 	@Autowired
 	private IssuesRepositoryImpl issuesRepository;
