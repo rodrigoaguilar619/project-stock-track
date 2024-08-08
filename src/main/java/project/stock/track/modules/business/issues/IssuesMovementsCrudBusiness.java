@@ -172,7 +172,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	public void executeInactivateIssueMovement(GetIssueMovementRequestPojo requestPojo) {
 		
 		IssuesMovementsEntity issueMovementEntity = (IssuesMovementsEntity) genericPersistance.findById(IssuesMovementsEntity.class, requestPojo.getIdIssueMovement());
-		issueMovementEntity.setIdStatus(CatalogsEntity.StatusIssueMovement.INACTIVE);
+		issueMovementEntity.setIdStatus(CatalogsEntity.CatalogStatusIssueMovement.INACTIVE);
 		
 		genericPersistance.update(issueMovementEntity);
 		genericPersistance.flush();

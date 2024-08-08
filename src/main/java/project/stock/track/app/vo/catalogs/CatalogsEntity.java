@@ -88,9 +88,9 @@ public class CatalogsEntity {
 		public static final Integer CONSUMER_DEFENSIVE = 13;
 	}
 	
-	public static final class StatusIssueMovement {
+	public static final class CatalogStatusIssueMovement {
 		
-		private StatusIssueMovement() {
+		private CatalogStatusIssueMovement() {
 		 }
 		
 		public static final Integer ACTIVE = 1;
