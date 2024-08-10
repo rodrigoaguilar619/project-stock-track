@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * The primary key class for the movements_issue_buy database table.
- * 
- */
+@Getter @Setter
+@EqualsAndHashCode
 @Embeddable
 public class IssuesManagerEntityPk implements Serializable {
 	
@@ -28,44 +29,5 @@ public class IssuesManagerEntityPk implements Serializable {
 		super();
 		this.idIssue = idIssue;
 		this.idUser = idUser;
-	}
-
-	public int getIdIssue() {
-		return idIssue;
-	}
-
-	public void setIdIssue(int idIssue) {
-		this.idIssue = idIssue;
-	}
-
-	public int getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idIssue;
-		result = prime * result + idUser;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IssuesManagerEntityPk other = (IssuesManagerEntityPk) obj;
-		if (idIssue != other.idIssue)
-			return false;
-		return idUser == other.idUser;
 	}
 }

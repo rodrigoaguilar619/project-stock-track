@@ -7,10 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.Table;
 import lib.base.backend.entity.generic.GenericCatalogIntEntity;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "catalog_broker")
+@Getter @Setter
+@Entity
+@Table(name = "catalog_broker")
 public class CatalogBrokerEntity extends GenericCatalogIntEntity implements Serializable {	
 
 	private static final long serialVersionUID = 1L;
@@ -30,30 +34,6 @@ public class CatalogBrokerEntity extends GenericCatalogIntEntity implements Seri
 	
 	public CatalogBrokerEntity(int id) {
 		super(id);
-	}
-
-	public Integer getIdTypeCurrency() {
-		return idTypeCurrency;
-	}
-
-	public void setIdTypeCurrency(Integer idTypeCurrency) {
-		this.idTypeCurrency = idTypeCurrency;
-	}
-
-	public String getAcronym() {
-		return acronym;
-	}
-
-	public void setAcronym(String acronym) {
-		this.acronym = acronym;
-	}
-
-	public CatalogTypeCurrencyEntity getCatalogTypeCurrencyEntity() {
-		return catalogTypeCurrencyEntity;
-	}
-
-	public void setCatalogTypeCurrencyEntity(CatalogTypeCurrencyEntity catalogTypeCurrencyEntity) {
-		this.catalogTypeCurrencyEntity = catalogTypeCurrencyEntity;
 	}
 
 }

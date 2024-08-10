@@ -6,7 +6,6 @@ import java.util.Date;
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")

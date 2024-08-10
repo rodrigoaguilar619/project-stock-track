@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * The primary key class for the issues_movements_buy database table.
- * 
- */
+@Getter @Setter
+@EqualsAndHashCode
 @Embeddable
 public class IssuesMovementsBuyEntityPk implements Serializable {
 	
@@ -19,40 +20,5 @@ public class IssuesMovementsBuyEntityPk implements Serializable {
 
 	@Column(name="id_issue_movement")
 	private int idIssueMovement;
-
-	public int getBuyTransactionNumber() {
-		return this.buyTransactionNumber;
-	}
-	public void setBuyTransactionNumber(int buyTransactionNumber) {
-		this.buyTransactionNumber = buyTransactionNumber;
-	}
-
-	public int getIdIssueMovement() {
-		return idIssueMovement;
-	}
-	public void setIdIssueMovement(int idIssueMovement) {
-		this.idIssueMovement = idIssueMovement;
-	}
 	
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof IssuesMovementsBuyEntityPk)) {
-			return false;
-		}
-		IssuesMovementsBuyEntityPk castOther = (IssuesMovementsBuyEntityPk)other;
-		return 
-			(this.buyTransactionNumber == castOther.buyTransactionNumber)
-			&& (this.idIssueMovement == castOther.idIssueMovement);
-	}
-
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.buyTransactionNumber;
-		hash = hash * prime + this.idIssueMovement;
-		
-		return hash;
-	}
 }

@@ -7,16 +7,19 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.ForeignKey; 
+import lombok.Getter;
+import lombok.Setter; 
 
-@Table(name = "transaction_issue")
+@Getter @Setter
 @Entity
+@Table(name = "transaction_issue")
 public class TransactionIssueEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -85,163 +88,4 @@ public class TransactionIssueEntity implements Serializable {
 	@JoinColumn(name = "id_broker", insertable = false, updatable= false)
 	private CatalogBrokerEntity catalogBrokerEntity;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Integer getIdIssue() {
-		return idIssue;
-	}
-
-	public void setIdIssue(Integer idIssue) {
-		this.idIssue = idIssue;
-	}
-
-	public Date getIdDate() {
-		return idDate;
-	}
-
-	public void setIdDate(Date idDate) {
-		this.idDate = idDate;
-	}
-
-	public BigDecimal getPriceBuy() {
-		return priceBuy;
-	}
-
-	public void setPriceBuy(BigDecimal priceBuy) {
-		this.priceBuy = priceBuy;
-	}
-
-	public BigDecimal getCommisionPercentage() {
-		return commisionPercentage;
-	}
-
-	public void setCommisionPercentage(BigDecimal commisionPercentage) {
-		this.commisionPercentage = commisionPercentage;
-	}
-
-	public BigDecimal getPriceTotalBuy() {
-		return priceTotalBuy;
-	}
-
-	public void setPriceTotalBuy(BigDecimal priceTotalBuy) {
-		this.priceTotalBuy = priceTotalBuy;
-	}
-
-	public BigDecimal getPriceSell() {
-		return priceSell;
-	}
-
-	public void setPriceSell(BigDecimal priceSell) {
-		this.priceSell = priceSell;
-	}
-
-	public BigDecimal getPriceTotalSell() {
-		return priceTotalSell;
-	}
-
-	public void setPriceTotalSell(BigDecimal priceTotalSell) {
-		this.priceTotalSell = priceTotalSell;
-	}
-
-	public BigDecimal getSellCommisionPercentage() {
-		return sellCommisionPercentage;
-	}
-
-	public void setSellCommisionPercentage(BigDecimal sellCommisionPercentage) {
-		this.sellCommisionPercentage = sellCommisionPercentage;
-	}
-
-	public BigDecimal getSellTaxesPercentage() {
-		return sellTaxesPercentage;
-	}
-
-	public void setSellTaxesPercentage(BigDecimal sellTaxesPercentage) {
-		this.sellTaxesPercentage = sellTaxesPercentage;
-	}
-
-	public BigDecimal getSellGainLossPercentage() {
-		return sellGainLossPercentage;
-	}
-
-	public void setSellGainLossPercentage(BigDecimal sellGainLossPercentage) {
-		this.sellGainLossPercentage = sellGainLossPercentage;
-	}
-
-	public BigDecimal getSellGainLossTotal() {
-		return sellGainLossTotal;
-	}
-
-	public void setSellGainLossTotal(BigDecimal sellGainLossTotal) {
-		this.sellGainLossTotal = sellGainLossTotal;
-	}
-
-	public Date getSellDate() {
-		return sellDate;
-	}
-
-	public void setSellDate(Date sellDate) {
-		this.sellDate = sellDate;
-	}
-
-	public CatalogBrokerEntity getCatalogBrokerEntity() {
-		return catalogBrokerEntity;
-	}
-
-	public void setCatalogBrokerEntity(CatalogBrokerEntity catalogBrokerEntity) {
-		this.catalogBrokerEntity = catalogBrokerEntity;
-	}
-
-	public Integer getIdBroker() {
-		return idBroker;
-	}
-
-	public void setIdBroker(Integer idBroker) {
-		this.idBroker = idBroker;
-	}
-
-	public Integer getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(Integer idUser) {
-		this.idUser = idUser;
-	}
-
-	public IssuesManagerEntity getIssuesManagerEntity() {
-		return issuesManagerEntity;
-	}
-
-	public void setIssuesManagerEntity(IssuesManagerEntity issuesManagerEntity) {
-		this.issuesManagerEntity = issuesManagerEntity;
-	}
-
-	public IssuesLastPriceTmpEntity getIssuesLastPriceTmpEntity() {
-		return issuesLastPriceTmpEntity;
-	}
-
-	public void setIssuesLastPriceTmpEntity(IssuesLastPriceTmpEntity issuesLastPriceTmpEntity) {
-		this.issuesLastPriceTmpEntity = issuesLastPriceTmpEntity;
-	}
-
-	public BigDecimal getTotalShares() {
-		return totalShares;
-	}
-
-	public void setTotalShares(BigDecimal totalShares) {
-		this.totalShares = totalShares;
-	}
-
-	public Boolean getIsSlice() {
-		return isSlice;
-	}
-
-	public void setIsSlice(Boolean isSlice) {
-		this.isSlice = isSlice;
-	}
 }

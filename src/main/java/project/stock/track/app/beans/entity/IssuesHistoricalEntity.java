@@ -9,8 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "issues_historical")
+@Getter @Setter
+@Entity
+@Table(name = "issues_historical")
 public class IssuesHistoricalEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -36,61 +41,5 @@ public class IssuesHistoricalEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_issue", insertable = false, updatable= false)
 	CatalogIssuesEntity catalogIssuesEntity;
-
-	public IssuesHistoricalEntityId getIssuesHistoricalEntityId() {
-		return issuesHistoricalEntityId;
-	}
-
-	public void setIssuesHistoricalEntityId(IssuesHistoricalEntityId issuesHistoricalEntityId) {
-		this.issuesHistoricalEntityId = issuesHistoricalEntityId;
-	}
-
-	public BigDecimal getOpen() {
-		return open;
-	}
-
-	public void setOpen(BigDecimal open) {
-		this.open = open;
-	}
-
-	public BigDecimal getClose() {
-		return close;
-	}
-
-	public void setClose(BigDecimal close) {
-		this.close = close;
-	}
-
-	public BigDecimal getHigh() {
-		return high;
-	}
-
-	public void setHigh(BigDecimal high) {
-		this.high = high;
-	}
-
-	public BigDecimal getLow() {
-		return low;
-	}
-
-	public void setLow(BigDecimal low) {
-		this.low = low;
-	}
-
-	public BigDecimal getVolume() {
-		return volume;
-	}
-
-	public void setVolume(BigDecimal volume) {
-		this.volume = volume;
-	}
-
-	public CatalogIssuesEntity getCatalogIssuesEntity() {
-		return catalogIssuesEntity;
-	}
-
-	public void setCatalogIssuesEntity(CatalogIssuesEntity catalogIssuesEntity) {
-		this.catalogIssuesEntity = catalogIssuesEntity;
-	}
 
 }

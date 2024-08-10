@@ -10,8 +10,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "issues_last_price_tmp")
+@Getter @Setter
+@Entity
+@Table(name = "issues_last_price_tmp")
 public class IssuesLastPriceTmpEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -45,75 +50,4 @@ public class IssuesLastPriceTmpEntity implements Serializable {
 	@JoinColumn(name = "id_issue")
 	private CatalogIssuesEntity catalogIssuesEntity;
 
-	public Integer getIdIssue() {
-		return idIssue;
-	}
-
-	public void setIdIssue(Integer idIssue) {
-		this.idIssue = idIssue;
-	}
-
-	public BigDecimal getLast() {
-		return last;
-	}
-
-	public void setLast(BigDecimal last) {
-		this.last = last;
-	}
-
-	public BigDecimal getOpen() {
-		return open;
-	}
-
-	public void setOpen(BigDecimal open) {
-		this.open = open;
-	}
-
-	public BigDecimal getVolume() {
-		return volume;
-	}
-
-	public void setVolume(BigDecimal volume) {
-		this.volume = volume;
-	}
-
-	public BigDecimal getPrevClose() {
-		return prevClose;
-	}
-
-	public void setPrevClose(BigDecimal prevClose) {
-		this.prevClose = prevClose;
-	}
-
-	public BigDecimal getHigh() {
-		return high;
-	}
-
-	public void setHigh(BigDecimal high) {
-		this.high = high;
-	}
-
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public Date getLastSaleTimestamp() {
-		return lastSaleTimestamp;
-	}
-
-	public void setLastSaleTimestamp(Date lastSaleTimestamp) {
-		this.lastSaleTimestamp = lastSaleTimestamp;
-	}
-
-	public CatalogIssuesEntity getCatalogIssuesEntity() {
-		return catalogIssuesEntity;
-	}
-
-	public void setCatalogIssuesEntity(CatalogIssuesEntity catalogIssuesEntity) {
-		this.catalogIssuesEntity = catalogIssuesEntity;
-	}
 }

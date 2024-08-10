@@ -10,12 +10,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 
-/**
- * The persistent class for the movements_issue_buy database table.
- * 
- */
+@Getter @Setter
 @Entity
 @Table(name="issues_movements_buy")
 public class IssuesMovementsBuyEntity implements Serializable {
@@ -44,59 +43,4 @@ public class IssuesMovementsBuyEntity implements Serializable {
 	@JoinColumn(name="id_issue_movement", insertable=false, updatable=false)
 	private IssuesMovementsEntity issuesMovementsEntity;
 
-	public IssuesMovementsBuyEntityPk getId() {
-		return this.id;
-	}
-
-	public void setId(IssuesMovementsBuyEntityPk id) {
-		this.id = id;
-	}
-
-	public BigDecimal getBuyPrice() {
-		return buyPrice;
-	}
-
-	public void setBuyPrice(BigDecimal buyPrice) {
-		this.buyPrice = buyPrice;
-	}
-
-	public Date getBuyDate() {
-		return buyDate;
-	}
-
-	public void setBuyDate(Date buyDate) {
-		this.buyDate = buyDate;
-	}
-
-	public BigDecimal getSellPrice() {
-		return sellPrice;
-	}
-
-	public void setSellPrice(BigDecimal sellPrice) {
-		this.sellPrice = sellPrice;
-	}
-
-	public Date getSellDate() {
-		return sellDate;
-	}
-
-	public void setSellDate(Date sellDate) {
-		this.sellDate = sellDate;
-	}
-
-	public IssuesMovementsEntity getIssuesMovementsEntity() {
-		return issuesMovementsEntity;
-	}
-
-	public void setIssuesMovementsEntity(IssuesMovementsEntity issueMovementsEntity) {
-		this.issuesMovementsEntity = issueMovementsEntity;
-	}
-
-	public BigDecimal getTotalShares() {
-		return totalShares;
-	}
-
-	public void setTotalShares(BigDecimal totalShares) {
-		this.totalShares = totalShares;
-	}
 }

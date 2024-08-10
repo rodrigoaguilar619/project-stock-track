@@ -5,7 +5,12 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
+@EqualsAndHashCode
 @Embeddable
 public class IssuesHistoricalEntityId implements Serializable {
 	
@@ -26,52 +31,5 @@ public class IssuesHistoricalEntityId implements Serializable {
 	
 	@Column(name = "id_date")
 	private Date idDate;
-
-	public Integer getIdIssue() {
-		return idIssue;
-	}
-
-	public void setIdIssue(Integer idIssue) {
-		this.idIssue = idIssue;
-	}
-
-	public Date getIdDate() {
-		return idDate;
-	}
-
-	public void setIdDate(Date idDate) {
-		this.idDate = idDate;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((idDate == null) ? 0 : idDate.hashCode());
-		result = prime * result + ((idIssue == null) ? 0 : idIssue.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IssuesHistoricalEntityId other = (IssuesHistoricalEntityId) obj;
-		if (idDate == null) {
-			if (other.idDate != null)
-				return false;
-		} else if (!idDate.equals(other.idDate))
-			return false;
-		if (idIssue == null) {
-			if (other.idIssue != null)
-				return false;
-		} else if (!idIssue.equals(other.idIssue))
-			return false;
-		return true;
-	}
 	
 }

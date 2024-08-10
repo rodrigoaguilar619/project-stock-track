@@ -15,12 +15,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-
-/**
- * The persistent class for the movements_issue database table.
- * 
- */
+@Getter @Setter
 @Entity
 @Table(name="issues_movements")
 public class IssuesMovementsEntity implements Serializable {
@@ -61,85 +59,5 @@ public class IssuesMovementsEntity implements Serializable {
 	//bi-directional many-to-one association to MovementsIssueBuy
 	@OneToMany(mappedBy="issuesMovementsEntity")
 	private List<IssuesMovementsBuyEntity> issuesMovementsBuys = new ArrayList<>();
-
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Integer getIdStatus() {
-		return this.idStatus;
-	}
-
-	public void setIdStatus(Integer idStatus) {
-		this.idStatus = idStatus;
-	}
-
-	public BigDecimal getPriceMovement() {
-		return priceMovement;
-	}
-
-	public void setPriceMovement(BigDecimal priceMovement) {
-		this.priceMovement = priceMovement;
-	}
-
-	public CatalogBrokerEntity getCatalogBrokerEntity() {
-		return catalogBrokerEntity;
-	}
-
-	public void setCatalogBrokerEntity(CatalogBrokerEntity catalogBrokerEntity) {
-		this.catalogBrokerEntity = catalogBrokerEntity;
-	}
-
-	public int getIdIssue() {
-		return idIssue;
-	}
-
-	public void setIdIssue(int idIssue) {
-		this.idIssue = idIssue;
-	}
-
-	public int getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
-	}
-
-	public IssuesManagerEntity getIssuesManagerEntity() {
-		return issuesManagerEntity;
-	}
-
-	public void setIssuesManagerEntity(IssuesManagerEntity issuesManagerEntity) {
-		this.issuesManagerEntity = issuesManagerEntity;
-	}
-
-	public CatalogStatusIssueMovementEntity getCatalogStatusIssueMovementEntity() {
-		return catalogStatusIssueMovementEntity;
-	}
-
-	public void setCatalogStatusIssueMovementEntity(CatalogStatusIssueMovementEntity catalogStatusIssueMovementEntity) {
-		this.catalogStatusIssueMovementEntity = catalogStatusIssueMovementEntity;
-	}
-
-	public List<IssuesMovementsBuyEntity> getIssuesMovementsBuys() {
-		return issuesMovementsBuys;
-	}
-
-	public void setIssuesMovementsBuys(List<IssuesMovementsBuyEntity> issuesMovementsBuys) {
-		this.issuesMovementsBuys = issuesMovementsBuys;
-	}
-
-	public Integer getIdBroker() {
-		return idBroker;
-	}
-
-	public void setIdBroker(Integer idBroker) {
-		this.idBroker = idBroker;
-	}
 
 }

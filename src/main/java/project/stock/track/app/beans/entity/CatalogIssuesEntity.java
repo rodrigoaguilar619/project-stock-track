@@ -15,8 +15,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "catalog_issues")
+@Getter @Setter
+@Entity
+@Table(name = "catalog_issues")
 public class CatalogIssuesEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -67,110 +72,6 @@ public class CatalogIssuesEntity implements Serializable {
 	
 	public CatalogIssuesEntity(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getInitials() {
-		return initials;
-	}
-
-	public void setInitials(String initials) {
-		this.initials = initials;
-	}
-
-	public Integer getIdStatusIssue() {
-		return idStatusIssue;
-	}
-
-	public void setIdStatusIssue(Integer idStatusIssue) {
-		this.idStatusIssue = idStatusIssue;
-	}
-
-	public Integer getIdTypeStock() {
-		return idTypeStock;
-	}
-
-	public void setIdTypeStock(Integer idTypeStock) {
-		this.idTypeStock = idTypeStock;
-	}
-
-	public Integer getIdSector() {
-		return idSector;
-	}
-
-	public void setIdSector(Integer idSector) {
-		this.idSector = idSector;
-	}
-	
-	public Boolean getIsSp500() {
-		return isSp500;
-	}
-
-	public void setIsSp500(Boolean isSp500) {
-		this.isSp500 = isSp500;
-	}
-
-	public Date getHistoricalStartDate() {
-		return historicalStartDate;
-	}
-
-	public void setHistoricalStartDate(Date historicalStartDate) {
-		this.historicalStartDate = historicalStartDate;
-	}
-
-	public CatalogSectorEntity getCatalogSectorEntity() {
-		return catalogSectorEntity;
-	}
-
-	public void setCatalogSectorEntity(CatalogSectorEntity catalogSectorEntity) {
-		this.catalogSectorEntity = catalogSectorEntity;
-	}
-
-	public CatalogStatusIssueEntity getCatalogStatusIssueEntity() {
-		return catalogStatusIssueEntity;
-	}
-
-	public void setCatalogStatusIssueEntity(CatalogStatusIssueEntity catalogStatusIssueEntity) {
-		this.catalogStatusIssueEntity = catalogStatusIssueEntity;
-	}
-
-	public CatalogTypeStockEntity getCatalogTypeStockEntity() {
-		return catalogTypeStockEntity;
-	}
-
-	public void setCatalogTypeStockEntity(CatalogTypeStockEntity catalogTypeStockEntity) {
-		this.catalogTypeStockEntity = catalogTypeStockEntity;
-	}
-
-	public List<IssuesHistoricalEntity> getIssuesHistoricalEntities() {
-		return issuesHistoricalEntities;
-	}
-
-	public void setIssuesHistoricalEntities(List<IssuesHistoricalEntity> issuesHistoricalEntities) {
-		this.issuesHistoricalEntities = issuesHistoricalEntities;
-	}
-	
-	public IssuesLastPriceTmpEntity getTempIssuesLastPriceEntity() {
-		return tempIssuesLastPriceEntity;
-	}
-
-	public void setTempIssuesLastPriceEntity(IssuesLastPriceTmpEntity tempIssuesLastPriceEntity) {
-		this.tempIssuesLastPriceEntity = tempIssuesLastPriceEntity;
 	}
 
 }

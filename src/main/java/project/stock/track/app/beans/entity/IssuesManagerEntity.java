@@ -12,8 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "issues_manager")
+@Getter @Setter
+@Entity
+@Table(name = "issues_manager")
 public class IssuesManagerEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -53,70 +58,6 @@ public class IssuesManagerEntity implements Serializable {
 		super();
 		IssuesManagerEntityPk pk = new IssuesManagerEntityPk(idIssue, iduser);
 		this.id = pk;
-	}
-
-	public IssuesManagerEntityPk getId() {
-		return id;
-	}
-
-	public void setId(IssuesManagerEntityPk id) {
-		this.id = id;
-	}
-
-	public Integer getIdStatusIssueQuick() {
-		return idStatusIssueQuick;
-	}
-
-	public void setIdStatusIssueQuick(Integer idStatusIssueQuick) {
-		this.idStatusIssueQuick = idStatusIssueQuick;
-	}
-	
-	public Integer getIdStatusIssueTrading() {
-		return idStatusIssueTrading;
-	}
-
-	public void setIdStatusIssueTrading(Integer idStatusIssueTrading) {
-		this.idStatusIssueTrading = idStatusIssueTrading;
-	}
-
-	public CatalogIssuesEntity getCatalogIssueEntity() {
-		return catalogIssueEntity;
-	}
-
-	public void setCatalogIssueEntity(CatalogIssuesEntity catalogIssueEntity) {
-		this.catalogIssueEntity = catalogIssueEntity;
-	}
-
-	public CatalogStatusIssueEntity getCatalogStatusIssueQuickEntity() {
-		return catalogStatusIssueQuickEntity;
-	}
-
-	public void setCatalogStatusIssueQuickEntity(CatalogStatusIssueEntity catalogStatusIssueQuickEntity) {
-		this.catalogStatusIssueQuickEntity = catalogStatusIssueQuickEntity;
-	}
-
-	public CatalogStatusIssueEntity getCatalogStatusIssueTradingEntity() {
-		return catalogStatusIssueTradingEntity;
-	}
-
-	public void setCatalogStatusIssueTradingEntity(CatalogStatusIssueEntity catalogStatusIssueTradingEntity) {
-		this.catalogStatusIssueTradingEntity = catalogStatusIssueTradingEntity;
-	}
-
-	public IssuesManagerTrackPropertiesEntity getIssuesManagerTrackPropertiesEntity() {
-		return issuesManagerTrackPropertiesEntity;
-	}
-
-	public void setIssuesManagerTrackPropertiesEntity(IssuesManagerTrackPropertiesEntity issuesManagerTrackPropertiesEntity) {
-		this.issuesManagerTrackPropertiesEntity = issuesManagerTrackPropertiesEntity;
-	}
-
-	public List<TransactionIssueEntity> getTransactionIssueEntities() {
-		return transactionIssueEntities;
-	}
-
-	public void setTransactionIssueEntities(List<TransactionIssueEntity> transactionIssueEntities) {
-		this.transactionIssueEntities = transactionIssueEntities;
 	}
 
 }

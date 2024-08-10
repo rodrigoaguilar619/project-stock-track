@@ -7,8 +7,13 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "dollar_historical_price")
+@Getter @Setter
+@Entity
+@Table(name = "dollar_historical_price")
 public class DollarHistoricalPriceEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -19,21 +24,5 @@ public class DollarHistoricalPriceEntity implements Serializable {
 	
 	@Column(name = "price")
 	private BigDecimal price;
-
-	public Date getIdDate() {
-		return idDate;
-	}
-
-	public void setIdDate(Date idDate) {
-		this.idDate = idDate;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
 
 }

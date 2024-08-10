@@ -11,9 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 @Entity(name = "transaction_money")
 public class TransactionMoneyEntity implements Serializable {
 
@@ -51,69 +53,5 @@ public class TransactionMoneyEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_type_movement", insertable=false, updatable=false)
 	private CatalogTypeMovementEntity catalogTypeMovementEntity;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setIdBroker(Integer idBroker) {
-		this.idBroker = idBroker;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public Integer getIdBroker() {
-		return idBroker;
-	}
-
-	public BigDecimal getValueMxn() {
-		return valueMxn;
-	}
-
-	public void setValueMxn(BigDecimal valueMxn) {
-		this.valueMxn = valueMxn;
-	}
-
-	public Integer getIdTypeMovement() {
-		return idTypeMovement;
-	}
-
-	public void setIdTypeMovement(Integer idTypeMovement) {
-		this.idTypeMovement = idTypeMovement;
-	}
-
-	public CatalogTypeMovementEntity getCatalogTypeMovementEntity() {
-		return catalogTypeMovementEntity;
-	}
-
-	public void setCatalogTypeMovementEntity(CatalogTypeMovementEntity catalogTypeMovementEntity) {
-		this.catalogTypeMovementEntity = catalogTypeMovementEntity;
-	}
-
-	public Date getDateTransaction() {
-		return dateTransaction;
-	}
-
-	public void setDateTransaction(Date dateTransaction) {
-		this.dateTransaction = dateTransaction;
-	}
-
-	public CatalogBrokerEntity getCatalogBrokerEntity() {
-		return catalogBrokerEntity;
-	}
-
-	public void setCatalogBrokerEntity(CatalogBrokerEntity catalogBrokerEntity) {
-		this.catalogBrokerEntity = catalogBrokerEntity;
-	}
 	
 }

@@ -9,8 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(name = "issues_manager_track_properties")
+@Getter @Setter
+@Entity
+@Table(name = "issues_manager_track_properties")
 public class IssuesManagerTrackPropertiesEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -42,54 +47,6 @@ public class IssuesManagerTrackPropertiesEntity implements Serializable {
 	public IssuesManagerTrackPropertiesEntity(IssuesManagerEntityPk id) {
 		super();
 		this.id = id;
-	}
-
-	public BigDecimal getTrackBuyPrice() {
-		return trackBuyPrice;
-	}
-
-	public IssuesManagerEntityPk getId() {
-		return id;
-	}
-
-	public void setId(IssuesManagerEntityPk id) {
-		this.id = id;
-	}
-
-	public void setTrackBuyPrice(BigDecimal trackBuyPrice) {
-		this.trackBuyPrice = trackBuyPrice;
-	}
-
-	public BigDecimal getTrackSellPrice() {
-		return trackSellPrice;
-	}
-
-	public void setTrackSellPrice(BigDecimal trackSellPrice) {
-		this.trackSellPrice = trackSellPrice;
-	}
-
-	public BigDecimal getFairValue() {
-		return fairValue;
-	}
-
-	public void setFairValue(BigDecimal fairValue) {
-		this.fairValue = fairValue;
-	}
-
-	public Boolean getIsInvest() {
-		return isInvest;
-	}
-
-	public void setIsInvest(Boolean isInvest) {
-		this.isInvest = isInvest;
-	}
-
-	public IssuesManagerEntity getIssuesManagerEntity() {
-		return issuesManagerEntity;
-	}
-
-	public void setIssuesManagerEntity(IssuesManagerEntity issuesManagerEntity) {
-		this.issuesManagerEntity = issuesManagerEntity;
 	}
 
 }
