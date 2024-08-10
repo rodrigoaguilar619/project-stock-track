@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import lib.base.backend.entity.generic.GenericCatalogIntEntity;
 import lib.base.backend.entity.generic.GenericStatusEntity;
 import lib.base.backend.utils.DataUtil;
@@ -21,11 +19,8 @@ import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 
 public class MapEntityToPojoUtil {
 	
-	@Autowired
-	DateUtil dateUtil;
-	
-	@Autowired
-	DataUtil dataUtil;
+	DateUtil dateUtil = new DateUtil();
+	DataUtil dataUtil = new DataUtil();
 	
 	public IssueLastPriceTmpEntityPojo mapTempIssueLastPrice(IssueLastPriceTmpEntityPojo tempIssueLastPricePojo, IssuesLastPriceTmpEntity tempIssuesLastPriceEntity) {
 		

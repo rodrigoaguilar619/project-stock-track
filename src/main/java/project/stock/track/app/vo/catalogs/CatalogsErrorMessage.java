@@ -1,6 +1,8 @@
 package project.stock.track.app.vo.catalogs;
 
 public class CatalogsErrorMessage {
+	
+	private CatalogsErrorMessage(){}
 
 	private static final String ERROR_MSG_ISSUES_EXIST = "issues %s already registered";
 	private static final String ERROR_MSG_ISSUE_NOT_REGISTERED = "Issue doesn't registered";

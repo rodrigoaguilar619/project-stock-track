@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogSectorEntity;
 import project.stock.track.app.beans.entity.CatalogStatusIssueEntity;
@@ -29,23 +31,17 @@ import project.stock.track.app.beans.pojos.petition.request.GetIssueManagerReque
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesManagerListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.UpdateIssueManagerRequestPojo;
 import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
-import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesManagerBusiness extends MainBusiness {
 
-	IssuesRepositoryImpl issuesRepository;
-	
-	IssuesManagerRepositoryImpl issuesManagerRepository;
-	
-	@Autowired
-	public IssuesManagerBusiness(IssuesRepositoryImpl issuesRepository, IssuesManagerRepositoryImpl issuesManagerRepository) {
-		this.issuesRepository = issuesRepository;
-		this.issuesManagerRepository = issuesManagerRepository;
-		
-	}
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final UserRepositoryImpl userRepository;
+	private final IssuesManagerRepositoryImpl issuesManagerRepository;
 	
 	@SuppressWarnings("unchecked")
 	public IssuesManagerEntity setAddUpdateIssueManager(IssuesManagerEntity issuesManagerEntity, UpdateIssueManagerPojo updateIssueManagerEntityPojo, CrudOptionsEnum crudOptionsEnum) {

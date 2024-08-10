@@ -1,9 +1,7 @@
 package project.stock.track.modules.business.historical;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -17,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -24,16 +23,14 @@ import org.mockito.MockitoAnnotations;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
-import lib.base.backend.utils.date.DateFormatUtil;
-import lib.base.backend.utils.date.DateUtil;
 import project.stock.track.ProjectUnitTest;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
+import project.stock.track.app.beans.entity.IssuesHistoricalEntityId;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntityPk;
-import project.stock.track.app.beans.pojos.business.issues.IssueCurrentPricePojo;
 import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityDesPojo;
 import project.stock.track.app.beans.pojos.entity.IssueHistoricalEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueHistoricalDataPojo;
@@ -43,9 +40,7 @@ import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
-import project.stock.track.app.utils.CalculatorUtil;
-import project.stock.track.app.utils.IssueHistoricalUtil;
-import project.stock.track.app.utils.IssueUtil;
+import project.stock.track.config.helpers.IssueHistoricalHelper;
 
 @SuppressWarnings("unchecked")
 class IssuesHistoricalBusinessTest extends ProjectUnitTest {
@@ -61,19 +56,7 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
 	private UserRepositoryImpl userRepository;
 
     @Mock
-    private DateFormatUtil dateFormatUtil;
-
-    @Mock
-    private DateUtil dateUtil;
-
-    @Mock
-    private IssueUtil issueUtil;
-
-    @Mock
-    private IssueHistoricalUtil issueHistoricalUtil;
-
-    @Mock
-    private CalculatorUtil calculatorUtil;
+    private IssueHistoricalHelper issueHistoricalHelper;
 
     @Mock
     private IssuesManagerRepositoryImpl issuesManagerRepository;
@@ -105,6 +88,8 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         when(userRepository.findByUserName(requestPojo.getUserName())).thenReturn(userEntity);
 
         IssuesLastPriceTmpEntity issuesLastPriceTmpEntity = new IssuesLastPriceTmpEntity();
+        issuesLastPriceTmpEntity.setLast(new BigDecimal(20));
+        
         CatalogIssuesEntity catalogIssuesEntity = new CatalogIssuesEntity(requestPojo.getIdIssue());
         catalogIssuesEntity.setTempIssuesLastPriceEntity(issuesLastPriceTmpEntity);
         IssuesManagerEntity issuesManagerEntity = new IssuesManagerEntity(requestPojo.getIdIssue(), userEntity.getId());
@@ -118,16 +103,11 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
 
         IssueHistoricalEntityPojo issueHistoricalEntityPojo = new IssueHistoricalEntityPojo();
         issueHistoricalEntityPojo.setIssueData(new CatalogIssuesEntityDesPojo());
-        when(issueHistoricalUtil.buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class)))
-            .thenReturn(issueHistoricalEntityPojo);
+        when(issueHistoricalHelper.buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class))).thenReturn(issueHistoricalEntityPojo);
 
         IssuesHistoricalEntity issuesHistoricalEntityLastRecord = new IssuesHistoricalEntity();
+        issuesHistoricalEntityLastRecord.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(requestPojo.getIdIssue(), new Date()));
         when(issuesHistoricalRepository.findLastRecord(1)).thenReturn(issuesHistoricalEntityLastRecord);
-
-        IssueCurrentPricePojo issueCurrentPricePojo = new IssueCurrentPricePojo();
-        issueCurrentPricePojo.setCurrentPrice(BigDecimal.valueOf(100.0));
-        when(issueUtil.getCurrentPrice(issuesLastPriceTmpEntity, issuesHistoricalEntityLastRecord))
-            .thenReturn(issueCurrentPricePojo);
 
         List<IssueTransactionResumeTuplePojo> issueTransactionResumeTuplePojos = new ArrayList<>();
         when(transactionIssueRepository.findIssueTransactionsResume(1, 1)).thenReturn(issueTransactionResumeTuplePojos);
@@ -137,7 +117,7 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         assertNotNull(result);
         assertEquals(issueHistoricalEntityPojo, result.getIssueHistoricalData());
         verify(userRepository, times(1)).findByUserName(requestPojo.getUserName());
-        verify(issueHistoricalUtil, times(1)).buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class));
+        verify(issueHistoricalHelper, times(1)).buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class));
     }
 
 

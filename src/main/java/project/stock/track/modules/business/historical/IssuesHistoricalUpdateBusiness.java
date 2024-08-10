@@ -11,12 +11,12 @@ import java.util.TreeMap;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import lib.base.backend.exception.data.BusinessException;
-import lib.base.backend.utils.date.DateFormatUtil;
-import lib.base.backend.utils.date.DateUtil;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntityId;
@@ -33,26 +33,17 @@ import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 
 	private static final Logger log = LoggerFactory.getLogger(IssuesHistoricalUpdateBusiness.class);
 
-	IssuesRepositoryImpl issuesRepository;
-
-	IssueTrackService issueTrackService;
-
-	DateUtil dateUtil;
-
-	DateFormatUtil dateFormatUtil;
-	
-	@Autowired
-	public IssuesHistoricalUpdateBusiness(IssuesRepositoryImpl issuesRepository, IssueTrackService issueTrackService, DateUtil dateUtil, DateFormatUtil dateFormatUtil) {
-		this.issuesRepository = issuesRepository;
-		this.issueTrackService = issueTrackService;
-		this.dateUtil = dateUtil;
-		this.dateFormatUtil = dateFormatUtil;
-	}
+	@SuppressWarnings("rawtypes")
+	@Qualifier("customPersistance")
+	private final GenericPersistence genericCustomPersistance;
+	private final IssuesRepositoryImpl issuesRepository;
+	private final IssueTrackService issueTrackService;
 
 	@SuppressWarnings("unchecked")
 	public void saveIssueHistorical(String dateIssue, IssueHistoryDayBean issueHistoricBean, CatalogIssuesEntity catalogIssuesEntity) {

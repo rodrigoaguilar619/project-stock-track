@@ -6,6 +6,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
@@ -16,11 +20,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import lib.base.backend.utils.DataParseUtil;
 import lib.base.backend.utils.JpaUtil;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
@@ -46,18 +45,13 @@ public class TransactionIssueRepositoryImpl {
 
 	EntityManager em;
 	
-	private JpaUtil jpaUtil;
-	
-	private CalculatorUtil calculatorUtil;
-	
-	private DataParseUtil dataParseUtil;
+	private JpaUtil jpaUtil = new JpaUtil();
+	private CalculatorUtil calculatorUtil = new CalculatorUtil();
+	private DataParseUtil dataParseUtil = new DataParseUtil();
 	
 	@Autowired
-	public TransactionIssueRepositoryImpl(EntityManager em, JpaUtil jpaUtil, CalculatorUtil calculatorUtil, DataParseUtil dataParseUtil) {
+	public TransactionIssueRepositoryImpl(EntityManager em) {
 		this.em = em;
-		this.jpaUtil = jpaUtil;
-		this.calculatorUtil = calculatorUtil;
-		this.dataParseUtil = dataParseUtil;
 	}
 	
 	public TransactionIssueEntity findTransactionIssueBuy(Integer idUser, Integer idIssue, Integer idBroker, Date date) {

@@ -7,18 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lib.base.backend.utils.date.DateUtil;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.pojos.entity.IssueLastPriceTmpEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetTempIssuesLastPriceDataPojo;
 import project.stock.track.app.beans.pojos.services.IssuesLastPriceQueryPojo;
 import project.stock.track.app.beans.rest.exchangetrade.service.IssueIexMainBean;
-import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.repository.TempIssuesLastPriceRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
@@ -27,31 +26,17 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesLastPriceBusiness extends MainBusiness {
 	
-	IssueTrackService issueTrackService;
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final IssueTrackService issueTrackService;
+	private final TempIssuesLastPriceRepositoryImpl tempIssuesLastPriceRepository;
+	private final IssuesRepositoryImpl issuesRepository;
 	
-	IssuesManagerRepositoryImpl issuesManagerRepository;
-	
-	TempIssuesLastPriceRepositoryImpl tempIssuesLastPriceRepository;
-	
-	IssuesRepositoryImpl issuesRepository;
-	
-	DateUtil dateUtil;
-	
-	CalculatorUtil calculatorUtil;
-	
-	@Autowired
-	public IssuesLastPriceBusiness( IssuesManagerRepositoryImpl issuesManagerRepository, TempIssuesLastPriceRepositoryImpl tempIssuesLastPriceRepository,
-			IssuesRepositoryImpl issuesRepository, CalculatorUtil calculatorUtil, IssueTrackService issueTrackService) {
-		this.issuesManagerRepository = issuesManagerRepository;
-		this.tempIssuesLastPriceRepository = tempIssuesLastPriceRepository;
-		this.issuesRepository = issuesRepository;
-		this.calculatorUtil = calculatorUtil;
-		this.issueTrackService = issueTrackService;
-		
-	}
+	CalculatorUtil calculatorUtil = new CalculatorUtil();
 	
 	@SuppressWarnings("unchecked")
 	public void storeIssuesLastPrice() {

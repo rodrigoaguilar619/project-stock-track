@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -14,10 +17,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
 import project.stock.track.app.beans.entity.CatalogSectorEntity_;

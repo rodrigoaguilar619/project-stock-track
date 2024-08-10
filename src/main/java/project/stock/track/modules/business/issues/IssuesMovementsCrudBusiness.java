@@ -3,13 +3,15 @@ package project.stock.track.modules.business.issues;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntityPk;
@@ -31,21 +33,16 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesMovementsCrudBusiness extends MainBusiness {
 	
-	IssuesRepositoryImpl issuesRepository;
-	
-	IssuesMovementsBuyRepositoryImpl issuesMovementsBuyRepository;
-	
-	IssuesMovementsRepositoryImpl issuesMovementsRepository;
-	
-	@Autowired
-	public IssuesMovementsCrudBusiness(IssuesRepositoryImpl issuesRepository, IssuesMovementsBuyRepositoryImpl issuesMovementsBuyRepository, IssuesMovementsRepositoryImpl issuesMovementsRepository) {
-		this.issuesRepository = issuesRepository;
-		this.issuesMovementsBuyRepository = issuesMovementsBuyRepository;
-		this.issuesMovementsRepository = issuesMovementsRepository;
-	}
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final UserRepositoryImpl userRepository;
+	private final IssuesRepositoryImpl issuesRepository;
+	private final IssuesMovementsBuyRepositoryImpl issuesMovementsBuyRepository;
+	private final IssuesMovementsRepositoryImpl issuesMovementsRepository;
 	
 	@SuppressWarnings("unchecked")
 	private void setManagerIssueIsInvest(IssuesManagerEntity issuesManagerEntity, Integer idIssueMovement, Integer idStatus) {

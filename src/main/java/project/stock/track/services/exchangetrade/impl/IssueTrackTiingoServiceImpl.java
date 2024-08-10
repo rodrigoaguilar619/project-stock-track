@@ -13,7 +13,6 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.utils.date.DateFormatUtil;
 import lib.base.backend.utils.date.DateUtil;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.pojos.services.IssueHistoricQueryPojo;
 import project.stock.track.app.beans.pojos.services.IssuesLastPriceQueryPojo;
 import project.stock.track.app.beans.rest.exchangetrade.IssueHistoryDayBean;
@@ -38,21 +38,16 @@ import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
+@RequiredArgsConstructor
 public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	
 	private static final Logger log = LoggerFactory.getLogger(IssueTrackTiingoServiceImpl.class);
 	
-	@Autowired
-	DateFormatUtil dateFormatUtil;
+	private DateFormatUtil dateFormatUtil = new DateFormatUtil();
+	private DateUtil dateUtil = new DateUtil();
 	
-	@Autowired
-	DateUtil dateUtil;
-	
-	@Autowired
-	RestTemplate restTemplate;
-	
-	@Autowired
-	ConfigControlRepositoryImpl configControlRepositoryImpl;
+	private final RestTemplate restTemplate;
+	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
 	private boolean validateRangeDate(String dateFrom, String dateTo) throws ParseException {
 		
@@ -64,6 +59,9 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		 
 	}
 	
+	private static final String MAP_KEY_START_DATE = "startDate";
+	private static final String MAP_KEY_END_DATE = "endDate";
+	
 	public MultiValueMap<String, String> getDataQuery(IssueHistoricQueryPojo issueHistoricQueryPojo, String defaultDate) {
 		
 		Date dateTo = issueHistoricQueryPojo.getDateTo() != null ? issueHistoricQueryPojo.getDateTo() : new Date();
@@ -73,8 +71,8 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
-		map.add("startDate", issueHistoricQueryPojo.getDateFrom() != null ? dateFormatUtil.formatDate(issueHistoricQueryPojo.getDateFrom(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT) : defaultDate);
-		map.add("endDate", dateFormatUtil.formatDate(dateTo, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT));
+		map.add(MAP_KEY_START_DATE, issueHistoricQueryPojo.getDateFrom() != null ? dateFormatUtil.formatDate(issueHistoricQueryPojo.getDateFrom(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT) : defaultDate);
+		map.add(MAP_KEY_END_DATE, dateFormatUtil.formatDate(dateTo, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT));
 		
 		return map;
 	}
@@ -120,10 +118,10 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 
 	    try 
 	    {
-			if (!validateRangeDate(map.get("startDate").get(0), (map.get("endDate").get(0))))
+			if (!validateRangeDate(map.get(MAP_KEY_START_DATE).get(0), (map.get(MAP_KEY_END_DATE).get(0))))
 					return null;
 		} catch (ParseException e) {
-			throw new BusinessException(CatalogsErrorMessage.getErrorMsgExchangeTradeBadRangeDate(issueHistoricQueryPojo.getIssue(), map.get("startDate").get(0), map.get("endDate").get(0)));
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgExchangeTradeBadRangeDate(issueHistoricQueryPojo.getIssue(), map.get(MAP_KEY_START_DATE).get(0), map.get(MAP_KEY_END_DATE).get(0)));
 		}
 	    
 	    Map<String, Object> mapIssuesData = getIssueHistorical(map, issueHistoricQueryPojo);

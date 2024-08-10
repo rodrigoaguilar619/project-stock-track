@@ -3,8 +3,6 @@ package project.stock.track.modules.controller.transactions;
 import java.io.IOException;
 import java.text.ParseException;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,7 @@ public class LoadTransactionIssuesFileController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(path = CatalogsUri.API_TRANSACION_ISSUES_FILE_LOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity registerIssueTransactions(HttpServletResponse httpResponse, @ModelAttribute LoadTransactionIssuesFileRequestPojo requestPojo) throws IOException, BusinessException, ParseException {
+	public ResponseEntity registerIssueTransactions(@ModelAttribute LoadTransactionIssuesFileRequestPojo requestPojo) throws IOException, BusinessException, ParseException {
 		
 		LoadTransactionIssuesFileDataPojo dataPojo = loadTransactionIssuesFileBusiness.executeRegisterTransactionIssuesFromFile(requestPojo);
 		

@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
@@ -27,21 +29,17 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class TransactionIssuesBusiness extends MainBusiness {
 	
-	TransactionIssueRepositoryImpl transactionIssueRepository;
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final TransactionIssueRepositoryImpl transactionIssueRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
+	private final UserRepositoryImpl userRepository;
 	
-	DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
-	
-	CalculatorUtil calculatorUtil;
-	
-	@Autowired
-	public TransactionIssuesBusiness(TransactionIssueRepositoryImpl transactionIssueRepository, DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository, CalculatorUtil calculatorUtil) {
-		this.transactionIssueRepository = transactionIssueRepository;
-		this.dollarHistoricalPriceRespository = dollarHistoricalPriceRespository;
-		this.calculatorUtil = calculatorUtil;
-	}
+	private CalculatorUtil calculatorUtil = new CalculatorUtil();
 
 	@SuppressWarnings("unchecked")
 	public List<TransactionIssueTrackPojo> getTransactionIssuesTrackPojos(UserEntity user) {

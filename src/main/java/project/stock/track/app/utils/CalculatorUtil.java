@@ -3,17 +3,9 @@ package project.stock.track.app.utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
-import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
-import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 
 public class CalculatorUtil {
-	
-	@Autowired
-	DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
 	
 	public BigDecimal calculateTotalPriceSellAfter(BigDecimal priceBuy, BigDecimal priceSell, BigDecimal commision, BigDecimal taxes) {
 		
@@ -34,12 +26,6 @@ public class CalculatorUtil {
 	}
 	
 	public BigDecimal calculateSellEstimate(BigDecimal issuePrice, BigDecimal priceDollar) {
-		
-		if (priceDollar == null) {
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRespository.findLastRecord();
-			priceDollar = dollarHistoricalPriceEntity.getPrice();
-			priceDollar = priceDollar.subtract(priceDollar.multiply(CatalogsStaticData.StaticData.DEFAULT_DOLAR_PRICE_DEPRECATE_PERCENTAGE).divide(BigDecimal.valueOf(100)));
-		}
 		
 		return priceDollar.multiply(issuePrice);
 	}

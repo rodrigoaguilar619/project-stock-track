@@ -8,15 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
 import lib.base.backend.utils.DataTableUtil;
 import lib.base.backend.utils.TimeElapseUtil;
-import lib.base.backend.utils.date.DateFormatUtil;
-import lib.base.backend.utils.date.DateUtil;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
@@ -33,44 +33,28 @@ import project.stock.track.app.beans.pojos.petition.request.GetIssuesHistoricalR
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionResumeTuplePojo;
 import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
-import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
-import project.stock.track.app.utils.IssueHistoricalUtil;
 import project.stock.track.app.utils.IssueUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.config.helpers.IssueHistoricalHelper;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesHistoricalBusiness extends MainBusiness {
 	
-	@Autowired
-	DateFormatUtil dateFormatUtil;
+	private IssueUtil issueUtil = new IssueUtil();
+	private CalculatorUtil calculatorUtil = new CalculatorUtil();
 	
-	@Autowired
-	DateUtil dateUtil;
-	
-	@Autowired
-	IssueUtil issueUtil;
-	
-	@Autowired
-	IssueHistoricalUtil issueHistoricalUtil;
-	
-	@Autowired
-	CalculatorUtil calculatorUtil;
-	
-	@Autowired
-	IssuesManagerRepositoryImpl issuesManagerRepository;
-	
-	@Autowired
-	IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
-	
-	@Autowired
-	TransactionIssueRepositoryImpl transactionIssueRepository;
-	
-	@Autowired
-	DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final UserRepositoryImpl userRepository;
+	private final IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
+	private final TransactionIssueRepositoryImpl transactionIssueRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
+	private final IssueHistoricalHelper issueHistoricalHelper;
 	
 	private TransactionIssueCalculatePojo getIssueTransactionEstimates(TransactionIssueCalculatePojo transactionIssueCalculatePojo, BigDecimal currentIssuePrice, BigDecimal dollarPriceAfterDeprecate) {
 		
@@ -105,9 +89,10 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		IssuesManagerEntity issuesManagerEntity = (IssuesManagerEntity) genericPersistance.findById(IssuesManagerEntity.class, new IssuesManagerEntityPk(requestPojo.getIdIssue(), userEntity.getId()));
 		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRespository.findLastRecord();
 		
-		IssueHistoricalEntityPojo issueHistoricalEntityPojo = issueHistoricalUtil.buildIssueHistoricalData(issuesManagerEntity, startDate);
+		IssueHistoricalEntityPojo issueHistoricalEntityPojo = issueHistoricalHelper.buildIssueHistoricalData(issuesManagerEntity, startDate);
 		
 		IssuesHistoricalEntity issuesHistoricalEntityLastRecord = issuesHistoricalRepository.findLastRecord(issuesManagerEntity.getId().getIdIssue());
+		issuesHistoricalEntityLastRecord.setClose(new BigDecimal(10));
 		IssuesLastPriceTmpEntity issuesLastPriceTmpEntity = issuesManagerEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity();
 		
 		IssueCurrentPricePojo issueCurrentPricePojo = issueUtil.getCurrentPrice(issuesLastPriceTmpEntity, issuesHistoricalEntityLastRecord);
@@ -162,7 +147,7 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		List<IssueHistoricalEntityPojo> issueHistoricalEntityPojos = new ArrayList<>();
 		
 		for (IssuesManagerEntity issuesManagerEntity: issuesManagerEntities)
-			issueHistoricalEntityPojos.add(issueHistoricalUtil.buildIssueHistoricalData(issuesManagerEntity, startDate));
+			issueHistoricalEntityPojos.add(issueHistoricalHelper.buildIssueHistoricalData(issuesManagerEntity, startDate));
 		
 		return issueHistoricalEntityPojos;
 	}

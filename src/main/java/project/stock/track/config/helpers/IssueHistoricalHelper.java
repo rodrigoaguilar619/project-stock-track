@@ -1,13 +1,14 @@
-package project.stock.track.app.utils;
+package project.stock.track.config.helpers;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import lib.base.backend.utils.DataUtil;
 import lib.base.backend.utils.date.DateUtil;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
@@ -18,28 +19,19 @@ import project.stock.track.app.beans.pojos.entity.IssueHistoricalDayEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueHistoricalEntityPojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
 import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
-import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
+import project.stock.track.app.utils.MapEntityToPojoUtil;
 
-public class IssueHistoricalUtil {
+@RequiredArgsConstructor
+@Component
+public class IssueHistoricalHelper {
 	
-	@Autowired
-	MapEntityToPojoUtil mapEntityToPojoUtil;
+	private MapEntityToPojoUtil mapEntityToPojoUtil = new MapEntityToPojoUtil();
+	private DateUtil dateUtil = new DateUtil();
+	private DataUtil dataUtil = new DataUtil();
 	
-	@Autowired
-	DateUtil dateUtil;
-	
-	@Autowired
-	DataUtil dataUtil;
-	
-	@Autowired
-	IssuesManagerRepositoryImpl issuesManagerRepository;
-	
-	@Autowired
-	IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
-	
-	@Autowired
-	TransactionIssueRepositoryImpl transactionIssueRepository;
+	private final IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
+	private final TransactionIssueRepositoryImpl transactionIssueRepository;
 
 	public IssueHistoricalEntityPojo buildIssueHistoricalData(IssuesManagerEntity issuesManagerEntity, Date startDate) {
 		

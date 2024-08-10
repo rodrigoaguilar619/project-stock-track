@@ -7,19 +7,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.TransactionIssueEntity;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.beans.pojos.petition.data.LoadTransactionIssuesFileDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.LoadTransactionIssuesFileRequestPojo;
-import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
@@ -33,25 +35,20 @@ import project.stock.track.modules.business.files.transactions.ReadCsvTransactio
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssuesBrokerGbm;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssuesBrokerSchwab;
 
+@SuppressWarnings("rawtypes")
 @Component
+@RequiredArgsConstructor
 public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	
-	IssuesManagerRepositoryImpl issuesManagerRepository;
+	private final GenericPersistence genericPersistance;
 	
-	IssuesRepositoryImpl issuesRepository;
+	@Qualifier("customPersistance")
+	private final GenericPersistence genericCustomPersistance;
+	private final UserRepositoryImpl userRepository;
+	private final IssuesRepositoryImpl issuesRepository;
+	private final TransactionIssueRepositoryImpl transactionIssueRepository;
 	
-	TransactionIssueRepositoryImpl transactionIssueRepository;
-	
-	CustomArraysUtil customArraysUtil;
-	
-	@Autowired
-	public LoadTransactionIssuesFileBusiness(IssuesManagerRepositoryImpl issuesManagerRepository, IssuesRepositoryImpl issuesRepository,
-			TransactionIssueRepositoryImpl transactionIssueRepository, CustomArraysUtil customArraysUtil) {
-		this.issuesManagerRepository = issuesManagerRepository;
-		this.issuesRepository = issuesRepository;
-		this.transactionIssueRepository = transactionIssueRepository;
-		this.customArraysUtil = customArraysUtil;
-	}
+	private CustomArraysUtil customArraysUtil = new CustomArraysUtil();
 	
 	private static final String MSG_ISSUE_NOT_REGISTERED = "Issue not registered issue: ";
 	private static final String MSG_DATE = " date: ";

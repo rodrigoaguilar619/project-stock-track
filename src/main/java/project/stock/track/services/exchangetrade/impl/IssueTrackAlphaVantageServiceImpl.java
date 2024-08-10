@@ -10,7 +10,6 @@ import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import lib.base.backend.utils.date.DateFormatUtil;
 import lib.base.backend.utils.date.DateUtil;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.pojos.services.IssueHistoricQueryPojo;
 import project.stock.track.app.beans.pojos.services.IssuesLastPriceQueryPojo;
 import project.stock.track.app.beans.rest.exchangetrade.IssueHistoryDayBean;
@@ -30,19 +30,14 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
+@RequiredArgsConstructor
 public class IssueTrackAlphaVantageServiceImpl implements IssueTrackService {
 	
-	@Autowired
-	DateFormatUtil dateFormatUtil;
+	private DateFormatUtil dateFormatUtil = new DateFormatUtil();
+	private DateUtil dateUtil = new DateUtil();
 	
-	@Autowired
-	DateUtil dateUtil;
-	
-	@Autowired
-	RestTemplate restTemplate;
-	
-	@Autowired
-	ConfigControlRepositoryImpl configControlRepositoryImpl;
+	private final RestTemplate restTemplate;
+	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
 	private static final Logger log = LoggerFactory.getLogger(IssueTrackAlphaVantageServiceImpl.class);
 

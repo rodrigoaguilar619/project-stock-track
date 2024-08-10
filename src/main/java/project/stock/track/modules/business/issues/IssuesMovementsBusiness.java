@@ -5,12 +5,13 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.pojo.datatable.DataTablePojo;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogSectorEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
@@ -26,35 +27,22 @@ import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesMovementsListRequestPojo;
 import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
-import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class IssuesMovementsBusiness extends MainBusiness {
 	
-	IssuesMovementsRepositoryImpl issuesMovementsRepository;
+	private final UserRepositoryImpl userRepository;
+	private final IssuesMovementsRepositoryImpl issuesMovementsRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
 	
-	IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
-	
-	DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
-	
-	IssueUtil issueUtil;
-	
-	CalculatorUtil calculatorUtil;
-	
-	@Autowired
-	public IssuesMovementsBusiness(IssuesMovementsRepositoryImpl issuesMovementsRepository, IssuesHistoricalRepositoryImpl issuesHistoricalRepository,
-			DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository, IssueUtil issueUtil, CalculatorUtil calculatorUtil) {
-		this.issuesMovementsRepository = issuesMovementsRepository;
-		this.issuesHistoricalRepository = issuesHistoricalRepository;
-		this.dollarHistoricalPriceRepository = dollarHistoricalPriceRepository;
-		this.issueUtil = issueUtil;
-		this.calculatorUtil = calculatorUtil;
-	}
+	private IssueUtil issueUtil = new IssueUtil();
+	private CalculatorUtil calculatorUtil = new CalculatorUtil();
 	
 	private String getAlertBuy(List<IssueMovementBuyEntityPojo> issueMovementBuysPojos, BigDecimal currentPrice) {
 		

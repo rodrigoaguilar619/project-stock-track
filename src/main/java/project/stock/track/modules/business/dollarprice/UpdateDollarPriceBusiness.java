@@ -4,21 +4,24 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.pojos.petition.data.UpdateDollarPriceDataPojo;
 import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.dollarprice.DollarPriceService;
 
+@RequiredArgsConstructor
 @Component
 public class UpdateDollarPriceBusiness extends MainBusiness {
 	
-	@Autowired
-	DollarPriceService dollarPriceService;
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final DollarPriceService dollarPriceService;
 
 	@SuppressWarnings({ "unchecked" })
 	@Transactional(rollbackFor = Exception.class)

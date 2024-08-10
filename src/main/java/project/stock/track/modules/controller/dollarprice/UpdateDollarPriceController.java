@@ -2,8 +2,6 @@ package project.stock.track.modules.controller.dollarprice;
 
 import java.text.ParseException;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +24,7 @@ public class UpdateDollarPriceController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(CatalogsUri.API_SERVICE_DOLLAR_UPDATE)
-	public ResponseEntity updateDollarPrice(/*HttpServletResponse httpResponse*/) throws ParseException {
+	public ResponseEntity updateDollarPrice() throws ParseException {
 		
 		UpdateDollarPriceDataPojo dataPojo = updateDollarPriceBusiness.executeUpdateDollarPrice();
 		return new RestUtil().buildResponseSuccess(dataPojo, "Dollar price updated");

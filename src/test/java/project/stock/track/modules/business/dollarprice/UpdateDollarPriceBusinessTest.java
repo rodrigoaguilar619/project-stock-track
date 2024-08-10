@@ -1,6 +1,6 @@
 package project.stock.track.modules.business.dollarprice;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,7 +42,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
     }
 
 	@Test
-    public void testExecuteUpdateDollarPrice_NewEntry() throws ParseException {
+    void testExecuteUpdateDollarPrice_NewEntry() throws ParseException {
 
         DollarPriceBean mockDollarPriceBean = new DollarPriceBean();
         mockDollarPriceBean.setDate(1661740800000L);
@@ -64,7 +64,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
     }
 
 	@Test
-    public void testExecuteUpdateDollarPrice_ExistingEntry() throws ParseException {
+    void testExecuteUpdateDollarPrice_ExistingEntry() throws ParseException {
         // Mock the dollar price service response
         DollarPriceBean mockDollarPriceBean = new DollarPriceBean();
         mockDollarPriceBean.setDate(1661740800000L);

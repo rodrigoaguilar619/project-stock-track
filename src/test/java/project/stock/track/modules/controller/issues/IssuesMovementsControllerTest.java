@@ -1,6 +1,6 @@
 package project.stock.track.modules.controller.issues;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

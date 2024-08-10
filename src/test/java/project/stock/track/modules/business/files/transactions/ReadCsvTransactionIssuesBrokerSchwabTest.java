@@ -1,6 +1,7 @@
 package project.stock.track.modules.business.files.transactions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -39,7 +40,7 @@ class ReadCsvTransactionIssuesBrokerSchwabTest extends ProjectUnitTest {
     }
 
     @Test
-    public void testReadCsvFile() throws ParseException, IOException {
+    void testReadCsvFile() throws ParseException, IOException {
     	
     	List<List<String>> records = Arrays.asList(
     		    Arrays.asList("Date", "Action", "Symbol", "Description", "Quantity", "Price", "Fees & Comm", "Amount"),

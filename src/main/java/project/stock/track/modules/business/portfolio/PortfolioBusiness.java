@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
+import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
+import lib.base.backend.persistance.GenericPersistence;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.pojos.business.portfolio.PorfolioIssuePojo;
@@ -23,25 +26,18 @@ import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.modules.business.MainBusiness;
 
+@RequiredArgsConstructor
 @Component
 public class PortfolioBusiness extends MainBusiness {
 	
-	DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
+	@SuppressWarnings("rawtypes")
+	private final GenericPersistence genericPersistance;
+	private final UserRepositoryImpl userRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
+	private final TransactionIssueRepositoryImpl transactionIssueRepository;
+	private final TransactionMoneyRepositoryImpl transactionMoneyRepository;
 	
-	TransactionIssueRepositoryImpl transactionIssueRepository;
-	
-	TransactionMoneyRepositoryImpl transactionMoneyRepository;
-	
-	CalculatorUtil calculatorUtil;
-	
-	public PortfolioBusiness(DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository, TransactionIssueRepositoryImpl transactionIssueRepository,
-			TransactionMoneyRepositoryImpl transactionMoneyRepository, CalculatorUtil calculatorUtil) {
-		this.dollarHistoricalPriceRespository = dollarHistoricalPriceRespository;
-		this.transactionIssueRepository = transactionIssueRepository;
-		this.transactionMoneyRepository = transactionMoneyRepository;
-		this.calculatorUtil = calculatorUtil;
-		
-	}
+	private CalculatorUtil calculatorUtil = new CalculatorUtil();
 	
 	public BigDecimal getTotalMoneyDeposits(int idBroker, int idUser) {
 		

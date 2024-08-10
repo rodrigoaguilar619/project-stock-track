@@ -2,14 +2,13 @@ package project.stock.track.services.dollarprice.impl;
 
 import java.text.ParseException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lib.base.backend.utils.date.DateFormatUtil;
-import lib.base.backend.utils.date.DateUtil;
+import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DollarPriceBancoMexicoBean;
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
@@ -17,19 +16,14 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.services.dollarprice.DollarPriceService;
 
+@RequiredArgsConstructor
 public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 	
-	@Autowired
-	DateFormatUtil dateFormatUtil;
 	
-	@Autowired
-	DateUtil dateUtil;
+	private final RestTemplate restTemplate;
+	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
-	@Autowired
-	RestTemplate restTemplate;
-	
-	@Autowired
-	ConfigControlRepositoryImpl configControlRepositoryImpl;
+	private DateFormatUtil dateFormatUtil = new DateFormatUtil();
 
 	@Override
 	public DollarPriceBean getDollarPrice() throws ParseException {
