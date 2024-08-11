@@ -32,5 +32,13 @@ class IssuesRepositoryImplTest extends ProjectJpaTest {
 			Assessment.assertDataList(issues);
 		});
 	}
+	
+	@Test
+	void testFindAllWithStatusActive() {
+		
+		List<CatalogIssuesEntity> result = issuesRepository.findAllWithStatusActive(false);
+		
+		Assessment.assertDataList(result);
+	}
 
 }

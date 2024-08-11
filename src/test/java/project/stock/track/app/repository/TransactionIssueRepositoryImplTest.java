@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import lib.base.backend.test.assessment.Assessment;
 import lib.base.backend.utils.ExecuteMethodUtil;
 import project.stock.track.ProjectJpaTest;
+import project.stock.track.app.beans.entity.TransactionIssueEntity;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionResumeTuplePojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
 
 class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 
@@ -45,7 +47,18 @@ class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 			
 			Assessment.assertDataList(issueTransactionResumeTuplePojos);
 		});
-
+	}
+	
+	@Test
+	void testFindTransactionIssuesNotSoldLower() {
+		
+		Integer idUser = 1;
+		Integer idIssue = 102;
+		Integer idBroker = CatalogBroker.CHARLES_SCHWAB;
+		
+		List<TransactionIssueEntity> result = transactionIssueRepository.findTransactionIssuesNotSoldLower(idUser, idIssue, idBroker);
+		
+		Assessment.assertDataList(result);
 	}
 
 }

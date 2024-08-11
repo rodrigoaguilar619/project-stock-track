@@ -40,6 +40,8 @@ import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.IssuesManagerRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.config.helpers.IssueHistoricalHelper;
 
 @SuppressWarnings("unchecked")
@@ -109,7 +111,17 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         issuesHistoricalEntityLastRecord.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(requestPojo.getIdIssue(), new Date()));
         when(issuesHistoricalRepository.findLastRecord(1)).thenReturn(issuesHistoricalEntityLastRecord);
 
+        IssueTransactionResumeTuplePojo issueTransactionResumeTuplePojo = new IssueTransactionResumeTuplePojo();
+        issueTransactionResumeTuplePojo.setBuyDate(new Date().getTime());
+        issueTransactionResumeTuplePojo.setDescriptionBroker("Broker test");
+        issueTransactionResumeTuplePojo.setDescriptionTypeCurrency("currency test");
+        issueTransactionResumeTuplePojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
+        issueTransactionResumeTuplePojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
+        issueTransactionResumeTuplePojo.setPriceBuy(new BigDecimal(10));
+        issueTransactionResumeTuplePojo.setTotalShares(new BigDecimal(10));
+        
         List<IssueTransactionResumeTuplePojo> issueTransactionResumeTuplePojos = new ArrayList<>();
+		issueTransactionResumeTuplePojos.add(issueTransactionResumeTuplePojo);
         when(transactionIssueRepository.findIssueTransactionsResume(1, 1)).thenReturn(issueTransactionResumeTuplePojos);
 
         GetIssueHistoricalDataPojo result = issuesHistoricalBusiness.executeGetIssueHistorical(requestPojo);
