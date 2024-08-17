@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -21,6 +22,15 @@ public abstract class ProjectConfigScriptTest {
 
 	private static Connection connection;
 	protected String userName = "ADMIN";
+	
+	@Value("${spring.datasource.username}")
+	private String dbUserName;
+	
+	@Value("${spring.datasource.password}")
+	private String dbPassword;
+	
+	@Value("${spring.datasource.url}")
+	private String dbUrl;
 	
 	@BeforeEach
 	public void initTestClass() throws SQLException, IOException {
@@ -34,7 +44,7 @@ public abstract class ProjectConfigScriptTest {
 		Server.createTcpServer("-tcpAllowOthers", "-tcpPort", "8085").start();
 	    Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8086").start();
 	    
-	    connection = DriverManager.getConnection("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;Mode=MySQL", "sa", "password");
+	    connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
         connection.setAutoCommit(true);
         
         List<String> sqlFiles = Arrays.asList( 

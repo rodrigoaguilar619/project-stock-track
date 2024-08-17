@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.Location;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,10 +46,6 @@ public abstract class ProjectConfigFlywayTest {
         Flyway flyway = Flyway.configure().dataSource(dbUrl, dbUserName, dbPassword)
 				.locations("classpath:db/migration")
         		.load();
-        
-        for(Location location : flyway.getConfiguration().getLocations()) {
-			System.out.println("location: " + location);
-		}
 
         flyway.migrate();
         
