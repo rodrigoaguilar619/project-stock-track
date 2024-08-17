@@ -1,25 +1,12 @@
 package project.stock.track.app.beans.rest.dollarprice;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class DollarPriceBean {
 	
 	private Long date;
 	
 	private String price;
-
-	public Long getDate() {
-		return date;
-	}
-
-	public void setDate(Long date) {
-		this.date = date;
-	}
-
-	public String getPrice() {
-		return price;
-	}
-
-	public void setPrice(String price) {
-		this.price = price;
-	}
-
 }

@@ -6,6 +6,10 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IssueHistoricAlphaVantageBean {
 
@@ -15,29 +19,4 @@ public class IssueHistoricAlphaVantageBean {
 	
 	@JsonProperty("Time Series (Daily)")
 	private Map<String, ShareHistoryDayAlphaVantageBean> history = new LinkedHashMap<>();
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getUri() {
-		return uri;
-	}
-
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-
-	public Map<String, ShareHistoryDayAlphaVantageBean> getHistory() {
-		return history;
-	}
-
-	public void setHistory(Map<String, ShareHistoryDayAlphaVantageBean> history) {
-		this.history = history;
-	}
-	
 }

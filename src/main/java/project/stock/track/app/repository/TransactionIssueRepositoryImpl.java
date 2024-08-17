@@ -284,7 +284,7 @@ public class TransactionIssueRepositoryImpl {
 			porfolioIssueEntityPojo.setInitials(result[10].toString());
 			
 			BigDecimal costAvgSellPerTitle = porfolioIssueEntityPojo.getIdTypeCurrency().equals(CatalogsEntity.CatalogTypeCurrency.MXN) ? porfolioIssueEntityPojo.getCostAvgSellPerTitleMxn() : porfolioIssueEntityPojo.getCostAvgSellPerTitle();
-			porfolioIssueEntityPojo.setYield(calculatorUtil.calculatePercentageUpDown(porfolioIssueEntityPojo.getCostAvgBuyPerTitle(), costAvgSellPerTitle ));
+			porfolioIssueEntityPojo.setTotalYield(calculatorUtil.calculatePercentageUpDown(porfolioIssueEntityPojo.getCostAvgBuyPerTitle(), costAvgSellPerTitle ));
 			
 			issuePorfolioEntityPojos.add(porfolioIssueEntityPojo);
 		}

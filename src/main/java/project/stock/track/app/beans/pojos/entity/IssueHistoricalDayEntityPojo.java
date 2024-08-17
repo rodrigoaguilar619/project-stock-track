@@ -2,6 +2,10 @@ package project.stock.track.app.beans.pojos.entity;
 
 import java.math.BigDecimal;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class IssueHistoricalDayEntityPojo {
 	
 	private BigDecimal open;
@@ -9,29 +13,4 @@ public class IssueHistoricalDayEntityPojo {
 	private BigDecimal close;
 	
 	private Long date;
-
-	public BigDecimal getOpen() {
-		return open;
-	}
-
-	public void setOpen(BigDecimal open) {
-		this.open = open;
-	}
-
-	public BigDecimal getClose() {
-		return close;
-	}
-
-	public void setClose(BigDecimal close) {
-		this.close = close;
-	}
-
-	public Long getDate() {
-		return date;
-	}
-
-	public void setDate(Long date) {
-		this.date = date;
-	}
-	
 }

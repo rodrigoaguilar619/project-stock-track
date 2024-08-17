@@ -6,6 +6,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptoTiingoBean {
 
@@ -17,29 +21,4 @@ public class CryptoTiingoBean {
 	
 	@JsonProperty("priceData")
 	private List<ShareHistoryDayTiingoBean> history = new ArrayList<>();
-
-	public String getTicker() {
-		return ticker;
-	}
-
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
-	}
-
-	public String getBaseCurrency() {
-		return baseCurrency;
-	}
-
-	public void setBaseCurrency(String baseCurrency) {
-		this.baseCurrency = baseCurrency;
-	}
-
-	public List<ShareHistoryDayTiingoBean> getHistory() {
-		return history;
-	}
-
-	public void setHistory(List<ShareHistoryDayTiingoBean> history) {
-		this.history = history;
-	}
-	
 }

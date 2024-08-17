@@ -4,17 +4,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BmxBean {
 
 	private List<SerieBean> series;
-
-	public List<SerieBean> getSeries() {
-		return series;
-	}
-
-	public void setSeries(List<SerieBean> series) {
-		this.series = series;
-	}
-	
 }

@@ -1,5 +1,9 @@
 package project.stock.track.app.beans.pojos.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class CatalogIssuesEntityDesPojo extends CatalogIssuesEntityPojo {
 
 	private String descriptionSector;
@@ -7,28 +11,4 @@ public class CatalogIssuesEntityDesPojo extends CatalogIssuesEntityPojo {
 	private String descriptionTypeStock;
 	
 	private String descriptionStatusIssue;
-
-	public String getDescriptionSector() {
-		return descriptionSector;
-	}
-
-	public void setDescriptionSector(String descriptionSector) {
-		this.descriptionSector = descriptionSector;
-	}
-
-	public String getDescriptionTypeStock() {
-		return descriptionTypeStock;
-	}
-
-	public void setDescriptionTypeStock(String descriptionTypeStock) {
-		this.descriptionTypeStock = descriptionTypeStock;
-	}
-
-	public String getDescriptionStatusIssue() {
-		return descriptionStatusIssue;
-	}
-
-	public void setDescriptionStatusIssue(String descriptionStatusIssue) {
-		this.descriptionStatusIssue = descriptionStatusIssue;
-	}
 }

@@ -1,29 +1,16 @@
 package project.stock.track.app.beans.pojos.petition.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import project.stock.track.app.beans.pojos.entity.IssueHistoricalEntityPojo;
 
+@Getter @Setter
 public class GetIssuesHistoricalDataPojo {
 	
-	List<IssueHistoricalEntityPojo> issuesHistorical;
+	private List<IssueHistoricalEntityPojo> issuesHistorical = new ArrayList<>();
 	
-	Long totalIssues;
-
-	public List<IssueHistoricalEntityPojo> getIssuesHistorical() {
-		return issuesHistorical;
-	}
-
-	public void setIssuesHistorical(List<IssueHistoricalEntityPojo> issuesHistorical) {
-		this.issuesHistorical = issuesHistorical;
-	}
-
-	public Long getTotalIssues() {
-		return totalIssues;
-	}
-
-	public void setTotalIssues(Long totalIssues) {
-		this.totalIssues = totalIssues;
-	}
-
+	private Long totalIssues;
 }

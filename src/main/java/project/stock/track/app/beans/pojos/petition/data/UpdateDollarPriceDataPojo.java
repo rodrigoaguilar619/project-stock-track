@@ -2,6 +2,10 @@ package project.stock.track.app.beans.pojos.petition.data;
 
 import java.math.BigDecimal;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class UpdateDollarPriceDataPojo {
 
 	private Long date;
@@ -9,29 +13,4 @@ public class UpdateDollarPriceDataPojo {
 	private BigDecimal price;
 	
 	private boolean isNewRegister;
-
-	public Long getDate() {
-		return date;
-	}
-
-	public void setDate(Long date) {
-		this.date = date;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	public boolean isNewRegister() {
-		return isNewRegister;
-	}
-
-	public void setNewRegister(boolean isNewRegister) {
-		this.isNewRegister = isNewRegister;
-	}
-	
 }

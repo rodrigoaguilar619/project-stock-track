@@ -3,6 +3,10 @@ package project.stock.track.app.beans.rest.exchangetrade.service.alphavantage;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShareHistoryDayAlphaVantageBean {
 	
@@ -23,54 +27,4 @@ public class ShareHistoryDayAlphaVantageBean {
 	
 	@JsonProperty("volume")
 	private String volume;
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String getOpen() {
-		return open;
-	}
-
-	public void setOpen(String open) {
-		this.open = open;
-	}
-
-	public String getClose() {
-		return close;
-	}
-
-	public void setClose(String close) {
-		this.close = close;
-	}
-
-	public String getHigh() {
-		return high;
-	}
-
-	public void setHigh(String high) {
-		this.high = high;
-	}
-
-	public String getLow() {
-		return low;
-	}
-
-	public void setLow(String low) {
-		this.low = low;
-	}
-
-	public String getVolume() {
-		return volume;
-	}
-
-	public void setVolume(String volume) {
-		this.volume = volume;
-	}
-	
-	
 }

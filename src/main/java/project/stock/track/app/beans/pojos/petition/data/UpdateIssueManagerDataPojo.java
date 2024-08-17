@@ -1,14 +1,10 @@
 package project.stock.track.app.beans.pojos.petition.data;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class UpdateIssueManagerDataPojo {
 
 	private Integer idIssueManager;
-
-	public Integer getIdIssueManager() {
-		return idIssueManager;
-	}
-
-	public void setIdIssueManager(Integer idIssueManager) {
-		this.idIssueManager = idIssueManager;
-	}
 }

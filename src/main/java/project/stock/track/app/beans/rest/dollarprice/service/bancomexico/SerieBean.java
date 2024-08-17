@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SerieBean {
 
@@ -12,28 +16,4 @@ public class SerieBean {
 	private String titulo;
 	
 	private List<DatosBean> datos;
-
-	public String getIdSerie() {
-		return idSerie;
-	}
-
-	public void setIdSerie(String idSerie) {
-		this.idSerie = idSerie;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
-	public List<DatosBean> getDatos() {
-		return datos;
-	}
-
-	public void setDatos(List<DatosBean> datos) {
-		this.datos = datos;
-	}
 }

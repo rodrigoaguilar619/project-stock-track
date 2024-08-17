@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lib.base.backend.pojo.rest.security.UserRequestPojo;
+import lombok.Getter;
+import lombok.Setter;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 
+@Getter @Setter
 public class AddEditIssueMovementRequestPojo extends UserRequestPojo {
 
 	private Integer idIssueMovement;
@@ -20,52 +23,4 @@ public class AddEditIssueMovementRequestPojo extends UserRequestPojo {
 	private BigDecimal priceMovement;
 	
 	private List<IssueMovementBuyEntityPojo> issueMovementBuysList = new ArrayList<>();
-
-	public Integer getIdIssueMovement() {
-		return idIssueMovement;
-	}
-
-	public void setIdIssueMovement(Integer idIssueMovement) {
-		this.idIssueMovement = idIssueMovement;
-	}
-
-	public String getIssue() {
-		return issue;
-	}
-
-	public void setIssue(String issue) {
-		this.issue = issue;
-	}
-
-	public Integer getIdBroker() {
-		return idBroker;
-	}
-
-	public void setIdBroker(Integer idBroker) {
-		this.idBroker = idBroker;
-	}
-
-	public Integer getIdStatus() {
-		return idStatus;
-	}
-
-	public void setIdStatus(Integer idStatus) {
-		this.idStatus = idStatus;
-	}
-
-	public BigDecimal getPriceMovement() {
-		return priceMovement;
-	}
-
-	public void setPriceMovement(BigDecimal priceMovement) {
-		this.priceMovement = priceMovement;
-	}
-
-	public List<IssueMovementBuyEntityPojo> getIssueMovementBuysList() {
-		return issueMovementBuysList;
-	}
-
-	public void setIssueMovementBuysList(List<IssueMovementBuyEntityPojo> issueMovementBuysList) {
-		this.issueMovementBuysList = issueMovementBuysList;
-	}
 }

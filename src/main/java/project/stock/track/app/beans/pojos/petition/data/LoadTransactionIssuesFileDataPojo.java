@@ -1,16 +1,13 @@
 package project.stock.track.app.beans.pojos.petition.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class LoadTransactionIssuesFileDataPojo {
 
-	private List<String> messages;
-
-	public List<String> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
-	}
+	private List<String> messages = new ArrayList<>();
 }

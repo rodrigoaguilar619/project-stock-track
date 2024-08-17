@@ -109,7 +109,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 		}
 		
 		GetIssuesManagerListDataPojo dataPojo = new GetIssuesManagerListDataPojo();
-		dataPojo.setIssuesManager(issueEntityPojos);
+		dataPojo.setIssuesManagerList(issueEntityPojos);
 		
 		return dataPojo;	
 	}
