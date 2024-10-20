@@ -109,12 +109,14 @@ public class TransactionIssueRepositoryImpl {
 		predicatesAnd.add(cb.greaterThanOrEqualTo(root.get(TransactionIssueEntity_.idDate), startDate));
 		
 		cq.select(cb.construct(IssueTransactionsByDateTuplePojo.class,
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP,Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP,Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000L),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)),
 				root.get(TransactionIssueEntity_.priceTotalBuy),
+				root.get(TransactionIssueEntity_.priceTotalSell),
 				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.acronym)));
 
-		cq.groupBy(root.get(TransactionIssueEntity_.idDate), root.get(TransactionIssueEntity_.priceTotalBuy));
+		cq.groupBy(root.get(TransactionIssueEntity_.idDate), root.get(TransactionIssueEntity_.sellDate), root.get(TransactionIssueEntity_.priceTotalBuy), root.get(TransactionIssueEntity_.priceTotalSell));
 		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.idDate)));
 
 		cq.where(predicatesAnd.toArray(new Predicate[0]));
