@@ -223,7 +223,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setIssueMovementTransactionSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceCurrency, true));
 		
 		if (!issueMovementBuysPojoList.isEmpty() && currentPriceData.getCurrentPrice() != null)
-			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(issueMovementBuysPojoList.getLast().getBuyPrice(), currentPriceCurrency).toPlainString());
+			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(currentPriceData.getCurrentPrice(), fairValue != null ? fairValue : BigDecimal.ZERO).toPlainString());
 	
 		return issueMovementPojo;
 	}
