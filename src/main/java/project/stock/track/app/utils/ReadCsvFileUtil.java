@@ -29,6 +29,11 @@ public class ReadCsvFileUtil {
 		
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
 		
+			br.mark(1);
+	        if (br.read() != 0xFEFF) { // UTF-8 BOM is 0xFEFF
+	            br.reset(); // Reset the stream if no BOM is found
+	        }
+			
 			csvParser = new CSVParser(br, CSVFormat.DEFAULT.withDelimiter(','));
 			
 			for (CSVRecord csvRecord: csvParser) {
