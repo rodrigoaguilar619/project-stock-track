@@ -77,7 +77,7 @@ public class IssuesMovementsRepositoryImpl {
 			Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = fetchIssuesManager.fetch(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY);
 			fetchIssuesManager.fetch(IssuesManagerEntity_.ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY);
 			fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_SECTOR_ENTITY);
-			fetchIssues.fetch(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY);
+			fetchIssues.fetch(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY, JoinType.LEFT);
 			fetchBroker.fetch(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY);
 		}
 		

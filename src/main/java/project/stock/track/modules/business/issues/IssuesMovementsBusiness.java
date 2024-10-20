@@ -95,6 +95,9 @@ public class IssuesMovementsBusiness extends MainBusiness {
 	
 	private IssueMovementTransactionPojo buildIssueMovementTransactionPojo(BigDecimal currentPrice, BigDecimal totalShares, BigDecimal totalSellPrice, BigDecimal totalBuyPrice, boolean isForSold) {
 		
+		if (currentPrice == null)
+			currentPrice = BigDecimal.ZERO;
+		
 		BigDecimal avgCostByShare = BigDecimal.ZERO;
 		BigDecimal performanceByShare = BigDecimal.ZERO;
 		BigDecimal performanceTotal = BigDecimal.ZERO;
