@@ -120,8 +120,8 @@ public class IssuesHistoricalRepositoryImpl {
 			if (filters.getFairValuePriceOverPercentage() != null) {
 				
 				Expression<Number> expresionUnder = cb.diff(joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.fairValue), joinTempIssueLastPrice.get(IssuesLastPriceTmpEntity_.last));
+				expresionUnder = cb.quot(expresionUnder, joinTempIssueLastPrice.get(IssuesLastPriceTmpEntity_.last));
 				expresionUnder = cb.prod(expresionUnder, cb.literal(100));
-				expresionUnder = cb.quot(expresionUnder, joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.fairValue));
 				
 				predicatesAnd.add(cb.ge(expresionUnder, filters.getFairValuePriceOverPercentage()));
 			}
