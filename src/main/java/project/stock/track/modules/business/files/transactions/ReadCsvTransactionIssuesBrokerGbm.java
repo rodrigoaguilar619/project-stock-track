@@ -108,7 +108,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			BigDecimal comissionPercentage = buildPrice(rowRecord.get(10)).divide(BigDecimal.valueOf(transactionIssueFileDataPojo.getTitles()), 5, RoundingMode.HALF_UP);
 			BigDecimal comissionPercentageTotal = comissionPercentage.multiply(BigDecimal.valueOf(16)).divide(BigDecimal.valueOf(100));
 			comissionPercentageTotal = comissionPercentageTotal.add(comissionPercentage);
-			comissionPercentageTotal = comissionPercentageTotal.multiply(BigDecimal.valueOf(100)).divide(transactionIssueFileDataPojo.getPrice(), 5, RoundingMode.HALF_UP);
+			comissionPercentageTotal = transactionIssueFileDataPojo.getPrice().compareTo(BigDecimal.valueOf(0)) == 0 ? BigDecimal.valueOf(0) : comissionPercentageTotal.multiply(BigDecimal.valueOf(100)).divide(transactionIssueFileDataPojo.getPrice(), 5, RoundingMode.HALF_UP);
 			transactionIssueFileDataPojo.setComissionPercentage(comissionPercentageTotal.setScale(2, RoundingMode.HALF_UP));
 			
 			issueTransactionDataPojos.add(transactionIssueFileDataPojo);
