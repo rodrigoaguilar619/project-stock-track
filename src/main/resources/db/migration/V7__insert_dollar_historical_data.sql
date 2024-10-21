@@ -1,0 +1,3 @@
+INSERT INTO config_control (reference,config_value,description) VALUES ('api.pricedollar.currentlayer.token','65d9e1dbf84b137a06dacf82f349fa94','Dollar price: token for current layer');
+INSERT INTO config_control (reference,config_value,description) VALUES ('api.pricedollar.currentlayer.price','https://api.currencylayer.com','Dollar price: API for current layer dollar');
+TRUNCATE TABLE dollar_historical_price;
