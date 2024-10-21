@@ -1,6 +1,7 @@
 package project.stock.track.services.dollarprice.impl;
 
 import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -50,6 +51,11 @@ public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 		}
 		
 		return dollarPriceBean;
+	}
+
+	@Override
+	public List<DollarPriceBean> getDollarPriceHistorical(long dateStart, long dateEnd) {
+		return null;
 	}
 
 }

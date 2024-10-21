@@ -51,6 +51,7 @@ public class CatalogsStaticData {
 		 }
 		
 		public static final String DATE_FORMAT_DEFAULT_BANCO_MEXICO = "dd/MM/yyyy";
+		public static final String DATE_FORMAT_DEFAULT_CURRENT_LAYER = "yyyy-MM-dd";
 	}
 	
 	public static final class CsvReportsHeaders {

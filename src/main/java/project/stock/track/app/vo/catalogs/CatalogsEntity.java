@@ -106,6 +106,8 @@ public class CatalogsEntity {
 		public static final String API_STOCK_TIINGO_TOKEN_TWO = "api.stock.tiingo.token.two";
 		public static final String API_PRICE_DOLLAR_BANXICO_TOKEN = "api.pricedollar.bancomexico.token";
 		public static final String API_PRICE_DOLLAR_BANXICO_URI = "api.pricedollar.bancomexico.price";
+		public static final String API_PRICE_DOLLAR_CURRENT_LAYER_TOKEN = "api.pricedollar.currentlayer.token";
+		public static final String API_PRICE_DOLLAR_CURRENT_LAYER_URI = "api.pricedollar.currentlayer.price";
 		public static final String API_STOCK_TIINGO_IEX = "api.stock.tiingo.iex";
 		public static final String API_STOCK_TIINGO_HISTORICAL_ISSUE = "api.stock.tiingo.finantial.historical.issue";
 		public static final String API_STOCK_TIINGO_HISTORICAL_CRYPTO = "api.stock.tiingo.finantial.historical.crypto";

@@ -26,8 +26,8 @@ public class UpdateDollarPriceController {
 	@PostMapping(CatalogsUri.API_SERVICE_DOLLAR_UPDATE)
 	public ResponseEntity updateDollarPrice() throws ParseException {
 		
-		UpdateDollarPriceDataPojo dataPojo = updateDollarPriceBusiness.executeUpdateDollarPrice();
-		return new RestUtil().buildResponseSuccess(dataPojo, "Dollar price updated");
+		UpdateDollarPriceDataPojo dataPojo = updateDollarPriceBusiness.executeUpdateDollarPriceHistorical();
+		return new RestUtil().buildResponseSuccess(dataPojo, "Dollar price historical updated");
 	}
 
 }
