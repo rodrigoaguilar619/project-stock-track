@@ -1,0 +1,2 @@
+ALTER TABLE issues_movements_buy CHANGE buy_price_mxn buy_price_mxn DECIMAL(15,4) NULL AFTER buy_price;
+ALTER TABLE issues_movements_buy CHANGE sell_price_mxn sell_price_mxn DECIMAL(15,4) NULL AFTER sell_price;
