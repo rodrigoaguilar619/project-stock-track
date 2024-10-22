@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,6 +27,8 @@ import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.BmxBea
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DatosBean;
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DollarPriceBancoMexicoBean;
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.SerieBean;
+import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.DollarPriceCurrentLayerBean;
+import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.QuoteBean;
 
 @SuppressWarnings("unchecked")
 class UpdateDollarPriceControllerTest extends ProjectIntegrationTest {
@@ -39,26 +43,23 @@ class UpdateDollarPriceControllerTest extends ProjectIntegrationTest {
 	@Test
 	void testUpdateDollarPrice() throws ParseException {
 		
-		DatosBean datosBean = new DatosBean();
-		datosBean.setDato("12.90");
-		datosBean.setFecha("01/01/2024");
 		
-		SerieBean serieBean = new SerieBean();
-		serieBean.setDatos(Arrays.asList(datosBean));
+		QuoteBean quoteBean = new QuoteBean();
+		quoteBean.setMxn(new BigDecimal(12.90));
 		
-		BmxBean bmxBean = new BmxBean();
-		bmxBean.setSeries(Arrays.asList(serieBean));
+		Map<String, QuoteBean> quotes = new LinkedHashMap<String, QuoteBean>(); 
+		quotes.put("2024-01-01", quoteBean);
 		
-		DollarPriceBancoMexicoBean dollarPriceBancoMexicoBean = new DollarPriceBancoMexicoBean();
-		dollarPriceBancoMexicoBean.setBmx(bmxBean);
+		DollarPriceCurrentLayerBean dollarPriceCurrentLayerBean = new DollarPriceCurrentLayerBean();
+		dollarPriceCurrentLayerBean.setQuotes(quotes);
 		
-		when(restTemplate.getForObject(anyString(), any(Class.class))).thenReturn(dollarPriceBancoMexicoBean);
+		when(restTemplate.getForObject(anyString(), any(Class.class))).thenReturn(dollarPriceCurrentLayerBean);
 		
 		ResponseEntity<GenericResponsePojo<UpdateDollarPriceDataPojo>> response = updateDollarPriceController.updateDollarPrice();
 		
 		Assessment.assertResponseData(response);
 		assertNotNull(response.getBody().getData().getPrice());
-		assertEquals(new BigDecimal(datosBean.getDato()), response.getBody().getData().getPrice());
+		assertEquals(dollarPriceCurrentLayerBean.getQuotes().get("2024-01-01").getMxn(), response.getBody().getData().getPrice());
 	}
 
 }
