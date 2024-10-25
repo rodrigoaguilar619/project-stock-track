@@ -8,4 +8,6 @@ import lombok.Setter;
 public class GetIssueMovementRequestPojo extends UserRequestPojo {
 
 	private Integer idIssueMovement;
+	
+	private Integer idTypeCurrency;
 }

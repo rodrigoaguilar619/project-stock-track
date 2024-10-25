@@ -26,11 +26,17 @@ public class IssuesMovementsBuyEntity implements Serializable {
 	@Column(name="buy_price")
 	private BigDecimal buyPrice;
 	
+	@Column(name="buy_price_mxn")
+	private BigDecimal buyPriceMxn;
+	
 	@Column(name = "buy_date")
 	private Date buyDate;
 
 	@Column(name="sell_price")
 	private BigDecimal sellPrice;
+	
+	@Column(name="sell_price_mxn")
+	private BigDecimal sellPriceMxn;
 	
 	@Column(name = "sell_date")
 	private Date sellDate;

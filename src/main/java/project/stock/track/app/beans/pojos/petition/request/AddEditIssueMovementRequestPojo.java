@@ -14,6 +14,8 @@ public class AddEditIssueMovementRequestPojo extends UserRequestPojo {
 
 	private Integer idIssueMovement;
 	
+	private Integer idTypeCurrency;
+	
 	private String issue;
 	
 	private Integer idBroker;

@@ -34,7 +34,7 @@ public class IssuesMovementsController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_LIST_GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity getIssuesMovementsList(@RequestBody GetIssuesMovementsListRequestPojo requestPojo) {
+	public ResponseEntity getIssuesMovementsList(@RequestBody GetIssuesMovementsListRequestPojo requestPojo) throws BusinessException {
 		
 		GetIssuesMovementsListDataPojo dataPojo = issuesMovementsBusiness.executeGetIssuesMovements(requestPojo);
 		return new RestUtil().buildResponseSuccess(dataPojo, "Issues movements list getted");

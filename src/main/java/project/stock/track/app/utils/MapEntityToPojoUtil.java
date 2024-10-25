@@ -1,5 +1,6 @@
 package project.stock.track.app.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityDesPojo;
 import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueLastPriceTmpEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 
 public class MapEntityToPojoUtil {
 	
@@ -70,13 +72,22 @@ public class MapEntityToPojoUtil {
 		return catalogIssuesEntityDesPojo;
 	}
 	
-	public IssueMovementBuyEntityPojo mapIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, IssueMovementBuyEntityPojo issueMovementBuyPojo) {
+	public IssueMovementBuyEntityPojo mapIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, IssueMovementBuyEntityPojo issueMovementBuyPojo, Integer idTypeCurrency) {
 		
 		if (issueMovementBuyPojo == null)
 			issueMovementBuyPojo = new IssueMovementBuyEntityPojo();
 		
-		issueMovementBuyPojo.setBuyPrice(issueMovementBuyEntity.getBuyPrice());
-		issueMovementBuyPojo.setSellPrice(issueMovementBuyEntity.getSellPrice());
+		BigDecimal buyPrice = issueMovementBuyEntity.getBuyPrice();
+		BigDecimal sellPrice = issueMovementBuyEntity.getSellPrice();
+		
+		if (idTypeCurrency == CatalogTypeCurrency.MXN) {
+			buyPrice = issueMovementBuyEntity.getBuyPriceMxn();
+			sellPrice = issueMovementBuyEntity.getSellPriceMxn();
+		}
+			
+		
+		issueMovementBuyPojo.setBuyPrice(buyPrice);
+		issueMovementBuyPojo.setSellPrice(sellPrice);
 		issueMovementBuyPojo.setBuyDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getBuyDate(), Date::getTime));
 		issueMovementBuyPojo.setSellDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getSellDate(), Date::getTime));
 		issueMovementBuyPojo.setBuyTransactionNumber(issueMovementBuyEntity.getId().getBuyTransactionNumber());
@@ -85,12 +96,12 @@ public class MapEntityToPojoUtil {
 		return issueMovementBuyPojo;
 	}
 	
-	public List<IssueMovementBuyEntityPojo> mapIssueMovementBuyList(List<IssuesMovementsBuyEntity> issuesMovementsBuyEntities){
+	public List<IssueMovementBuyEntityPojo> mapIssueMovementBuyList(List<IssuesMovementsBuyEntity> issuesMovementsBuyEntities, Integer idTypeCurrency){
 		
 		List<IssueMovementBuyEntityPojo> issueMovementBuyPojos = new ArrayList<>();
 		
 		for(IssuesMovementsBuyEntity issuesMovementsBuyEntity: issuesMovementsBuyEntities) {
-			issueMovementBuyPojos.add(mapIssueMovementBuy(issuesMovementsBuyEntity, null));
+			issueMovementBuyPojos.add(mapIssueMovementBuy(issuesMovementsBuyEntity, null, idTypeCurrency));
 		}
 		
 		return issueMovementBuyPojos;

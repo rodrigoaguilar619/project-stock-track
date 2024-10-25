@@ -16,6 +16,7 @@ public class CatalogsErrorMessage {
 	private static final String ERROR_MSG_FILE_BAD_HEADER_FORMAT = "Bad header format. broker: %s";
 	private static final String ERROR_MSG_FILE_BROKER_NOT_REGISTERED = "Broker doesn't registered";
 	private static final String ERROR_MSG_EXCHANGE_TRADE_BAD_RANGE_DATE = "Error validating range date on service consume. issue: %s, date start: %s, date end: %s";
+	private static final String ERROR_DOLLAR_HISTORICAL_PRICE_BUY_SELL_NOT_FOUND = "Dollar historical price not found for %s on date %s";
 	
 	public static String getErrorMsgIssuesRegistered(String issues) {
 		return String.format(ERROR_MSG_ISSUES_EXIST, issues);
@@ -63,5 +64,9 @@ public class CatalogsErrorMessage {
 	
 	public static String getErrorMsgExchangeTradeBadRangeDate(String issue, String dateTo, String dateFrom) {
 		return String.format(ERROR_MSG_EXCHANGE_TRADE_BAD_RANGE_DATE, issue, dateTo, dateFrom);
+	}
+	
+	public static String getErrorMsgDollarHistoricalPriceBuySellNotFound(String issue, String date) {
+		return String.format(ERROR_DOLLAR_HISTORICAL_PRICE_BUY_SELL_NOT_FOUND, issue, date);
 	}
 }

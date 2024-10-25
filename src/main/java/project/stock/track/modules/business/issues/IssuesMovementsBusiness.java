@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.pojo.datatable.DataTablePojo;
@@ -30,7 +31,7 @@ import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -153,7 +154,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 	}
 	
-	private IssueMovementTransactionTotalResumePojo buildIssueMovementTransactionTotal(List<IssueMovementResumePojo> issueMovementResumePojos, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, boolean isForSold) {
+	private IssueMovementTransactionTotalResumePojo buildIssueMovementTransactionTotal(List<IssueMovementResumePojo> issueMovementResumePojos, boolean isForSold) {
 		
 		BigDecimal totalCurrentPrice = BigDecimal.ZERO;
 		BigDecimal totalBuyPrice = BigDecimal.ZERO;
@@ -171,11 +172,6 @@ public class IssuesMovementsBusiness extends MainBusiness {
 				totalBuyPriceSet = issueMovementResumePojo.getIssueMovementTransactionNotSold().getAvgCostByShare().multiply(issueMovementResumePojo.getIssueMovementTransactionNotSold().getTotalShares());
 			}
 			
-			if(issueMovementResumePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER)) {
-				totalCurrentPriceSet = totalCurrentPriceSet.divide(dollarHistoricalPriceEntity.getPrice(), 5, RoundingMode.HALF_DOWN);
-				totalBuyPriceSet = totalBuyPriceSet.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : totalBuyPriceSet.divide(dollarHistoricalPriceEntity.getPrice(), 5, RoundingMode.HALF_DOWN);
-			}
-			
 			totalCurrentPrice = totalCurrentPrice.add(totalCurrentPriceSet);
 			totalBuyPrice = totalBuyPrice.add(totalBuyPriceSet);
 		}
@@ -189,18 +185,18 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		return issueMovementTransactionTotalResumePojo;
 	}
 	
-	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, DollarHistoricalPriceEntity dollarHistoricalPriceEntity, IssueCurrentPricePojo currentPriceData) {
+	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, IssueCurrentPricePojo currentPriceData, Integer idTypeCurrency) {
+		
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
 		IssuesManagerEntity managerIssuesEntity = issueMovement.getIssuesManagerEntity();
 		CatalogIssuesEntity catalogIssuesEntity = managerIssuesEntity.getCatalogIssueEntity();
 		CatalogSectorEntity catalogSectorEntity = catalogIssuesEntity.getCatalogSectorEntity();
 		
 		BigDecimal fairValue = dataUtil.getValueOrNull(managerIssuesEntity.getIssuesManagerTrackPropertiesEntity(), IssuesManagerTrackPropertiesEntity::getFairValue);
-		BigDecimal currentPriceCurrency = null;
 		
-		if(currentPriceData.getCurrentPrice() != null)
-			currentPriceCurrency = issueMovement.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? dollarHistoricalPriceEntity.getPrice().multiply(currentPriceData.getCurrentPrice()) : currentPriceData.getCurrentPrice();
-		
+		if (fairValue != null && idTypeCurrency == CatalogTypeCurrency.MXN)
+			fairValue = dollarHistoricalPriceEntity.getPrice().multiply(fairValue);
 		
 		IssueMovementResumePojo issueMovementPojo = new IssueMovementResumePojo();
 		issueMovementPojo.setIdIssueMovement(issueMovement.getId());
@@ -210,7 +206,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setIssueMovementBuysList(issueMovementBuysPojoList);
 		issueMovementPojo.setCurrentPrice(currentPriceData.getCurrentPrice());
 		issueMovementPojo.setCurrentPriceDate(currentPriceData.getDate());
-		issueMovementPojo.setAlert(getAlerts(issueMovementBuysPojoList, currentPriceCurrency));
+		issueMovementPojo.setAlert(getAlerts(issueMovementBuysPojoList, currentPriceData.getCurrentPrice()));
 		issueMovementPojo.setIdBroker(issueMovement.getCatalogBrokerEntity().getId());
 		issueMovementPojo.setDescriptionBroker(issueMovement.getCatalogBrokerEntity().getAcronym());
 		issueMovementPojo.setDescriptionCurrency(issueMovement.getCatalogBrokerEntity().getCatalogTypeCurrencyEntity().getDescription());
@@ -219,8 +215,8 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		issueMovementPojo.setDescriptionSector(dataUtil.getValueOrNull(catalogSectorEntity, CatalogSectorEntity::getDescription));
 		issueMovementPojo.setFairValue(fairValue != null ? fairValue.toPlainString() : null);
 		issueMovementPojo.setPriceMovement(issueMovement.getPriceMovement());
-		issueMovementPojo.setIssueMovementTransactionNotSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceCurrency, false));
-		issueMovementPojo.setIssueMovementTransactionSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceCurrency, true));
+		issueMovementPojo.setIssueMovementTransactionNotSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceData.getCurrentPrice(), false));
+		issueMovementPojo.setIssueMovementTransactionSold(buildIssueMovementTransaction(issueMovementBuysPojoList, currentPriceData.getCurrentPrice(), true));
 		
 		if (!issueMovementBuysPojoList.isEmpty() && currentPriceData.getCurrentPrice() != null)
 			issueMovementPojo.setIssuePerformance(calculatorUtil.calculatePercentageUpDown(currentPriceData.getCurrentPrice(), fairValue != null ? fairValue : BigDecimal.ZERO).toPlainString());
@@ -228,35 +224,36 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		return issueMovementPojo;
 	}
 	
-	private List<IssueMovementBuyEntityPojo> buildIssueMovementBuy(IssuesMovementsEntity issueMovement) {
+	private List<IssueMovementBuyEntityPojo> buildIssueMovementBuy(IssuesMovementsEntity issueMovement, Integer idTypeCurrency) {
 		
-		return mapEntityToPojoUtil.mapIssueMovementBuyList(issueMovement.getIssuesMovementsBuys());
+		return mapEntityToPojoUtil.mapIssueMovementBuyList(issueMovement.getIssuesMovementsBuys(), idTypeCurrency);
 	}
 
-	public GetIssuesMovementsListDataPojo getIssuesMovements(Integer idUser, DataTablePojo<IssuesMovementsFiltersPojo> dataTableConfig) {
+	public GetIssuesMovementsListDataPojo getIssuesMovements(Integer idUser, DataTablePojo<IssuesMovementsFiltersPojo> dataTableConfig, Integer idTypeCurrency) {
+		
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
 		List<IssuesMovementsEntity> issuesMovements = issuesMovementsRepository.findAllIssuesMovements(idUser, dataTableConfig.getFilters());
 		Long totalIssuesMovements = issuesMovementsRepository.findCountIssuesMovements(idUser, dataTableConfig.getFilters());
-		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
 		List<IssueMovementResumePojo> issueMovementPojos = new ArrayList<>();
 		
 		for (IssuesMovementsEntity issueMovementEntity: issuesMovements) {
 			
-			List<IssueMovementBuyEntityPojo> issueMovementBuysPojosList = buildIssueMovementBuy(issueMovementEntity);
+			List<IssueMovementBuyEntityPojo> issueMovementBuysPojosList = buildIssueMovementBuy(issueMovementEntity, idTypeCurrency);
 			
 			IssuesManagerEntity managerIssuesEntity = issueMovementEntity.getIssuesManagerEntity();
-			IssueCurrentPricePojo currentPriceData = issueUtil.getCurrentPrice(managerIssuesEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity(), null);
+			IssueCurrentPricePojo currentPriceData = issueUtil.getCurrentPrice(managerIssuesEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity(), null, dollarHistoricalPriceEntity, idTypeCurrency);
 			
-			IssueMovementResumePojo issueMovementPojo = buildIssueMovementData(issueMovementEntity, issueMovementBuysPojosList, dollarHistoricalPriceEntity, currentPriceData);
+			IssueMovementResumePojo issueMovementPojo = buildIssueMovementData(issueMovementEntity, issueMovementBuysPojosList, currentPriceData, idTypeCurrency);
 			issueMovementPojos.add(issueMovementPojo);
 		}
 		
 		GetIssuesMovementsListDataPojo dataPojo = new GetIssuesMovementsListDataPojo();
 		dataPojo.setIssuesMovementsList(issueMovementPojos);
 		dataPojo.setTotalIssuesMovements(totalIssuesMovements);
-		dataPojo.setIssueMovementTransactionTotalSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, true));
-		dataPojo.setIssueMovementTransactionTotalNotSold(buildIssueMovementTransactionTotal(issueMovementPojos, dollarHistoricalPriceEntity, false));
+		dataPojo.setIssueMovementTransactionTotalSold(buildIssueMovementTransactionTotal(issueMovementPojos, true));
+		dataPojo.setIssueMovementTransactionTotalNotSold(buildIssueMovementTransactionTotal(issueMovementPojos, false));
 		
 		IssueMovementTransactionTotalResumePojo issueMovementTransactionTotalResumePojo = new IssueMovementTransactionTotalResumePojo();
 		issueMovementTransactionTotalResumePojo.setTotalCurrentPrice(dataPojo.getIssueMovementTransactionTotalNotSold().getTotalCurrentPrice().add(dataPojo.getIssueMovementTransactionTotalSold().getTotalCurrentPrice()));
@@ -275,10 +272,13 @@ public class IssuesMovementsBusiness extends MainBusiness {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public GetIssuesMovementsListDataPojo executeGetIssuesMovements(GetIssuesMovementsListRequestPojo requestPojo) {
+	public GetIssuesMovementsListDataPojo executeGetIssuesMovements(GetIssuesMovementsListRequestPojo requestPojo) throws BusinessException {
 		
 		UserEntity userEntity = userRepository.findByUserName(requestPojo.getUserName());
 		
-		return getIssuesMovements(userEntity.getId(), requestPojo.getDataTableConfig());
+		if(requestPojo.getIdTypeCurrency() == null)
+			throw new BusinessException("Currency type not found");
+		
+		return getIssuesMovements(userEntity.getId(), requestPojo.getDataTableConfig(), requestPojo.getIdTypeCurrency());
 	}
 }

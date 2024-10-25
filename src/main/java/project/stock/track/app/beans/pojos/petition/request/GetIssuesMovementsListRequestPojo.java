@@ -10,4 +10,6 @@ import project.stock.track.app.beans.pojos.business.issues.IssuesMovementsFilter
 public class GetIssuesMovementsListRequestPojo extends UserRequestPojo {
 	
 	private DataTablePojo<IssuesMovementsFiltersPojo> dataTableConfig;
+	
+	private Integer idTypeCurrency;
 }

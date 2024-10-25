@@ -1,5 +1,7 @@
 package project.stock.track.modules.business.issues;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
+import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntityPk;
 import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity;
@@ -25,12 +28,15 @@ import project.stock.track.app.beans.pojos.entity.IssueMovementEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequestPojo;
+import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsBuyRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -43,6 +49,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	private final IssuesRepositoryImpl issuesRepository;
 	private final IssuesMovementsBuyRepositoryImpl issuesMovementsBuyRepository;
 	private final IssuesMovementsRepositoryImpl issuesMovementsRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
 	
 	@SuppressWarnings("unchecked")
 	private void setManagerIssueIsInvest(IssuesManagerEntity issuesManagerEntity, Integer idIssueMovement, Integer idStatus) {
@@ -65,20 +72,58 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void setAddEditIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, Integer idIssueMovement, IssueMovementBuyEntityPojo issueMovementBuyEntityPojo) {
+	public void setAddEditIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, Integer idIssueMovement, IssueMovementBuyEntityPojo issueMovementBuyEntityPojo, Integer idTypeCurrency) throws BusinessException {
 		
 		if (issueMovementBuyEntity == null)
 			issueMovementBuyEntity = new IssuesMovementsBuyEntity();
+		
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(issueMovementBuyEntityPojo.getBuyDate()));
+		
+		if(dollarHistoricalPriceEntityBuy == null)
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("buy", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getBuyDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
+		
+		BigDecimal buyPriceUsd = null;
+		BigDecimal buyPriceMxn = null;
+		BigDecimal sellPriceUsd = null;
+		BigDecimal sellPriceMxn = null;
+		
+		if(idTypeCurrency == CatalogTypeCurrency.USD) {
+			buyPriceUsd = issueMovementBuyEntityPojo.getBuyPrice();
+			buyPriceMxn = issueMovementBuyEntityPojo.getBuyPrice().multiply(dollarHistoricalPriceEntityBuy.getPrice());
+		}
+		else if(idTypeCurrency == CatalogTypeCurrency.MXN) {
+			buyPriceUsd = issueMovementBuyEntityPojo.getBuyPrice().divide(dollarHistoricalPriceEntityBuy.getPrice(), 5, RoundingMode.HALF_DOWN);
+			buyPriceMxn = issueMovementBuyEntityPojo.getBuyPrice();
+		}
+		
+		if(issueMovementBuyEntityPojo.getSellDate() != null) {
+			
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(new Date(issueMovementBuyEntityPojo.getSellDate()));
+			
+			if(dollarHistoricalPriceEntitySell == null)
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("sell", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getSellDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
+			
+			if(idTypeCurrency == CatalogTypeCurrency.USD) {
+				sellPriceUsd = issueMovementBuyEntityPojo.getSellPrice();
+				sellPriceMxn = issueMovementBuyEntityPojo.getSellPrice().multiply(dollarHistoricalPriceEntitySell.getPrice());
+			}
+			else if(idTypeCurrency == CatalogTypeCurrency.MXN) {
+				sellPriceUsd = issueMovementBuyEntityPojo.getSellPrice().divide(dollarHistoricalPriceEntitySell.getPrice(), 5, RoundingMode.HALF_DOWN);
+				sellPriceMxn = issueMovementBuyEntityPojo.getSellPrice();
+			}
+		}
 		
 		IssuesMovementsBuyEntityPk pk = new IssuesMovementsBuyEntityPk();
 		pk.setBuyTransactionNumber(issueMovementBuyEntityPojo.getBuyTransactionNumber());
 		pk.setIdIssueMovement(idIssueMovement);
 		
 		issueMovementBuyEntity.setId(pk);
-		issueMovementBuyEntity.setBuyPrice(issueMovementBuyEntityPojo.getBuyPrice());
+		issueMovementBuyEntity.setBuyPrice(buyPriceUsd);
+		issueMovementBuyEntity.setBuyPriceMxn(buyPriceMxn);
 		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
 		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
-		issueMovementBuyEntity.setSellPrice(issueMovementBuyEntityPojo.getSellPrice());
+		issueMovementBuyEntity.setSellPrice(sellPriceUsd);
+		issueMovementBuyEntity.setSellPriceMxn(sellPriceMxn);
 		issueMovementBuyEntity.setSellDate(issueMovementBuyEntityPojo.getSellDate() != null ? new Date(issueMovementBuyEntityPojo.getSellDate()) : null);
 		issueMovementBuyEntity.setTotalShares(issueMovementBuyEntityPojo.getTotalShares());
 		
@@ -86,7 +131,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void setAddEditIssueMovement(IssuesMovementsEntity issueMovementEntity, UserEntity userEntity, IssueMovementEntityPojo issueMovementEntityPojo, CrudOptionsEnum crudOptionsEnum) {
+	public void setAddEditIssueMovement(IssuesMovementsEntity issueMovementEntity, UserEntity userEntity, IssueMovementEntityPojo issueMovementEntityPojo, CrudOptionsEnum crudOptionsEnum, Integer idTypeCurrency) throws BusinessException {
 		
 		issueMovementEntity.setIdIssue(issueMovementEntityPojo.getIdIssue());
 		issueMovementEntity.setIdBroker(issueMovementEntityPojo.getIdBroker());
@@ -103,7 +148,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		}
 		
 		for(IssueMovementBuyEntityPojo issueMovementBuyEntityPojo: issueMovementEntityPojo.getIssueMovementBuysList())
-			setAddEditIssueMovementBuy(null, issueMovementEntity.getId(), issueMovementBuyEntityPojo);
+			setAddEditIssueMovementBuy(null, issueMovementEntity.getId(), issueMovementBuyEntityPojo, idTypeCurrency);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,7 +157,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		
 		IssuesMovementsEntity issueMovement = (IssuesMovementsEntity) genericPersistance.findById(IssuesMovementsEntity.class, requestPojo.getIdIssueMovement());
 		
-		List<IssueMovementBuyEntityPojo> issueMovementBuysPojos = mapEntityToPojoUtil.mapIssueMovementBuyList(issueMovement.getIssuesMovementsBuys());
+		List<IssueMovementBuyEntityPojo> issueMovementBuysPojos = mapEntityToPojoUtil.mapIssueMovementBuyList(issueMovement.getIssuesMovementsBuys(), requestPojo.getIdTypeCurrency());
 		
 		IssueMovementPojo issueMovementPojo = new IssueMovementPojo();
 		issueMovementPojo.setIdIssueMovement(issueMovement.getId());
@@ -158,7 +203,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		issueMovementEntityPojo.setIssueMovementBuysList(requestPojo.getIssueMovementBuysList());
 		issueMovementEntityPojo.setPriceMovement(requestPojo.getPriceMovement());
 		
-		setAddEditIssueMovement(issuesMovementsEntity, userEntity, issueMovementEntityPojo, crudOptionsEnum);
+		setAddEditIssueMovement(issuesMovementsEntity, userEntity, issueMovementEntityPojo, crudOptionsEnum, requestPojo.getIdTypeCurrency());
 		genericPersistance.flush();
 		
 		setManagerIssueIsInvest(issuesManagerEntity, issuesMovementsEntity.getId(), issuesMovementsEntity.getIdStatus());
