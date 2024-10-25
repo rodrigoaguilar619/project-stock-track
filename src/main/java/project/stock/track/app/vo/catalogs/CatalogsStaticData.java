@@ -25,6 +25,7 @@ public class CatalogsStaticData {
 		public static final BigDecimal DEFAULT_TAXES_PERCENTAGE_GBM = BigDecimal.valueOf(10);
 		public static final BigDecimal DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB = BigDecimal.valueOf(0);
 		public static final BigDecimal DEFAULT_DOLAR_PRICE_DEPRECATE_PERCENTAGE = BigDecimal.valueOf(1.5);
+		public static final String DEFAULT_CURRENCY_FORMAT = "YYYY-MM-dd";
 	}
 	
 	public static final class OptionTypeQueryIssuesHistorial {
