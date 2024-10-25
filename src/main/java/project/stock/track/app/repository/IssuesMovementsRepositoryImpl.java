@@ -121,6 +121,8 @@ public class IssuesMovementsRepositoryImpl {
 		
 		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters, false);
 		
+		cq.orderBy(cb.asc(root.get(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY).get(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY).get(CatalogIssuesEntity_.INITIALS)));
+		
 		cq.where( predicateAnd );
 
 		return em.createQuery(cq).getResultList();
