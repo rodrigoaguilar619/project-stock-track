@@ -2,9 +2,11 @@ package project.stock.track.app.utils;
 
 import java.math.BigDecimal;
 
+import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssueCurrentPricePojo;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 
 public class IssueUtil {
 
@@ -26,6 +28,17 @@ public class IssueUtil {
 		IssueCurrentPricePojo issueCurrentPricePojo = new IssueCurrentPricePojo();
 		issueCurrentPricePojo.setCurrentPrice(currentPrice);
 		issueCurrentPricePojo.setDate(dateHistorical == 0 ? null : dateHistorical);
+		
+		return issueCurrentPricePojo;
+	}
+	
+	public IssueCurrentPricePojo getCurrentPrice(IssuesLastPriceTmpEntity tempIssuesLastPriceEntity, IssuesHistoricalEntity issuesHistoricalEntityLastRecord,
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntity, Integer idTypeCurrency) {
+		
+		IssueCurrentPricePojo issueCurrentPricePojo = getCurrentPrice(tempIssuesLastPriceEntity, issuesHistoricalEntityLastRecord);
+		
+		if(idTypeCurrency == CatalogTypeCurrency.MXN)
+			issueCurrentPricePojo.setCurrentPrice(issueCurrentPricePojo.getCurrentPrice() != null ? issueCurrentPricePojo.getCurrentPrice().multiply(dollarHistoricalPriceEntity.getPrice()) : null);
 		
 		return issueCurrentPricePojo;
 	}
