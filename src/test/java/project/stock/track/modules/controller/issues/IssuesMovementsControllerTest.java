@@ -34,7 +34,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 	IssuesMovementsController issuesMovementsController;
 
 	@Test
-	void testGetIssuesMovementsList() {
+	void testGetIssuesMovementsList() throws BusinessException {
 		
 		DataTablePojo<IssuesMovementsFiltersPojo> dataTablePojo = new DataTablePojo<>();
 		dataTablePojo.setCurrentPage(1);
