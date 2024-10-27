@@ -70,7 +70,7 @@ public class IssuesMovementsRepositoryImpl {
 		
 		if(!isCountRows) {
 			root.fetch(IssuesMovementsEntity_.CATALOG_STATUS_ISSUE_MOVEMENT_ENTITY);
-			root.fetch(IssuesMovementsEntity_.MOVEMENTS_ISSUE_BUYS);
+			root.fetch(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS);
 			
 			Fetch<IssuesMovementsEntity, CatalogBrokerEntity> fetchBroker = root.fetch(IssuesMovementsEntity_.CATALOG_BROKER_ENTITY);
 			Fetch<IssuesMovementsEntity, IssuesManagerEntity> fetchIssuesManager = root.fetch(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY);
@@ -93,7 +93,14 @@ public class IssuesMovementsRepositoryImpl {
 				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_BROKER), filters.getIdBroker()));
 			if (filters.getIdStatusIssueMovement() != null)
 				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
-		}
+			if (filters.getYear() != null)
+				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.BUY_DATE)), filters.getYear()));
+			if (filters.getIsSold() != null)
+				if (filters.getIsSold())
+					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNotNull());
+				else
+					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNull());
+			}
 		
 		return cb.and(predicatesAnd.toArray(new Predicate[0]));
 	}
