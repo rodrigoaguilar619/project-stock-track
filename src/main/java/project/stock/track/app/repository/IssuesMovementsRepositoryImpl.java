@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
@@ -151,6 +152,21 @@ public class IssuesMovementsRepositoryImpl {
 		cq.select(cb.count(root)).where(predicatesAnd.toArray(new Predicate[0]));
 		
 		return em.createQuery(cq).getSingleResult() > 0;
+	}
+	
+	public void deleteIssueMovements(Integer idIssueMovement) {
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaDelete<IssuesMovementsBuyEntity> delete = cb.createCriteriaDelete(IssuesMovementsBuyEntity.class);
+		Root<IssuesMovementsBuyEntity> root = delete.from(IssuesMovementsBuyEntity.class);
+		delete.where(cb.equal(root.get(IssuesMovementsBuyEntity_.id).get(IssuesMovementsBuyEntityPk_.idIssueMovement), idIssueMovement));
+		this.em.createQuery(delete).executeUpdate();
+		
+		CriteriaBuilder cb2 = em.getCriteriaBuilder();
+		CriteriaDelete<IssuesMovementsEntity> delete2 = cb2.createCriteriaDelete(IssuesMovementsEntity.class);
+		Root<IssuesMovementsEntity> root2 = delete2.from(IssuesMovementsEntity.class);
+		delete2.where(cb2.equal(root2.get(IssuesMovementsEntity_.id), idIssueMovement));
+		this.em.createQuery(delete2).executeUpdate();
 	}
 	
 }

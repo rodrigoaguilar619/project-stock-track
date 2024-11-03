@@ -27,6 +27,7 @@ import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;
+import project.stock.track.app.beans.pojos.petition.request.DeleteIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequestPojo;
 import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsBuyRepositoryImpl;
@@ -220,6 +221,13 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		genericPersistance.flush();
 		
 		setManagerIssueIsInvest(issueMovementEntity.getIssuesManagerEntity(), issueMovementEntity.getId(), issueMovementEntity.getIdStatus());
+		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void executeDeleteIssueMovement(DeleteIssueMovementRequestPojo requestPojo) {
+		
+		issuesMovementsRepository.deleteIssueMovements(requestPojo.getIdIssueMovement());
 		
 	}
 }

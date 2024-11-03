@@ -22,6 +22,7 @@ public class CatalogsUri {
 	public static final String API_ISSUES_MOVEMENTS_INDIVIDUAL_SAVE = "/api/issuesMovements/saveIssueMovement";
 	public static final String API_ISSUES_MOVEMENTS_INDIVIDUAL_UPDATE = "/api/issuesMovements/updateIssueMovement";
 	public static final String API_ISSUES_MOVEMENTS_INDIVIDUAL_INACTIVATE = "/api/issuesMovements/inactivateIssueMovement";
+	public static final String API_ISSUES_MOVEMENTS_INDIVIDUAL_DELETE = "/api/issuesMovements/deleteIssueMovement";
 	public static final String API_PORTFOLIO_LIST_GET = "/api/portfolio/getPortfolioList";
 	public static final String API_PORTFOLIO_DATA_GET = "/api/portfolio/getPortfolioData";
 	public static final String API_TRANSACION_ISSUES_TRACK_GET = "/api/transactions/getTransactionIssuesTrack";

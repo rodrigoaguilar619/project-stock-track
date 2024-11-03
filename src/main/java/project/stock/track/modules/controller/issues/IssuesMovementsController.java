@@ -13,6 +13,7 @@ import lib.base.backend.utils.RestUtil;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;
+import project.stock.track.app.beans.pojos.petition.request.DeleteIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesMovementsListRequestPojo;
 import project.stock.track.app.vo.catalogs.CatalogsUri;
@@ -70,5 +71,13 @@ public class IssuesMovementsController {
 		
 		issuesMovementsCrudBusiness.executeInactivateIssueMovement(requestPojo);
 		return new RestUtil().buildResponseSuccess("", "Inactivate issue movement processed");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping(path = CatalogsUri.API_ISSUES_MOVEMENTS_INDIVIDUAL_DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity deleteIssueMovement(@RequestBody DeleteIssueMovementRequestPojo requestPojo) {
+		
+		issuesMovementsCrudBusiness.executeDeleteIssueMovement(requestPojo);
+		return new RestUtil().buildResponseSuccess("", "Delete issue movement processed");
 	}
 }
