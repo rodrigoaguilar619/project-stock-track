@@ -75,6 +75,9 @@ public class TransactionIssueEntity implements Serializable {
 	@Column(name = "is_slice")
 	private Boolean isSlice;
 	
+	@Column(name = "is_short_sell")
+	private Boolean isShortSell;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_issue", referencedColumnName = "id_issue", insertable = false, updatable = false)
 	@JoinColumn(name = "id_user", referencedColumnName = "id_user", insertable = false, updatable = false)

@@ -1,0 +1,1 @@
+ALTER TABLE transaction_issue ADD is_short_sell bit NULL;

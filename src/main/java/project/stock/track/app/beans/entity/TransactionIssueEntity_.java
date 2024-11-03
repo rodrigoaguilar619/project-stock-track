@@ -32,6 +32,7 @@ public abstract class TransactionIssueEntity_ {
 	public static SingularAttribute<TransactionIssueEntity, BigDecimal> sellGainLossPercentage;
 	public static SingularAttribute<TransactionIssueEntity, BigDecimal> totalShares;
 	public static SingularAttribute<TransactionIssueEntity, Boolean> isSlice;
+	public static SingularAttribute<TransactionIssueEntity, Boolean> isShortSell;
 
 	public static final String ID = "id";
 	public static final String SELL_GAIN_LOSS_TOTAL = "sellGainLossTotal";
@@ -54,6 +55,7 @@ public abstract class TransactionIssueEntity_ {
 	public static final String SELL_GAIN_LOSS_PERCENTAGE = "sellGainLossPercentage";
 	public static final String TOTAL_SHARES = "totalShares";
 	public static final String IS_SLICE = "isSlice";
+	public static final String IS_SHORT_SELL = "isShortSell";
 
 }
 
