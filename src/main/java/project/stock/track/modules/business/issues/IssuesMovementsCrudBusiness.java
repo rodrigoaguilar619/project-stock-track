@@ -1,7 +1,5 @@
 package project.stock.track.modules.business.issues;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +21,7 @@ import project.stock.track.app.beans.entity.IssuesMovementsBuyEntity;
 import project.stock.track.app.beans.entity.IssuesMovementsBuyEntityPk;
 import project.stock.track.app.beans.entity.IssuesMovementsEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssueMovementPojo;
+import project.stock.track.app.beans.pojos.business.transaction.CurrencyValuesPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementEntityPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
@@ -35,9 +34,9 @@ import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
+import project.stock.track.config.helpers.CurrencyDataHelper;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -51,6 +50,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	private final IssuesMovementsBuyRepositoryImpl issuesMovementsBuyRepository;
 	private final IssuesMovementsRepositoryImpl issuesMovementsRepository;
 	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
+	private final CurrencyDataHelper currencyDataHelper;
 	
 	@SuppressWarnings("unchecked")
 	private void setManagerIssueIsInvest(IssuesManagerEntity issuesManagerEntity, Integer idIssueMovement, Integer idStatus) {
@@ -83,19 +83,8 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		if(dollarHistoricalPriceEntityBuy == null)
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("buy", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getBuyDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
 		
-		BigDecimal buyPriceUsd = null;
-		BigDecimal buyPriceMxn = null;
-		BigDecimal sellPriceUsd = null;
-		BigDecimal sellPriceMxn = null;
-		
-		if(idTypeCurrency == CatalogTypeCurrency.USD) {
-			buyPriceUsd = issueMovementBuyEntityPojo.getBuyPrice();
-			buyPriceMxn = issueMovementBuyEntityPojo.getBuyPrice().multiply(dollarHistoricalPriceEntityBuy.getPrice());
-		}
-		else if(idTypeCurrency == CatalogTypeCurrency.MXN) {
-			buyPriceUsd = issueMovementBuyEntityPojo.getBuyPrice().divide(dollarHistoricalPriceEntityBuy.getPrice(), 5, RoundingMode.HALF_DOWN);
-			buyPriceMxn = issueMovementBuyEntityPojo.getBuyPrice();
-		}
+		CurrencyValuesPojo currencyValuesBuyPojo = currencyDataHelper.getCurrencyValues(idTypeCurrency, dollarHistoricalPriceEntityBuy.getPrice(), issueMovementBuyEntityPojo.getBuyPrice());
+		CurrencyValuesPojo currencyValuesSellPojo = new CurrencyValuesPojo();
 		
 		if(issueMovementBuyEntityPojo.getSellDate() != null) {
 			
@@ -104,14 +93,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 			if(dollarHistoricalPriceEntitySell == null)
 				throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("sell", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getSellDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
 			
-			if(idTypeCurrency == CatalogTypeCurrency.USD) {
-				sellPriceUsd = issueMovementBuyEntityPojo.getSellPrice();
-				sellPriceMxn = issueMovementBuyEntityPojo.getSellPrice().multiply(dollarHistoricalPriceEntitySell.getPrice());
-			}
-			else if(idTypeCurrency == CatalogTypeCurrency.MXN) {
-				sellPriceUsd = issueMovementBuyEntityPojo.getSellPrice().divide(dollarHistoricalPriceEntitySell.getPrice(), 5, RoundingMode.HALF_DOWN);
-				sellPriceMxn = issueMovementBuyEntityPojo.getSellPrice();
-			}
+			currencyValuesSellPojo = currencyDataHelper.getCurrencyValues(idTypeCurrency, dollarHistoricalPriceEntitySell.getPrice(), issueMovementBuyEntityPojo.getSellPrice());
 		}
 		
 		IssuesMovementsBuyEntityPk pk = new IssuesMovementsBuyEntityPk();
@@ -119,12 +101,12 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		pk.setIdIssueMovement(idIssueMovement);
 		
 		issueMovementBuyEntity.setId(pk);
-		issueMovementBuyEntity.setBuyPrice(buyPriceUsd);
-		issueMovementBuyEntity.setBuyPriceMxn(buyPriceMxn);
+		issueMovementBuyEntity.setBuyPrice(currencyValuesBuyPojo.getValueUsd());
+		issueMovementBuyEntity.setBuyPriceMxn(currencyValuesBuyPojo.getValueMxn());
 		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
 		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
-		issueMovementBuyEntity.setSellPrice(sellPriceUsd);
-		issueMovementBuyEntity.setSellPriceMxn(sellPriceMxn);
+		issueMovementBuyEntity.setSellPrice(currencyValuesSellPojo.getValueUsd());
+		issueMovementBuyEntity.setSellPriceMxn(currencyValuesSellPojo.getValueMxn());
 		issueMovementBuyEntity.setSellDate(issueMovementBuyEntityPojo.getSellDate() != null ? new Date(issueMovementBuyEntityPojo.getSellDate()) : null);
 		issueMovementBuyEntity.setTotalShares(issueMovementBuyEntityPojo.getTotalShares());
 		
