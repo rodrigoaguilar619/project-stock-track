@@ -39,17 +39,29 @@ public class TransactionIssueEntity implements Serializable {
 	@Column(name = "price_buy")
 	private BigDecimal priceBuy;
 	
+	@Column(name = "price_buy_mxn")
+	private BigDecimal priceBuyMxn;
+	
 	@Column(name = "commision_percentage")
 	private BigDecimal commisionPercentage;
 	
 	@Column(name = "price_total_buy")
 	private BigDecimal priceTotalBuy;
 	
+	@Column(name = "price_total_buy_mxn")
+	private BigDecimal priceTotalBuyMxn;
+	
 	@Column(name = "price_sell")
 	private BigDecimal priceSell;
 	
+	@Column(name = "price_sell_mxn")
+	private BigDecimal priceSellMxn;
+	
 	@Column(name = "price_total_sell")
 	private BigDecimal priceTotalSell;
+	
+	@Column(name = "price_total_sell_mxn")
+	private BigDecimal priceTotalSellMxn;
 	
 	@Column(name = "sell_commision_percentage")
 	private BigDecimal sellCommisionPercentage;
@@ -62,6 +74,9 @@ public class TransactionIssueEntity implements Serializable {
 	
 	@Column(name = "sell_gain_loss_total")
 	private BigDecimal sellGainLossTotal;
+	
+	@Column(name = "sell_gain_loss_total_mxn")
+	private BigDecimal sellGainLossTotalMxn;
 	
 	@Column(name = "sell_date")
 	private Date sellDate;
