@@ -18,10 +18,13 @@ import lib.base.backend.persistance.GenericPersistence;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
+import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.TransactionIssueEntity;
+import project.stock.track.app.beans.pojos.business.transaction.CurrencyValuesPojo;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.beans.pojos.petition.data.LoadTransactionIssuesFileDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.LoadTransactionIssuesFileRequestPojo;
+import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
@@ -30,6 +33,7 @@ import project.stock.track.app.utils.ReadCsvFileUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.config.helpers.CurrencyDataHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssues;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssuesBrokerGbm;
@@ -47,27 +51,53 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	private final UserRepositoryImpl userRepository;
 	private final IssuesRepositoryImpl issuesRepository;
 	private final TransactionIssueRepositoryImpl transactionIssueRepository;
+	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
+	private final CurrencyDataHelper currencyDataHelper;
 	
 	private CustomArraysUtil customArraysUtil = new CustomArraysUtil();
 	
-	private static final String MSG_ISSUE_NOT_REGISTERED = "Issue not registered issue: ";
 	private static final String MSG_DATE = " date: ";
 	
-	private TransactionIssueEntity buildTransactionIssueEntity(UserEntity userEntity, CatalogIssuesEntity catalogIssuesEntityVerify, TransactionIssueFilePojo transactionIssueFilePojo) {
+	private TransactionIssueEntity buildTransactionIssueEntity(UserEntity userEntity, CatalogIssuesEntity catalogIssuesEntityVerify, TransactionIssueFilePojo transactionIssueFilePojo, BigDecimal dollarPrice) {
 		
-		BigDecimal priceTotalBuy = transactionIssueFilePojo.getPrice().multiply(BigDecimal.valueOf(transactionIssueFilePojo.getTitles()));
+		BigDecimal titles = transactionIssueFilePojo.getIsSlice() ? transactionIssueFilePojo.getTitles() : new BigDecimal(1);
+		
+		CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarPrice, transactionIssueFilePojo.getPrice());
+		CurrencyValuesPojo currencyValuesPriceTotalBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarPrice, transactionIssueFilePojo.getPrice().multiply(titles));
 		
 		TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
 		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 		transactionIssueEntity.setIdUser(userEntity.getId());
 		transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
-		transactionIssueEntity.setPriceBuy(transactionIssueFilePojo.getPrice());
+		transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
+		transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 		transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
-		transactionIssueEntity.setPriceTotalBuy(priceTotalBuy.multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(priceTotalBuy));
+		transactionIssueEntity.setPriceTotalBuy(currencyValuesPriceTotalBuyPojo.getValueUsd().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(currencyValuesPriceTotalBuyPojo.getValueUsd()));
+		transactionIssueEntity.setPriceTotalBuyMxn(currencyValuesPriceTotalBuyPojo.getValueMxn().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(currencyValuesPriceTotalBuyPojo.getValueMxn()));
 		transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
 		transactionIssueEntity.setIsSlice(transactionIssueFilePojo.getIsSlice());
-		transactionIssueEntity.setTotalShares(transactionIssueFilePojo.getIsSlice() ? BigDecimal.valueOf(transactionIssueFilePojo.getTitles()) : new BigDecimal(1));
+		transactionIssueEntity.setTotalShares(titles);
 		
+		return transactionIssueEntity;
+	}
+	
+	private TransactionIssueEntity buildTransactionSellIssueEntity(TransactionIssueEntity transactionIssueEntity, CatalogIssuesEntity catalogIssuesEntityVerify, TransactionIssueFilePojo transactionIssueFilePojo, CurrencyValuesPojo currencyValuesPriceSellPojo, BigDecimal titles) {
+		
+		BigDecimal priceTotalSell = currencyValuesPriceSellPojo.getValueUsd().multiply(titles);
+		BigDecimal priceTotalSellMxn = currencyValuesPriceSellPojo.getValueMxn().multiply(titles);
+		
+		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
+		transactionIssueEntity.setSellTaxesPercentage(transactionIssueFilePojo.getTaxesPercentage());
+		transactionIssueEntity.setSellDate(new Date(transactionIssueFilePojo.getDate()));
+		transactionIssueEntity.setPriceSell(currencyValuesPriceSellPojo.getValueUsd());
+		transactionIssueEntity.setPriceSellMxn(currencyValuesPriceSellPojo.getValueMxn());
+		transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
+		transactionIssueEntity.setPriceTotalSell(new CalculatorUtil().calculateTotalPriceSellAfter(transactionIssueEntity.getPriceTotalBuy(), priceTotalSell, transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
+		transactionIssueEntity.setPriceTotalSellMxn(new CalculatorUtil().calculateTotalPriceSellAfter(transactionIssueEntity.getPriceTotalBuyMxn(), priceTotalSellMxn, transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
+		transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(transactionIssueEntity.getPriceTotalBuy()));
+		transactionIssueEntity.setSellGainLossTotalMxn(transactionIssueEntity.getPriceTotalSellMxn().subtract(transactionIssueEntity.getPriceTotalBuyMxn()));
+		transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
+	
 		return transactionIssueEntity;
 	}
 	
@@ -76,50 +106,57 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		
 		List<String> messages = new ArrayList<>();
 		
+		CatalogIssuesEntity catalogIssuesEntityVerify =  issuesRepository.findByInitials(transactionIssueFilePojo.getIssue());
+	
+		if (catalogIssuesEntityVerify == null)
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
+		
+		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
+		
+		if (issuesFundsTransactionsEntityVerify != null) {
+			messages.add("Issue transaction found issue: " + transactionIssueFilePojo.getIssue() + MSG_DATE + issuesFundsTransactionsEntityVerify.getIdDate());
+			return messages;
+		}
+			
 		try {
 			
 			genericCustomPersistance.startTransaction();
 			
-			CatalogIssuesEntity catalogIssuesEntityVerify =  issuesRepository.findByInitials(transactionIssueFilePojo.getIssue());
-		
-			if (catalogIssuesEntityVerify == null)
-				throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
-			
-			TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
-			
-			if (issuesFundsTransactionsEntityVerify != null) {
-				messages.add("Issue transaction found issue: " + transactionIssueFilePojo.getIssue() + MSG_DATE + issuesFundsTransactionsEntityVerify.getIdDate());
-				return messages;
-			}
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionIssueFilePojo.getPrice());
 			
 			if (!transactionIssueFilePojo.getIsSlice()) {
 			
 				List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssueShortSells(userEntity.getId(), catalogIssuesEntityVerify.getId(), transactionIssueFilePojo.getBroker());
 	
-				for (int i = 0; i < transactionIssueFilePojo.getTitles(); i++) {
+				for (int i = 0; i < transactionIssueFilePojo.getTitles().intValue(); i++) {
 					
 					if (i < transactionIssueEntities.size()) {
 						
 						TransactionIssueEntity transactionIssueEntity = transactionIssueEntities.get(i);
 						transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
-						transactionIssueEntity.setPriceBuy(transactionIssueFilePojo.getPrice());
+						transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
+						transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 						transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
-						transactionIssueEntity.setPriceTotalBuy(transactionIssueFilePojo.getPrice().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(transactionIssueFilePojo.getPrice()));
-						transactionIssueEntity.setPriceTotalSell(new CalculatorUtil().calculateTotalPriceSellAfter(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceSell(), transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
-						transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(transactionIssueEntity.getPriceTotalBuy()));
+						transactionIssueEntity.setPriceTotalBuy(currencyValuesPriceBuyPojo.getValueUsd().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(currencyValuesPriceBuyPojo.getValueUsd()));
+						transactionIssueEntity.setPriceTotalBuyMxn(currencyValuesPriceBuyPojo.getValueMxn().multiply(transactionIssueFilePojo.getComissionPercentage()).divide(BigDecimal.valueOf(100)).add(currencyValuesPriceBuyPojo.getValueMxn()));
+						transactionIssueEntity.setPriceTotalSell(new CalculatorUtil().calculateTotalPriceSellAfter(currencyValuesPriceBuyPojo.getValueUsd(), transactionIssueEntity.getPriceSell(), transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
+						transactionIssueEntity.setPriceTotalSellMxn(new CalculatorUtil().calculateTotalPriceSellAfter(currencyValuesPriceBuyPojo.getValueMxn(), transactionIssueEntity.getPriceSellMxn(), transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
+						transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(currencyValuesPriceBuyPojo.getValueUsd()));
+						transactionIssueEntity.setSellGainLossTotalMxn(transactionIssueEntity.getPriceTotalSellMxn().subtract(currencyValuesPriceBuyPojo.getValueMxn()));
 						transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
 						
 						genericCustomPersistance.update(transactionIssueEntity);
 						continue;
 					}
 				
-					TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo);
+					TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo, dollarHistoricalPriceEntityBuy.getPrice());
 					genericCustomPersistance.save(transactionIssueEntity);
 				}
 			}
 			else {
 				
-				TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo);
+				TransactionIssueEntity transactionIssueEntity = buildTransactionIssueEntity(userEntity, catalogIssuesEntityVerify, transactionIssueFilePojo, dollarHistoricalPriceEntityBuy.getPrice());
 				genericCustomPersistance.save(transactionIssueEntity);
 			}
 			
@@ -160,24 +197,30 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			
 			genericCustomPersistance.startTransaction();
 			
-			List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssuesNotSoldLower(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId());
+			List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssuesNotSoldLower(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), transactionIssueFilePojo.getIsSlice());
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntitySell.getPrice(), transactionIssueFilePojo.getPrice());
 			
-			for (int i = 0; i < transactionIssueFilePojo.getTitles(); i++) {
+			if(transactionIssueFilePojo.getIsSlice()) {
 				
-				TransactionIssueEntity transactionIssueEntity = transactionIssueEntities.get(i);
+				if (transactionIssueEntities.size() > 1)
+					throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileSliceMultipleDate(transactionIssueFilePojo.getIssue()));
+				if (transactionIssueEntities.size() == 1 && transactionIssueEntities.getFirst().getTotalShares().compareTo(transactionIssueFilePojo.getTitles()) != 0)
+					throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileSliceSharesNotMatch(transactionIssueFilePojo.getIssue()));
+			
+				TransactionIssueEntity transactionIssueEntity = buildTransactionSellIssueEntity(transactionIssueEntities.getFirst(), catalogIssuesEntityVerify, transactionIssueFilePojo, currencyValuesPriceBuyPojo, transactionIssueEntities.getFirst().getTotalShares());
+				genericCustomPersistance.update(transactionIssueEntity);
+			}
+			
+			for (int i = 0; i < transactionIssueFilePojo.getTitles().intValue(); i++) {
 				
-				transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
-				transactionIssueEntity.setSellTaxesPercentage(transactionIssueFilePojo.getTaxesPercentage());
-				transactionIssueEntity.setSellDate(new Date(transactionIssueFilePojo.getDate()));
-				transactionIssueEntity.setPriceSell(transactionIssueFilePojo.getPrice());
-				transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
-				transactionIssueEntity.setPriceTotalSell(new CalculatorUtil().calculateTotalPriceSellAfter(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceSell(), transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
-				transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(transactionIssueEntity.getPriceTotalBuy()));
-				transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
-				
+				TransactionIssueEntity transactionIssueEntity = buildTransactionSellIssueEntity(transactionIssueEntities.get(i), catalogIssuesEntityVerify, transactionIssueFilePojo, currencyValuesPriceBuyPojo, new BigDecimal(1));
 				genericCustomPersistance.update(transactionIssueEntity);
 			}
 			genericCustomPersistance.commitTransaction();
+		}
+		catch(BusinessException ex) {
+			throw ex;
 		}
 		catch(Exception ex) {
 			genericCustomPersistance.rollBackTransaction();
@@ -189,7 +232,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		return messages;
 	}
 	
-	@SuppressWarnings({ "unused", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public List<String> registerTransactionIssueShortSells(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionIssueFilePojo transactionIssueFilePojo) throws BusinessException {
 		
 		List<String> messages = new ArrayList<>();
@@ -197,7 +240,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		CatalogIssuesEntity catalogIssuesEntityVerify =  issuesRepository.findByInitials(transactionIssueFilePojo.getIssue());
 		
 		if (catalogIssuesEntityVerify == null) {
-			messages.add(MSG_ISSUE_NOT_REGISTERED + transactionIssueFilePojo.getIssue());
+			messages.add(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 		}
 		else {
 			TransactionIssueEntity transactionIssueEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
@@ -211,18 +254,22 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 				
 				genericCustomPersistance.startTransaction();
 				
-				List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssueShortSells(userEntity.getId(), catalogIssuesEntityVerify.getId(), transactionIssueFilePojo.getBroker());
+				DollarHistoricalPriceEntity dollarHistoricalPriceEntityShortSell = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+				CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityShortSell.getPrice(), transactionIssueFilePojo.getPrice());
 				
-				for (int i = 0; i < transactionIssueFilePojo.getTitles(); i++) {
+				for (int i = 0; i < transactionIssueFilePojo.getTitles().intValue(); i++) {
 					
 					TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
 					
 					transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
+					transactionIssueEntity.setIdUser(userEntity.getId());
 					transactionIssueEntity.setSellTaxesPercentage(transactionIssueFilePojo.getTaxesPercentage());
 					transactionIssueEntity.setSellDate(new Date(transactionIssueFilePojo.getDate()));
-					transactionIssueEntity.setPriceSell(transactionIssueFilePojo.getPrice());
+					transactionIssueEntity.setPriceSell(currencyValuesPriceBuyPojo.getValueUsd());
+					transactionIssueEntity.setPriceSellMxn(currencyValuesPriceBuyPojo.getValueMxn());
 					transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
 					transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
+					transactionIssueEntity.setIsShortSell(true);
 					
 					genericCustomPersistance.save(transactionIssueEntity);
 				}

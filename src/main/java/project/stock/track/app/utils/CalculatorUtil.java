@@ -10,7 +10,7 @@ public class CalculatorUtil {
 	public BigDecimal calculateTotalPriceSellAfter(BigDecimal priceBuy, BigDecimal priceSell, BigDecimal commision, BigDecimal taxes) {
 		
 		BigDecimal taxesTotal = priceSell.subtract(priceBuy).multiply(taxes).divide(BigDecimal.valueOf(100));
-		BigDecimal commisionTotal = priceSell.multiply(commision).divide(BigDecimal.valueOf(100));
+		BigDecimal commisionTotal = priceSell.subtract(priceBuy).multiply(commision).divide(BigDecimal.valueOf(100));
 		
 		return priceSell.subtract(taxesTotal).subtract(commisionTotal);
 	}

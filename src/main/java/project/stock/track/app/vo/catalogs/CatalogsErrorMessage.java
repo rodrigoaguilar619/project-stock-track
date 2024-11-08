@@ -17,6 +17,8 @@ public class CatalogsErrorMessage {
 	private static final String ERROR_MSG_FILE_BROKER_NOT_REGISTERED = "Broker doesn't registered";
 	private static final String ERROR_MSG_EXCHANGE_TRADE_BAD_RANGE_DATE = "Error validating range date on service consume. issue: %s, date start: %s, date end: %s";
 	private static final String ERROR_DOLLAR_HISTORICAL_PRICE_BUY_SELL_NOT_FOUND = "Dollar historical price not found for %s on date %s";
+	private static final String ERROR_MSG_FILE_SLICE_MULTIPLE_DATE = "Error slice multiple dates. issue: %s. First merge current slices registered";
+	private static final String ERROR_MSG_FILE_SLICE_SHARES_NOT_MATCH = "Error slice TOTAL shares not match. issue: %s. First SPLIT current slices registered";
 	
 	public static String getErrorMsgIssuesRegistered(String issues) {
 		return String.format(ERROR_MSG_ISSUES_EXIST, issues);
@@ -68,5 +70,13 @@ public class CatalogsErrorMessage {
 	
 	public static String getErrorMsgDollarHistoricalPriceBuySellNotFound(String issue, String date) {
 		return String.format(ERROR_DOLLAR_HISTORICAL_PRICE_BUY_SELL_NOT_FOUND, issue, date);
+	}
+	
+	public static String getErrorMsgFileSliceMultipleDate(String issue) {
+		return String.format(ERROR_MSG_FILE_SLICE_MULTIPLE_DATE, issue);
+	}
+	
+	public static String getErrorMsgFileSliceSharesNotMatch(String issue) {
+		return String.format(ERROR_MSG_FILE_SLICE_SHARES_NOT_MATCH, issue);
 	}
 }

@@ -56,7 +56,7 @@ class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 		Integer idIssue = 102;
 		Integer idBroker = CatalogBroker.CHARLES_SCHWAB;
 		
-		List<TransactionIssueEntity> result = transactionIssueRepository.findTransactionIssuesNotSoldLower(idUser, idIssue, idBroker);
+		List<TransactionIssueEntity> result = transactionIssueRepository.findTransactionIssuesNotSoldLower(idUser, idIssue, idBroker, false);
 		
 		Assessment.assertDataList(result);
 	}

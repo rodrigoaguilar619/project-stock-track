@@ -14,7 +14,7 @@ public class TransactionIssueFilePojo {
 	
 	private String typeTransaction;
 	
-	private double titles;
+	private BigDecimal titles;
 	
 	private BigDecimal price;
 	

@@ -52,30 +52,32 @@ public class PortfolioBusiness extends MainBusiness {
 		DollarHistoricalPriceEntity historicalPriceEntity = dollarHistoricalPriceRespository.findLastRecord();
 		
 		BigDecimal totalMoneyDeposits = getTotalMoneyDeposits(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueBuy = transactionIssueRepository.findBuyValueBuysNotSold(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValue = transactionIssueRepository.findCurrentValueBuysNotSold(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueMxn = totalSecuritesValue != null ? totalSecuritesValue.multiply(historicalPriceEntity.getPrice()) : new BigDecimal("0.0");
+		BigDecimal totalSecuritesValueBuy = transactionIssueRepository.findBuyValueBuys(catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalSecuritesValueSold = transactionIssueRepository.findBuyValueBuysSold(catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalSecuritesValueNotSold = transactionIssueRepository.findCurrentValueBuysNotSold(catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalSecuritesValueNotSoldMxn = totalSecuritesValueNotSold != null ? totalSecuritesValueNotSold.multiply(historicalPriceEntity.getPrice()) : new BigDecimal("0.0");
 		
-		if (totalSecuritesValue == null)
-			totalSecuritesValue = new BigDecimal("0.0");
+		if (totalSecuritesValueNotSold == null)
+			totalSecuritesValueNotSold = new BigDecimal("0.0");
 		
 		if (catalogBrokerEntity.getIdTypeCurrency().equals(CatalogsEntity.CatalogTypeCurrency.MXN))
-			totalSecuritesValue = totalSecuritesValueMxn;
+			totalSecuritesValueNotSold = totalSecuritesValueNotSoldMxn;
 		
-		BigDecimal totalBrokerValue = totalMoneyDeposits.subtract(totalSecuritesValueBuy);
+		BigDecimal totalBrokerValue = totalSecuritesValueBuy.subtract(totalSecuritesValueSold).subtract(totalSecuritesValueNotSold);
+		//BigDecimal totalBrokerValue = totalMoneyDeposits.subtract(totalSecuritesValueBuy);
 		
 		if (totalBrokerValue.compareTo(BigDecimal.valueOf(0)) < 0)
 			totalBrokerValue = BigDecimal.valueOf(0);
 		
-		totalBrokerValue = totalBrokerValue.add(totalSecuritesValue);
+		totalBrokerValue = totalBrokerValue.add(totalSecuritesValueNotSold);
 		BigDecimal yieldBroker = totalMoneyDeposits.compareTo(new BigDecimal("0.0")) != 0 ? calculatorUtil.calculatePercentageUpDown(totalMoneyDeposits, totalBrokerValue) : new BigDecimal("0.0");
 		
 		PortfolioResumePojo portfolioResumePojo = new PortfolioResumePojo();
 		portfolioResumePojo.setIdBroker(catalogBrokerEntity.getId());
 		portfolioResumePojo.setBroker(catalogBrokerEntity.getDescription());
 		portfolioResumePojo.setTotalDeposits(totalMoneyDeposits);
-		portfolioResumePojo.setTotalSecuritiesValue(totalSecuritesValue);
-		portfolioResumePojo.setTotalSecuritiesValueMxn(totalSecuritesValueMxn);
+		portfolioResumePojo.setTotalSecuritiesValue(totalSecuritesValueNotSold);
+		portfolioResumePojo.setTotalSecuritiesValueMxn(totalSecuritesValueNotSoldMxn);
 		portfolioResumePojo.setIdTypeCurrency(catalogBrokerEntity.getIdTypeCurrency());
 		portfolioResumePojo.setTypeCurrency(catalogBrokerEntity.getCatalogTypeCurrencyEntity().getDescription());
 		portfolioResumePojo.setYield(yieldBroker);

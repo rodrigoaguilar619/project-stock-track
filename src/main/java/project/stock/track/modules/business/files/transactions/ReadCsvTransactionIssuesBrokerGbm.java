@@ -53,6 +53,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 	}
 	
 	private String buildIssue(String issueDescription) {
+		
 		String issue = issueDescription.split(" ")[0].trim();
 		
 		switch(issue) {
@@ -69,7 +70,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			case "OXY1":
 				return "OXY";
 			default:
-				return issue;
+				return buildIssueCommon(issue);
 		}
 	}
 	
@@ -78,7 +79,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 	}
 	
 	private boolean determineSkipRow(List<String> rowRecord) {
-		
+
 		return (rowRecord.size() < 13 || rowRecord.get(0).contains("GBMF2"));
 	}
 
@@ -99,13 +100,13 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			transactionIssueFileDataPojo.setIssue(buildIssue(rowRecord.get(0)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(1) + " " +rowRecord.get(2), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(3)));
-			transactionIssueFileDataPojo.setTitles(Double.parseDouble(rowRecord.get(4).replace(",", "")));
+			transactionIssueFileDataPojo.setTitles(new BigDecimal(rowRecord.get(4).replace(",", "")));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
 			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.MXN);
 			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.GBM_HOMBROKER);
 			transactionIssueFileDataPojo.setIsSlice(numberDataUtil.hasFractionalPart(transactionIssueFileDataPojo.getTitles()));
 			
-			BigDecimal comissionPercentage = buildPrice(rowRecord.get(10)).divide(BigDecimal.valueOf(transactionIssueFileDataPojo.getTitles()), 5, RoundingMode.HALF_UP);
+			BigDecimal comissionPercentage = buildPrice(rowRecord.get(10)).divide(transactionIssueFileDataPojo.getTitles(), 5, RoundingMode.HALF_UP);
 			BigDecimal comissionPercentageTotal = comissionPercentage.multiply(BigDecimal.valueOf(16)).divide(BigDecimal.valueOf(100));
 			comissionPercentageTotal = comissionPercentageTotal.add(comissionPercentage);
 			comissionPercentageTotal = transactionIssueFileDataPojo.getPrice().compareTo(BigDecimal.valueOf(0)) == 0 ? BigDecimal.valueOf(0) : comissionPercentageTotal.multiply(BigDecimal.valueOf(100)).divide(transactionIssueFileDataPojo.getPrice(), 5, RoundingMode.HALF_UP);

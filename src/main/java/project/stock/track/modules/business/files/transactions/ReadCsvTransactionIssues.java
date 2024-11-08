@@ -23,4 +23,16 @@ public abstract class ReadCsvTransactionIssues {
 	
 	public abstract List<TransactionIssueFilePojo> readCsvFile(List<List<String>> records) throws ParseException, IOException;
 	
+	protected String buildIssueCommon(String issue) {
+		
+		switch(issue) {
+			case "FB":
+				return "META";
+			case "WLL1":
+				return "WLL";
+			default:
+				return issue;
+		}
+	}
+	
 }

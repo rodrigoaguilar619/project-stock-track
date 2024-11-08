@@ -61,10 +61,10 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 			
 			TransactionIssueFilePojo transactionIssueFileDataPojo = new TransactionIssueFilePojo();
 			transactionIssueFileDataPojo.setTaxesPercentage(BigDecimal.valueOf(10));
-			transactionIssueFileDataPojo.setIssue(rowRecord.get(2));
+			transactionIssueFileDataPojo.setIssue(buildIssueCommon(rowRecord.get(2)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(0), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(1)));
-			transactionIssueFileDataPojo.setTitles(Double.parseDouble(rowRecord.get(4)));
+			transactionIssueFileDataPojo.setTitles(new BigDecimal(rowRecord.get(4)));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
 			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.USD);
 			transactionIssueFileDataPojo.setComissionPercentage(BigDecimal.valueOf(0));
