@@ -1,6 +1,7 @@
 package project.stock.track.app.repository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,13 +41,21 @@ public class DollarHistoricalPriceRepositoryImpl {
 	
 	public DollarHistoricalPriceEntity findByDate(Date date) {
 		
+		Calendar cal = Calendar.getInstance();
+	    cal.setTime(date);
+	    cal.set(Calendar.HOUR_OF_DAY, 0);
+	    cal.set(Calendar.MINUTE, 0);
+	    cal.set(Calendar.SECOND, 0);
+	    cal.set(Calendar.MILLISECOND, 0);
+	    Date truncatedDate = cal.getTime();
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<DollarHistoricalPriceEntity> cq = cb.createQuery(DollarHistoricalPriceEntity.class);
 		Root<DollarHistoricalPriceEntity> root = cq.from(DollarHistoricalPriceEntity.class);
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		
-		predicatesAnd.add(cb.equal(root.get(DollarHistoricalPriceEntity_.idDate).as(Date.class), date));
+		predicatesAnd.add(cb.equal(root.get(DollarHistoricalPriceEntity_.idDate).as(Date.class), truncatedDate));
 		
 		cq.where( predicatesAnd.toArray(new Predicate[0]) );
 		
