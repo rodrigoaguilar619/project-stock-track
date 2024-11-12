@@ -13,5 +13,7 @@ public class GetPortfolioDataPojo {
 
 	private PortfolioResumePojo portfolioResume;
 	
-	private List<PorfolioIssuePojo> portfolioIssues = new ArrayList<>();
+	private List<PorfolioIssuePojo> portfolioIssuesNotSold = new ArrayList<>();
+	
+	private List<PorfolioIssuePojo> portfolioIssuesSold = new ArrayList<>();
 }

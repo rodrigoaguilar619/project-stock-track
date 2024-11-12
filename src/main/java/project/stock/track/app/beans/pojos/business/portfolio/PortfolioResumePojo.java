@@ -14,9 +14,9 @@ public class PortfolioResumePojo {
 
 	private BigDecimal totalDeposits;
 	
-	private BigDecimal totalSecuritiesValue;
+	private BigDecimal totalGainLoss;
 	
-	private BigDecimal totalSecuritiesValueMxn;
+	private BigDecimal totalCash;
 	
 	private BigDecimal yield;
 	

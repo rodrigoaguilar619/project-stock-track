@@ -43,7 +43,7 @@ class PortfolioControllerTest  extends ProjectIntegrationTest {
 		ResponseEntity<GenericResponsePojo<GetPortfolioDataPojo>> response = portfolioController.getPortfolioData(requestPojo);
 		
 		Assessment.assertResponseData(response);
-		assertNotNull(response.getBody().getData().getPortfolioIssues());
+		assertNotNull(response.getBody().getData().getPortfolioIssuesNotSold());
 	}
 
 }

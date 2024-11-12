@@ -49,35 +49,27 @@ public class PortfolioBusiness extends MainBusiness {
 	
 	public PortfolioResumePojo getTotalPortfolio(CatalogBrokerEntity catalogBrokerEntity, UserEntity userEntity) {
 		
-		DollarHistoricalPriceEntity historicalPriceEntity = dollarHistoricalPriceRespository.findLastRecord();
-		
 		BigDecimal totalMoneyDeposits = getTotalMoneyDeposits(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueBuy = transactionIssueRepository.findBuyValueBuys(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueSold = transactionIssueRepository.findBuyValueBuysSold(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueNotSold = transactionIssueRepository.findCurrentValueBuysNotSold(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalSecuritesValueNotSoldMxn = totalSecuritesValueNotSold != null ? totalSecuritesValueNotSold.multiply(historicalPriceEntity.getPrice()) : new BigDecimal("0.0");
 		
-		if (totalSecuritesValueNotSold == null)
-			totalSecuritesValueNotSold = new BigDecimal("0.0");
+		BigDecimal totalSecuritesValueBuyNotSold = transactionIssueRepository.findTotalBuys(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), false);
+		BigDecimal totalSecuritesValueBuySold = transactionIssueRepository.findTotalBuys(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), true);
 		
-		if (catalogBrokerEntity.getIdTypeCurrency().equals(CatalogsEntity.CatalogTypeCurrency.MXN))
-			totalSecuritesValueNotSold = totalSecuritesValueNotSoldMxn;
+		BigDecimal totalSecuritesValueSellNotSold = transactionIssueRepository.findTotalSells(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), false);
+		BigDecimal totalSecuritesValueSellSold = transactionIssueRepository.findTotalSells(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), true);
 		
-		BigDecimal totalBrokerValue = totalSecuritesValueBuy.subtract(totalSecuritesValueSold).subtract(totalSecuritesValueNotSold);
-		//BigDecimal totalBrokerValue = totalMoneyDeposits.subtract(totalSecuritesValueBuy);
+		BigDecimal totalSecuritesGainSold = totalSecuritesValueSellSold.subtract(totalSecuritesValueBuySold);
+		BigDecimal totalSecuritesGainNotSold = totalSecuritesValueSellNotSold.subtract(totalSecuritesValueBuyNotSold);
+		BigDecimal totalSecuritesGain = totalSecuritesGainSold.add(totalSecuritesGainNotSold);
+		BigDecimal totalCash = totalMoneyDeposits.subtract(totalSecuritesValueBuyNotSold).add(totalSecuritesGainSold);
 		
-		if (totalBrokerValue.compareTo(BigDecimal.valueOf(0)) < 0)
-			totalBrokerValue = BigDecimal.valueOf(0);
-		
-		totalBrokerValue = totalBrokerValue.add(totalSecuritesValueNotSold);
-		BigDecimal yieldBroker = totalMoneyDeposits.compareTo(new BigDecimal("0.0")) != 0 ? calculatorUtil.calculatePercentageUpDown(totalMoneyDeposits, totalBrokerValue) : new BigDecimal("0.0");
+		BigDecimal yieldBroker = calculatorUtil.calculatePercentageUpDown(totalMoneyDeposits, totalMoneyDeposits.add(totalSecuritesGain));
 		
 		PortfolioResumePojo portfolioResumePojo = new PortfolioResumePojo();
 		portfolioResumePojo.setIdBroker(catalogBrokerEntity.getId());
 		portfolioResumePojo.setBroker(catalogBrokerEntity.getDescription());
 		portfolioResumePojo.setTotalDeposits(totalMoneyDeposits);
-		portfolioResumePojo.setTotalSecuritiesValue(totalSecuritesValueNotSold);
-		portfolioResumePojo.setTotalSecuritiesValueMxn(totalSecuritesValueNotSoldMxn);
+		portfolioResumePojo.setTotalGainLoss(totalSecuritesGain);
+		portfolioResumePojo.setTotalCash(totalCash);
 		portfolioResumePojo.setIdTypeCurrency(catalogBrokerEntity.getIdTypeCurrency());
 		portfolioResumePojo.setTypeCurrency(catalogBrokerEntity.getCatalogTypeCurrencyEntity().getDescription());
 		portfolioResumePojo.setYield(yieldBroker);
@@ -122,13 +114,15 @@ public class PortfolioBusiness extends MainBusiness {
 		
 		PortfolioResumePojo portfolioResumePojo = getTotalPortfolio(catalogBrokerEntity, userEntity);
 		
-		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRespository.findLastRecord();
+		CatalogBrokerEntity catalogBroker = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, requestPojo.getIdBroker());
 		
-		List<PorfolioIssuePojo> portfolioIssuePojos = transactionIssueRepository.findPortfolioIssues(userEntity.getId(), requestPojo.getIdBroker(), dollarHistoricalPriceEntity.getPrice());
+		List<PorfolioIssuePojo> portfolioIssuePojosNotSold = transactionIssueRepository.findPortfolioIssues(userEntity.getId(), requestPojo.getIdBroker(), catalogBroker.getIdTypeCurrency(), false);
+		List<PorfolioIssuePojo> portfolioIssuePojosSold = transactionIssueRepository.findPortfolioIssues(userEntity.getId(), requestPojo.getIdBroker(), catalogBroker.getIdTypeCurrency(), true);
 		
 		GetPortfolioDataPojo dataPojo = new GetPortfolioDataPojo();
 		dataPojo.setPortfolioResume(portfolioResumePojo);
-		dataPojo.setPortfolioIssues(portfolioIssuePojos);
+		dataPojo.setPortfolioIssuesNotSold(portfolioIssuePojosNotSold);
+		dataPojo.setPortfolioIssuesSold(portfolioIssuePojosSold);
 		
 		return dataPojo;
 	}

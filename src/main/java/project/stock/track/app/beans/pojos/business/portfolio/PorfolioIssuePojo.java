@@ -14,19 +14,17 @@ public class PorfolioIssuePojo {
 	
 	private Integer idTypeCurrency;
 	
-	private Integer titles;
+	private BigDecimal titles;
 	
 	private BigDecimal costAvgBuyPerTitle;
 	
 	private BigDecimal costAvgSellPerTitle;
 	
-	private BigDecimal costAvgSellPerTitleMxn;
-	
 	private BigDecimal costTotalBuy;
 	
 	private BigDecimal costTotalSell;
 	
-	private BigDecimal costTotalSellMxn;
+	private BigDecimal totalGainLoss;
 	
 	private BigDecimal totalYield;
 	
