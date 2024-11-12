@@ -1,0 +1,1 @@
+INSERT INTO issues_split (id_issue,is_regular_split,`date`,ratio,is_applied,id) VALUES (578,0,'2024-06-13',20,1,5);
