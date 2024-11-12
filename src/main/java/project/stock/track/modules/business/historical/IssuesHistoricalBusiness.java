@@ -63,8 +63,9 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		if (transactionIssueCalculatePojo.getSellDate() == null) {
 			
 			BigDecimal commision = transactionIssueCalculatePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
+			BigDecimal taxes = transactionIssueCalculatePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
 			
-			BigDecimal taxesOutcomeEstimate = sellEstimate.subtract(transactionIssueCalculatePojo.getPriceBuy()).multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100));
+			BigDecimal taxesOutcomeEstimate = sellEstimate.subtract(transactionIssueCalculatePojo.getPriceBuy()).multiply(taxes).divide(BigDecimal.valueOf(100));
 			BigDecimal commisionOutcomeEstimate = sellEstimate.multiply(commision).divide(BigDecimal.valueOf(100));
 			BigDecimal sellEstimateAfterAll = sellEstimate.subtract(taxesOutcomeEstimate).subtract(commisionOutcomeEstimate);
 			BigDecimal gainLossTotalEstimate = sellEstimateAfterAll.subtract(transactionIssueCalculatePojo.getPriceBuy());

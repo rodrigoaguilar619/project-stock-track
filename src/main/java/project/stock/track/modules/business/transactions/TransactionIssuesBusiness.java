@@ -55,7 +55,9 @@ public class TransactionIssuesBusiness extends MainBusiness {
 			
 			IssuesLastPriceTmpEntity issuesLastPriceTmpEntity = (IssuesLastPriceTmpEntity) genericPersistance.findById(IssuesLastPriceTmpEntity.class, transactionIssueNotSoldPojo.getIdIssue());
 			CatalogBrokerEntity catalogBrokerEntity = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, transactionIssueNotSoldPojo.getIdBroker());
+			
 			BigDecimal commision = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
+			BigDecimal taxes = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
 			
 			if (issuesLastPriceTmpEntity == null)
 				continue;
@@ -63,7 +65,7 @@ public class TransactionIssuesBusiness extends MainBusiness {
 			BigDecimal currentIssuePrice = issuesLastPriceTmpEntity.getLast();
 			BigDecimal sellEstimate = new CalculatorUtil().determineFinalValue(currentIssuePrice, catalogBrokerEntity.getIdTypeCurrency(), dollarPriceAfterDeprecate);
 			
-			BigDecimal taxesOutcomeEstimate = sellEstimate.subtract(transactionIssueNotSoldPojo.getPriceTotalBuy()).multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100));
+			BigDecimal taxesOutcomeEstimate = sellEstimate.subtract(transactionIssueNotSoldPojo.getPriceTotalBuy()).multiply(taxes).divide(BigDecimal.valueOf(100));
 			BigDecimal commisionOutcomeEstimate = sellEstimate.multiply(commision).divide(BigDecimal.valueOf(100));
 			BigDecimal totalIncomeEstimate = sellEstimate.subtract(taxesOutcomeEstimate).subtract(commisionOutcomeEstimate);
 			BigDecimal sellEstimateAfterAll = sellEstimate.subtract(taxesOutcomeEstimate).subtract(commisionOutcomeEstimate);

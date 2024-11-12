@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 
 public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues {
 	
@@ -96,7 +97,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 				continue;
 			
 			TransactionIssueFilePojo transactionIssueFileDataPojo = new TransactionIssueFilePojo();
-			transactionIssueFileDataPojo.setTaxesPercentage(BigDecimal.valueOf(10));
+			transactionIssueFileDataPojo.setTaxesPercentage(CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM);
 			transactionIssueFileDataPojo.setIssue(buildIssue(rowRecord.get(0)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(1) + " " +rowRecord.get(2), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(3)));

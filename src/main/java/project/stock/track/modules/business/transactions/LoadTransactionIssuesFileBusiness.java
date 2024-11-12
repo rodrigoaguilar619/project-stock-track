@@ -31,6 +31,7 @@ import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.config.helpers.CurrencyDataHelper;
@@ -96,8 +97,12 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		transactionIssueEntity.setPriceTotalSellMxn(new CalculatorUtil().calculateTotalPriceSellAfter(transactionIssueEntity.getPriceTotalBuyMxn(), priceTotalSellMxn, transactionIssueFilePojo.getComissionPercentage(), transactionIssueFilePojo.getTaxesPercentage()));
 		transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(transactionIssueEntity.getPriceTotalBuy()));
 		transactionIssueEntity.setSellGainLossTotalMxn(transactionIssueEntity.getPriceTotalSellMxn().subtract(transactionIssueEntity.getPriceTotalBuyMxn()));
-		transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
-	
+		
+		if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrency.USD))
+			transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
+		else if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrency.MXN))
+			transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuyMxn(), transactionIssueEntity.getPriceTotalSellMxn()));
+		
 		return transactionIssueEntity;
 	}
 	
@@ -269,6 +274,8 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 					transactionIssueEntity.setPriceSellMxn(currencyValuesPriceBuyPojo.getValueMxn());
 					transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
 					transactionIssueEntity.setIdBroker(transactionIssueFilePojo.getBroker());
+					transactionIssueEntity.setTotalShares(new BigDecimal(1));
+					transactionIssueEntity.setIsSlice(false);
 					transactionIssueEntity.setIsShortSell(true);
 					
 					genericCustomPersistance.save(transactionIssueEntity);

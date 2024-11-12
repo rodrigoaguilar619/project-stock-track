@@ -60,7 +60,7 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 				continue;
 			
 			TransactionIssueFilePojo transactionIssueFileDataPojo = new TransactionIssueFilePojo();
-			transactionIssueFileDataPojo.setTaxesPercentage(BigDecimal.valueOf(10));
+			transactionIssueFileDataPojo.setTaxesPercentage(CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB);
 			transactionIssueFileDataPojo.setIssue(buildIssueCommon(rowRecord.get(2)));
 			transactionIssueFileDataPojo.setDate(buildDate(rowRecord.get(0), ++timeSeconds));
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransaction(rowRecord.get(1)));
