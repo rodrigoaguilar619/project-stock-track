@@ -30,6 +30,12 @@ public class CatalogsEntity {
 		
 		public static final Integer DEPOSIT = 1;
 		public static final Integer WITHDRAW = 2;
+		public static final Integer DIVIDEND = 3;
+		public static final Integer TAX = 4;
+		public static final Integer CASH_IN_LIEU = 5;
+		public static final Integer ISSUE_FEE = 6;
+		public static final Integer BANK_INTEREST = 7;
+		public static final Integer BANK_FEE = 8;
 	}
 	
 	public static final class CatalogBroker {

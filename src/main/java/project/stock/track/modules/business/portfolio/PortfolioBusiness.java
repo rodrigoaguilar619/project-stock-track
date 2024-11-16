@@ -41,8 +41,8 @@ public class PortfolioBusiness extends MainBusiness {
 	
 	public BigDecimal getTotalMoneyDeposits(int idBroker, int idUser) {
 		
-		BigDecimal deposits = transactionMoneyRepository.getTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.DEPOSIT, idBroker, idUser);
-		BigDecimal withdraws = transactionMoneyRepository.getTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.WITHDRAW, idBroker, idUser);
+		BigDecimal deposits = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.DEPOSIT, idBroker, idUser);
+		BigDecimal withdraws = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.WITHDRAW, idBroker, idUser);
 		
 		return deposits.subtract(withdraws);
 	}

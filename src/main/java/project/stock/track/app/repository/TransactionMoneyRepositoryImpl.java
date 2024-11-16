@@ -2,6 +2,7 @@ package project.stock.track.app.repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TransactionMoneyRepositoryImpl {
 		this.em = em;
 	}
 	
-	public BigDecimal getTotalMovementMoney(Integer movementType, int idBroker, int idUser) {
+	public BigDecimal findTotalMovementMoney(Integer movementType, int idBroker, int idUser) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
@@ -45,5 +46,29 @@ public class TransactionMoneyRepositoryImpl {
 		BigDecimal result = typedQuery.getSingleResult();
 		return result == null ? BigDecimal.valueOf(0) : result;
 		
+	}
+	
+	public TransactionMoneyEntity findTransactionMoney(Integer idUser, Integer idIssue, int idBroker, Date date, Integer idTypeMovement) {
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TransactionMoneyEntity> cq = cb.createQuery(TransactionMoneyEntity.class);
+		Root<TransactionMoneyEntity> root = cq.from(TransactionMoneyEntity.class);
+		
+		List<Predicate> predicatesAnd = new ArrayList<>();
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idUser), idUser));
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idBroker), idBroker));
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idTypeMovement), idTypeMovement));
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.dateTransaction).as(Date.class), date));
+		
+		if(idIssue == null)
+			predicatesAnd.add(cb.isNull(root.get(TransactionMoneyEntity_.idIssue)));
+		else
+			predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idIssue), idIssue));
+		
+		cq.where( predicatesAnd.toArray(new Predicate[0]) );
+		
+		List<TransactionMoneyEntity> transactionIssueEntities = em.createQuery(cq).setMaxResults(1).getResultList();
+		
+		return transactionIssueEntities.isEmpty() ? null : transactionIssueEntities.getFirst();
 	}
 }

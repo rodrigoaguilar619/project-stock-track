@@ -26,6 +26,7 @@ public class CatalogsUri {
 	public static final String API_PORTFOLIO_LIST_GET = "/api/portfolio/getPortfolioList";
 	public static final String API_PORTFOLIO_DATA_GET = "/api/portfolio/getPortfolioData";
 	public static final String API_TRANSACION_ISSUES_TRACK_GET = "/api/transactions/getTransactionIssuesTrack";
-	public static final String API_TRANSACION_ISSUES_FILE_LOAD = "/api/transactions/loadtransactionIssuesFile";
+	public static final String API_TRANSACION_ISSUES_FILE_LOAD = "/api/transactions/loadTransactionIssuesFile";
+	public static final String API_TRANSACION_MONEY_FILE_LOAD = "/api/transactions/loadTransactionMoneyFile";
 	
 }

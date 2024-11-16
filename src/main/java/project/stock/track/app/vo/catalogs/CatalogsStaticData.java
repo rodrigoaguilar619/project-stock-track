@@ -60,9 +60,10 @@ public class CatalogsStaticData {
 		private CsvReportsHeaders() {
 		 }
 		
-		public static final List<String> CSV_HEADER_HOMEBROKER = Collections.unmodifiableList(Arrays.asList("Emisora","Fecha","Hora","Descripción","Títulos","Precio","Tasa","Plazo","Intereses","Impuestos","Comisión","Importe","Saldo"));
-		public static final List<String> CSV_HEADER_CHARLES_SCHWAB = Collections.unmodifiableList(Arrays.asList("Date","Action","Symbol","Description","Quantity","Price","Fees & Comm","Amount",""));
-		public static final List<String> CSV_HEADER_CHARLES_SCHWAB_2 = Collections.unmodifiableList(Arrays.asList("Date","Action","Symbol","Description","Quantity","Price","Fees & Comm","Amount"));
+		public static final List<String> CSV_HEADER_HOMEBROKER_ISSUES = Collections.unmodifiableList(Arrays.asList("Emisora","Fecha","Hora","Descripción","Títulos","Precio","Tasa","Plazo","Intereses","Impuestos","Comisión","Importe","Saldo"));
+		public static final List<String> CSV_HEADER_HOMEBROKER_MONEY = Collections.unmodifiableList(Arrays.asList("Contrato","Fecha","Hora","Folio","Movimiento","Emisora","Monto","Estatus"));
+		public static final List<String> CSV_HEADER_CHARLES_SCHWAB = Collections.unmodifiableList(Arrays.asList("Date","Action","Symbol","Description","Quantity","Price","Fees & Comm","Amount"));
+		public static final List<String> CSV_HEADER_CHARLES_SCHWAB_CHECKING_ACCOUNT = Collections.unmodifiableList(Arrays.asList("Date","Status","Type","CheckNumber","Description","Withdrawal","Deposit","RunningBalance"));
 	}
 	
 	public final class ServiceTiingo {

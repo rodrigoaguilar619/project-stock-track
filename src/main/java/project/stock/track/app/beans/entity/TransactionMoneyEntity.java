@@ -6,6 +6,7 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,14 +34,20 @@ public class TransactionMoneyEntity implements Serializable {
 	@Column(name = "id_user")
 	private Integer idUser;
 	
-	@Column(name = "value_mxn")
-	private BigDecimal valueMxn;
+	@Column(name = "id_issue")
+	private Integer idIssue;
+	
+	@Column(name = "amount_mxn")
+	private BigDecimal amountMxn;
 	
 	@Column(name = "id_type_movement")
 	private Integer idTypeMovement;
 	
 	@Column(name = "date_transaction")
 	private Date dateTransaction;
+	
+	@Column(name = "information")
+	private String information;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_broker", insertable=false, updatable=false)
@@ -53,5 +60,9 @@ public class TransactionMoneyEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_type_movement", insertable=false, updatable=false)
 	private CatalogTypeMovementEntity catalogTypeMovementEntity;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_issue", insertable = false, updatable = false)
+	private CatalogIssuesEntity catalogIssueEntity;
 	
 }

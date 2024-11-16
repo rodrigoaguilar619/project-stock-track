@@ -13,6 +13,9 @@ public class CatalogsErrorMessage {
 	private static final String ERROR_MSG_FILE_SELL_TRANSACTION_REGISTER = "Error registering sell transaction. issue: %s";
 	private static final String ERROR_MSG_FILE_SHORT_SELL_TRANSACTION_REGISTER = "Error registering sell transaction. issue: %s";
 	private static final String ERROR_MSG_FILE_EMPTY = "File is empty";
+	private static final String ERROR_MSG_FILE_TRANSACTION_DEPOSIT_WITHDRAW = "Error registering transaction. deposit/withdraw";
+	private static final String ERROR_MSG_FILE_TRANSACTION_BANK = "Error registering transaction bank";
+	private static final String ERROR_MSG_FILE_TRANSACTION_ISSUE = "Error registering transaction. issue: %s";
 	private static final String ERROR_MSG_FILE_BAD_HEADER_FORMAT = "Bad header format. broker: %s";
 	private static final String ERROR_MSG_FILE_BROKER_NOT_REGISTERED = "Broker doesn't registered";
 	private static final String ERROR_MSG_EXCHANGE_TRADE_BAD_RANGE_DATE = "Error validating range date on service consume. issue: %s, date start: %s, date end: %s";
@@ -78,5 +81,17 @@ public class CatalogsErrorMessage {
 	
 	public static String getErrorMsgFileSliceSharesNotMatch(String issue) {
 		return String.format(ERROR_MSG_FILE_SLICE_SHARES_NOT_MATCH, issue);
+	}
+	
+	public static String getErrorMsgFileTransactionDepositWithdraw() {
+		return ERROR_MSG_FILE_TRANSACTION_DEPOSIT_WITHDRAW;
+	}
+	
+	public static String getErrorMsgFileTransaction(String issue) {
+		return String.format(ERROR_MSG_FILE_TRANSACTION_ISSUE, issue);
+	}
+	
+	public static String getErrorMsgFileTransactionBank() {
+		return ERROR_MSG_FILE_TRANSACTION_BANK;
 	}
 }

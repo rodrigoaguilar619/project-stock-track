@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.utils.NumberDataUtil;
 import lib.base.backend.utils.date.DateFormatUtil;
 import project.stock.track.ProjectUnitTest;
@@ -40,7 +41,7 @@ class ReadCsvTransactionIssuesBrokerSchwabTest extends ProjectUnitTest {
     }
 
     @Test
-    void testReadCsvFile() throws ParseException, IOException {
+    void testReadCsvFile() throws ParseException, IOException, BusinessException {
     	
     	List<List<String>> records = Arrays.asList(
     		    Arrays.asList("Date", "Action", "Symbol", "Description", "Quantity", "Price", "Fees & Comm", "Amount"),
@@ -50,7 +51,7 @@ class ReadCsvTransactionIssuesBrokerSchwabTest extends ProjectUnitTest {
         when(dateFormatUtil.formatDate(anyString(), anyString())).thenReturn(new java.util.Date(1700000000000L));
         when(numberDataUtil.hasFractionalPart(anyDouble())).thenReturn(false);
 
-        List<TransactionIssueFilePojo> result = readCsvTransactionIssuesBrokerSchwab.readCsvFile(records);
+        List<TransactionIssueFilePojo> result = readCsvTransactionIssuesBrokerSchwab.readCsvFileIssues(records);
 
         assertNotNull(result);
         assertEquals(1, result.size());

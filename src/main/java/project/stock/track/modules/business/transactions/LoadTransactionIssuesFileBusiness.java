@@ -301,10 +301,15 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		
 		CatalogBrokerEntity catalogBrokerEntity = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, idBroker);
 		
-		if ((idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) && !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER)) ||
+		List<String> header = csvFileData.get(0);
+		
+		if (!header.isEmpty() && header.getLast().isEmpty())
+			header.remove(header.size() - 1);
+		
+		if ((idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) && !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER_ISSUES)) ||
 				(idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB) && 
-				(!customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
-				 !customArraysUtil.compareList(csvFileData.get(0), CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_2)
+				(!customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
+				 !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_CHECKING_ACCOUNT)
 			)))
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBadHeaderFormat(catalogBrokerEntity.getAcronym()));
 	}
@@ -347,7 +352,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		validateFileFormat(catalogBrokerEntity.getId(), csvData);
 		ReadCsvTransactionIssues readCsvTransactionIssues = getReadTransactionIssues(catalogBrokerEntity.getId());
 		
-		List<TransactionIssueFilePojo> transactionIssueFilePojos = readCsvTransactionIssues.readCsvFile(csvData);
+		List<TransactionIssueFilePojo> transactionIssueFilePojos = readCsvTransactionIssues.readCsvFileIssues(csvData);
 		return registerTransactionIssuesFromFile(userEntity, catalogBrokerEntity, transactionIssueFilePojos);	
 	}
 	
