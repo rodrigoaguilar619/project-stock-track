@@ -12,10 +12,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Selection;
+import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity_;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 
 @Repository
 public class TransactionMoneyRepositoryImpl {
@@ -27,16 +31,22 @@ public class TransactionMoneyRepositoryImpl {
 		this.em = em;
 	}
 	
-	public BigDecimal findTotalMovementMoney(Integer movementType, int idBroker, int idUser) {
+	public BigDecimal findTotalMovementMoney(Integer idMovementType, int idBroker, int idUser) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
 		Root<TransactionMoneyEntity> root = cq.from(TransactionMoneyEntity.class);
-		cq.select(cb.sum(root.<BigDecimal>get(TransactionMoneyEntity_.amount)));
+		
+		Expression<Object> amountSelection = cb.selectCase()
+				.when(cb.equal(root.get(TransactionMoneyEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.USD), root.get(TransactionMoneyEntity_.AMOUNT))
+	            .when(cb.equal(root.get(TransactionMoneyEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.MXN), root.get(TransactionMoneyEntity_.AMOUNT_MXN))
+	            .otherwise(cb.nullLiteral(BigDecimal.class));
+		
+		cq.select(cb.sum(amountSelection.as(BigDecimal.class)));
 			
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		
-		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idTypeMovement), movementType));
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idTypeMovement), idMovementType));
 		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idBroker), idBroker));
 		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idUser), idUser));
 		

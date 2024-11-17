@@ -50,6 +50,14 @@ public class PortfolioBusiness extends MainBusiness {
 	public PortfolioResumePojo getTotalPortfolio(CatalogBrokerEntity catalogBrokerEntity, UserEntity userEntity) {
 		
 		BigDecimal totalMoneyDeposits = getTotalMoneyDeposits(catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalDividends = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.DIVIDEND, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalDividendTaxes = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.TAX, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalCashInLieu = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.CASH_IN_LIEU, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalIssueFee = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.ISSUE_FEE, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalBankInterest = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.BANK_INTEREST, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalBankFee = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.BANK_FEE, catalogBrokerEntity.getId(), userEntity.getId());
+		
+		BigDecimal totalMoney = totalMoneyDeposits.add(totalDividends).subtract(totalDividendTaxes).add(totalCashInLieu).subtract(totalIssueFee).add(totalBankInterest).subtract(totalBankFee);
 		
 		BigDecimal totalSecuritesValueBuyNotSold = transactionIssueRepository.findTotalBuys(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), false);
 		BigDecimal totalSecuritesValueBuySold = transactionIssueRepository.findTotalBuys(catalogBrokerEntity.getId(), catalogBrokerEntity.getIdTypeCurrency(), userEntity.getId(), true);
@@ -60,16 +68,21 @@ public class PortfolioBusiness extends MainBusiness {
 		BigDecimal totalSecuritesGainSold = totalSecuritesValueSellSold.subtract(totalSecuritesValueBuySold);
 		BigDecimal totalSecuritesGainNotSold = totalSecuritesValueSellNotSold.subtract(totalSecuritesValueBuyNotSold);
 		BigDecimal totalSecuritesGain = totalSecuritesGainSold.add(totalSecuritesGainNotSold);
-		BigDecimal totalCash = totalMoneyDeposits.subtract(totalSecuritesValueBuyNotSold).add(totalSecuritesGainSold);
+		BigDecimal totalCash = totalMoney.subtract(totalSecuritesValueBuyNotSold).add(totalSecuritesGainSold);
 		
-		BigDecimal yieldBroker = calculatorUtil.calculatePercentageUpDown(totalMoneyDeposits, totalMoneyDeposits.add(totalSecuritesGain));
+		BigDecimal yieldBroker = calculatorUtil.calculatePercentageUpDown(totalMoney, totalMoney.add(totalSecuritesGain));
 		
 		PortfolioResumePojo portfolioResumePojo = new PortfolioResumePojo();
 		portfolioResumePojo.setIdBroker(catalogBrokerEntity.getId());
 		portfolioResumePojo.setBroker(catalogBrokerEntity.getDescription());
-		portfolioResumePojo.setTotalDeposits(totalMoneyDeposits);
+		portfolioResumePojo.setTotalDeposits(totalMoney);
 		portfolioResumePojo.setTotalGainLoss(totalSecuritesGain);
 		portfolioResumePojo.setTotalCash(totalCash);
+		portfolioResumePojo.setTotalDividends(totalDividends);
+		portfolioResumePojo.setTotalDividendTaxes(totalDividendTaxes);
+		portfolioResumePojo.setTotalCashInLieu(totalCashInLieu);
+		portfolioResumePojo.setTotalBankInterests(totalBankInterest);
+		portfolioResumePojo.setTotalFees(totalBankFee.add(totalIssueFee));
 		portfolioResumePojo.setIdTypeCurrency(catalogBrokerEntity.getIdTypeCurrency());
 		portfolioResumePojo.setTypeCurrency(catalogBrokerEntity.getCatalogTypeCurrencyEntity().getDescription());
 		portfolioResumePojo.setYield(yieldBroker);

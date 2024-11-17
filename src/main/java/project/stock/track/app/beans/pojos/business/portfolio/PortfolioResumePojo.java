@@ -14,6 +14,16 @@ public class PortfolioResumePojo {
 
 	private BigDecimal totalDeposits;
 	
+	private BigDecimal totalDividends;
+	
+	private BigDecimal totalDividendTaxes;
+	
+	private BigDecimal totalCashInLieu;
+	
+	private BigDecimal totalFees;
+	
+	private BigDecimal totalBankInterests;
+	
 	private BigDecimal totalGainLoss;
 	
 	private BigDecimal totalCash;
