@@ -45,7 +45,7 @@ class UpdateDollarPriceControllerTest extends ProjectIntegrationTest {
 		
 		
 		QuoteBean quoteBean = new QuoteBean();
-		quoteBean.setMxn(new BigDecimal(12.90));
+		quoteBean.setMxn(new BigDecimal("17.0300"));
 		
 		Map<String, QuoteBean> quotes = new LinkedHashMap<String, QuoteBean>(); 
 		quotes.put("2024-01-01", quoteBean);

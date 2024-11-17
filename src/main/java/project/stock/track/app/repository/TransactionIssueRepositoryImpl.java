@@ -306,7 +306,7 @@ public class TransactionIssueRepositoryImpl {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PorfolioIssuePojo> findPortfolioIssues(Integer idUser, Integer idBroker, Integer idTypeCurrency, boolean isSold /*BigDecimal dollarPrice, Integer statusIssue*/) {
+	public List<PorfolioIssuePojo> findPortfolioIssues(Integer idUser, Integer idBroker, Integer idTypeCurrency, boolean isSold) {
 		
 		BigDecimal dollarPrice = new BigDecimal(1);
 		String priceTotalBuy = null;
@@ -335,9 +335,11 @@ public class TransactionIssueRepositoryImpl {
 			"catalogBroker." + CatalogBrokerEntity_.ID_TYPE_CURRENCY,
 			"SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ")",
 			"SUM(transactionIssue." + priceTotalBuy + ") / SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ") AS costAverageBuy",
-			"SUM(IF(:isSold, transactionIssue. " + priceTotalSell + ", (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * :dollarPrice )) / SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ") AS costAverageSell",
+			"SUM(CASE WHEN :isSold = true THEN transactionIssue." + priceTotalSell + 
+	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * CAST(:dollarPrice as DOUBLE) END) / SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ") AS costAverageSell",
 			"SUM(transactionIssue." + priceTotalBuy + ") AS costTotalBuy",
-			"SUM(IF(:isSold, transactionIssue. " + priceTotalSell + ", (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * :dollarPrice )) AS costTotalSell",
+			"SUM(CASE WHEN :isSold = true THEN transactionIssue." + priceTotalSell + 
+	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * CAST(:dollarPrice as DOUBLE) END) AS costTotalSell",
 			"issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.TIMESTAMP
 		);
 		

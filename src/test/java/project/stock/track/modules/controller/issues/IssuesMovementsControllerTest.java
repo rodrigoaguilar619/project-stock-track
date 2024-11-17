@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequ
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesMovementsListRequestPojo;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssueMovement;
+import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 
 @SuppressWarnings("unchecked")
 class IssuesMovementsControllerTest extends ProjectIntegrationTest {
@@ -43,6 +45,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		GetIssuesMovementsListRequestPojo requestPojo = new GetIssuesMovementsListRequestPojo();
 		requestPojo.setUserName(userName);
 		requestPojo.setDataTableConfig(dataTablePojo);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
 		
 		ResponseEntity<GenericResponsePojo<GetIssuesMovementsListDataPojo>> response = issuesMovementsController.getIssuesMovementsList(requestPojo);
 		
@@ -67,13 +70,13 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 	void testSaveIssueMovement() throws BusinessException {
 
 		IssueMovementBuyEntityPojo issueMovementBuyEntityPojo1 = new IssueMovementBuyEntityPojo();
-		issueMovementBuyEntityPojo1.setBuyDate(new Date().getTime());
+		issueMovementBuyEntityPojo1.setBuyDate(new LocalDate(2024, 1, 2).toDate().getTime());
 		issueMovementBuyEntityPojo1.setBuyPrice(new BigDecimal("190"));
 		issueMovementBuyEntityPojo1.setBuyTransactionNumber(1);
 		issueMovementBuyEntityPojo1.setTotalShares(new BigDecimal("5"));
 		
 		IssueMovementBuyEntityPojo issueMovementBuyEntityPojo2 = new IssueMovementBuyEntityPojo();
-		issueMovementBuyEntityPojo2.setBuyDate(new Date().getTime());
+		issueMovementBuyEntityPojo2.setBuyDate(new LocalDate(2024, 1, 2).toDate().getTime());
 		issueMovementBuyEntityPojo2.setBuyPrice(new BigDecimal("170"));
 		issueMovementBuyEntityPojo2.setBuyTransactionNumber(2);
 		issueMovementBuyEntityPojo2.setTotalShares(new BigDecimal("15"));
@@ -99,13 +102,13 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 	void testUpdateIssueMovement() throws BusinessException {
 		
 		IssueMovementBuyEntityPojo issueMovementBuyEntityPojo1 = new IssueMovementBuyEntityPojo();
-		issueMovementBuyEntityPojo1.setBuyDate(new Date().getTime());
+		issueMovementBuyEntityPojo1.setBuyDate(new LocalDate(2024, 1, 2).toDate().getTime());
 		issueMovementBuyEntityPojo1.setBuyPrice(new BigDecimal("190"));
 		issueMovementBuyEntityPojo1.setBuyTransactionNumber(1);
 		issueMovementBuyEntityPojo1.setTotalShares(new BigDecimal("5"));
 		
 		IssueMovementBuyEntityPojo issueMovementBuyEntityPojo2 = new IssueMovementBuyEntityPojo();
-		issueMovementBuyEntityPojo2.setBuyDate(new Date().getTime());
+		issueMovementBuyEntityPojo2.setBuyDate(new LocalDate(2024, 1, 2).toDate().getTime());
 		issueMovementBuyEntityPojo2.setBuyPrice(new BigDecimal("170"));
 		issueMovementBuyEntityPojo2.setBuyTransactionNumber(2);
 		issueMovementBuyEntityPojo2.setTotalShares(new BigDecimal("15"));
