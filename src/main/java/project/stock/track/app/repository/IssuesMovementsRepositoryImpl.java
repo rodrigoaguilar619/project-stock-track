@@ -3,7 +3,6 @@ package project.stock.track.app.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -35,7 +34,6 @@ public class IssuesMovementsRepositoryImpl {
 
 	EntityManager em;
 	
-	@Autowired
 	public IssuesMovementsRepositoryImpl(EntityManager em) {
 		this.em = em;
 	}
@@ -64,6 +62,33 @@ public class IssuesMovementsRepositoryImpl {
 			return null;
 	}
 	
+	public List<Predicate> buildFiltersPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager, Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues, Integer idUser, IssuesMovementsFiltersPojo filters) {
+		
+		List<Predicate> predicatesAnd = new ArrayList<>();
+		
+		predicatesAnd.add(cb.equal(joinIssuesManager.get(IssuesManagerEntity_.ID).get(IssuesManagerEntityPk_.ID_USER), idUser));
+		
+		if (filters != null) {
+			
+			if (filters.getIdSector() != null)
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
+			if (filters.getIdBroker() != null)
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_BROKER), filters.getIdBroker()));
+			if (filters.getIdStatusIssueMovement() != null)
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
+			if (filters.getYear() != null)
+				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.BUY_DATE)), filters.getYear()));
+			if (filters.getIsSold() != null) {
+				if (filters.getIsSold())
+					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNotNull());
+				else
+					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNull());
+			}
+		}
+		
+		return predicatesAnd;
+	}
+	
 	public Predicate buildPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Integer idUser, IssuesMovementsFiltersPojo filters, boolean isCountRows) {
 		
 		Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY, JoinType.LEFT);
@@ -82,26 +107,7 @@ public class IssuesMovementsRepositoryImpl {
 			fetchBroker.fetch(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY);
 		}
 		
-		List<Predicate> predicatesAnd = new ArrayList<>();
-		
-		predicatesAnd.add(cb.equal(joinIssuesManager.get(IssuesManagerEntity_.ID).get(IssuesManagerEntityPk_.ID_USER), idUser));
-		
-		if (filters != null) {
-			
-			if (filters.getIdSector() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
-			if (filters.getIdBroker() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_BROKER), filters.getIdBroker()));
-			if (filters.getIdStatusIssueMovement() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
-			if (filters.getYear() != null)
-				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.BUY_DATE)), filters.getYear()));
-			if (filters.getIsSold() != null)
-				if (filters.getIsSold())
-					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNotNull());
-				else
-					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNull());
-			}
+		List<Predicate> predicatesAnd = buildFiltersPredicateIssuesMovements(cb, root, joinIssuesManager, joinIssues, idUser, filters);
 		
 		return cb.and(predicatesAnd.toArray(new Predicate[0]));
 	}

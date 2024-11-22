@@ -29,7 +29,7 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 	@SuppressWarnings("rawtypes")
 	private final GenericPersistence genericPersistance;
 	private final DollarPriceService dollarPriceService;
-	@Qualifier("DollarPriceServiceCurrentLayer") private final DollarPriceService dollarPriceServiceCurrentLayer;
+	@Qualifier("dollarPriceServiceCurrentLayer") private final DollarPriceService dollarPriceServiceCurrentLayer;
 	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
 	
 	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();

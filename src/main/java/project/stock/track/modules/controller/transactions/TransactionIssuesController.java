@@ -1,6 +1,5 @@
 package project.stock.track.modules.controller.transactions;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,6 @@ public class TransactionIssuesController {
 	
 	TransactionIssuesBusiness portfolioBusiness;
 	
-	@Autowired
 	public TransactionIssuesController(TransactionIssuesBusiness portfolioBusiness) {
 		this.portfolioBusiness = portfolioBusiness;
 	}

@@ -72,7 +72,7 @@ public class MapEntityToPojoUtil {
 		return catalogIssuesEntityDesPojo;
 	}
 	
-	public IssueMovementBuyEntityPojo mapIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, IssueMovementBuyEntityPojo issueMovementBuyPojo, Integer idTypeCurrency) {
+	public IssueMovementBuyEntityPojo mapIssueMovementBuy(IssuesMovementsBuyEntity issueMovementBuyEntity, IssueMovementBuyEntityPojo issueMovementBuyPojo, int idTypeCurrency) {
 		
 		if (issueMovementBuyPojo == null)
 			issueMovementBuyPojo = new IssueMovementBuyEntityPojo();
@@ -84,7 +84,6 @@ public class MapEntityToPojoUtil {
 			buyPrice = issueMovementBuyEntity.getBuyPriceMxn();
 			sellPrice = issueMovementBuyEntity.getSellPriceMxn();
 		}
-			
 		
 		issueMovementBuyPojo.setBuyPrice(buyPrice);
 		issueMovementBuyPojo.setSellPrice(sellPrice);

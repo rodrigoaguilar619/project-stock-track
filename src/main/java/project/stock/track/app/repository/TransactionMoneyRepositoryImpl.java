@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -15,7 +14,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Selection;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity_;
@@ -26,7 +24,6 @@ public class TransactionMoneyRepositoryImpl {
 
 	EntityManager em;
 	
-	@Autowired
 	public TransactionMoneyRepositoryImpl(EntityManager em) {
 		this.em = em;
 	}

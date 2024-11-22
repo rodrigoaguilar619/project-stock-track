@@ -1,6 +1,5 @@
 package project.stock.track.modules.controller.issues;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,6 @@ public class IssuesController {
 
 	IssuesBusiness issuesBusiness;
 	
-	@Autowired
 	public IssuesController(IssuesBusiness issuesBusiness) {
 		this.issuesBusiness = issuesBusiness;
 	}

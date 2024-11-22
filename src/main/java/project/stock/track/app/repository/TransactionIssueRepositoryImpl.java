@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -51,7 +50,6 @@ public class TransactionIssueRepositoryImpl {
 	private CalculatorUtil calculatorUtil = new CalculatorUtil();
 	private DataParseUtil dataParseUtil = new DataParseUtil();
 	
-	@Autowired
 	public TransactionIssueRepositoryImpl(EntityManager em, DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository) {
 		this.em = em;
 		this.dollarHistoricalPriceRepository = dollarHistoricalPriceRepository;
@@ -306,7 +304,7 @@ public class TransactionIssueRepositoryImpl {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PorfolioIssuePojo> findPortfolioIssues(Integer idUser, Integer idBroker, Integer idTypeCurrency, boolean isSold) {
+	public List<PorfolioIssuePojo> findPortfolioIssues(Integer idUser, Integer idBroker, int idTypeCurrency, boolean isSold) {
 		
 		BigDecimal dollarPrice = new BigDecimal(1);
 		String priceTotalBuy = null;

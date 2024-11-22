@@ -1,6 +1,5 @@
 package project.stock.track.modules.controller.portfolio;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,6 @@ public class PortfolioController {
 	
 	PortfolioBusiness portfolioBusiness;
 	
-	@Autowired
 	public PortfolioController(PortfolioBusiness portfolioBusiness) {
 		this.portfolioBusiness = portfolioBusiness;
 	}

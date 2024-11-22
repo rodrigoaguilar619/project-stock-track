@@ -1,6 +1,5 @@
 package project.stock.track.config.beans;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -21,7 +20,6 @@ public class ServiceBeans {
 	private final RestTemplate restTemplate;
 	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
-	@Autowired
 	public ServiceBeans(RestTemplate restTemplate, ConfigControlRepositoryImpl configControlRepositoryImpl) {
 		this.restTemplate = restTemplate;
 		this.configControlRepositoryImpl = configControlRepositoryImpl;
@@ -43,7 +41,7 @@ public class ServiceBeans {
 		return new DollarPriceBancoMexicoServiceImpl(restTemplate, configControlRepositoryImpl);
 	}
 	
-	@Bean("DollarPriceServiceCurrentLayer")
+	@Bean("dollarPriceServiceCurrentLayer")
 	public DollarPriceService generateDollarPriceServiceCurrentLayer() {
 		return new DollarPriceCurrentLayerServiceImpl(restTemplate, configControlRepositoryImpl);
 	}

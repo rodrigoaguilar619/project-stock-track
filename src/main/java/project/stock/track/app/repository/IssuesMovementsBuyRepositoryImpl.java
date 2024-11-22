@@ -1,6 +1,5 @@
 package project.stock.track.app.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -16,7 +15,6 @@ public class IssuesMovementsBuyRepositoryImpl {
 
 	EntityManager em;
 	
-	@Autowired
 	public IssuesMovementsBuyRepositoryImpl(EntityManager em) {
 		this.em = em;
 	}

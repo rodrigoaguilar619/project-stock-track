@@ -3,7 +3,6 @@ package project.stock.track.app.repository;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -20,7 +19,6 @@ public class TempIssuesLastPriceRepositoryImpl {
 	
 	EntityManager em;
 	
-	@Autowired
 	public TempIssuesLastPriceRepositoryImpl(EntityManager em) {
 		this.em = em;
 	}

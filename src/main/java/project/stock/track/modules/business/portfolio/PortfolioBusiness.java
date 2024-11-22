@@ -12,14 +12,12 @@ import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
-import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.pojos.business.portfolio.PorfolioIssuePojo;
 import project.stock.track.app.beans.pojos.business.portfolio.PortfolioResumePojo;
 import project.stock.track.app.beans.pojos.petition.data.GetPortfolioDataPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetPortfolioListDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetPortfolioListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetPortfolioRequestPojo;
-import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.repository.TransactionMoneyRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
@@ -33,7 +31,6 @@ public class PortfolioBusiness extends MainBusiness {
 	@SuppressWarnings("rawtypes")
 	private final GenericPersistence genericPersistance;
 	private final UserRepositoryImpl userRepository;
-	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRespository;
 	private final TransactionIssueRepositoryImpl transactionIssueRepository;
 	private final TransactionMoneyRepositoryImpl transactionMoneyRepository;
 	
@@ -74,7 +71,7 @@ public class PortfolioBusiness extends MainBusiness {
 		
 		PortfolioResumePojo portfolioResumePojo = new PortfolioResumePojo();
 		portfolioResumePojo.setIdBroker(catalogBrokerEntity.getId());
-		portfolioResumePojo.setBroker(catalogBrokerEntity.getDescription());
+		portfolioResumePojo.setBroker(catalogBrokerEntity.getAcronym());
 		portfolioResumePojo.setTotalDeposits(totalMoney);
 		portfolioResumePojo.setTotalGainLoss(totalSecuritesGain);
 		portfolioResumePojo.setTotalCash(totalCash);

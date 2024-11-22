@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -33,7 +32,6 @@ public class IssuesRepositoryImpl {
 
 	EntityManager em;
 	
-	@Autowired
 	public IssuesRepositoryImpl(EntityManager em) {
 		this.em = em;
 	}

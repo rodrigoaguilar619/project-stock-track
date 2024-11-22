@@ -12,7 +12,7 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 @Component
 public class CurrencyDataHelper {
 	
-	public CurrencyValuesPojo getCurrencyValues(Integer idTypeCurrency, BigDecimal dollarPrice, BigDecimal currentPrice) {
+	public CurrencyValuesPojo getCurrencyValues(int idTypeCurrency, BigDecimal dollarPrice, BigDecimal currentPrice) {
 		
 		CurrencyValuesPojo currencyValuesPojo = new CurrencyValuesPojo();
 		

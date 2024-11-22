@@ -33,7 +33,7 @@ public class IssueUtil {
 	}
 	
 	public IssueCurrentPricePojo getCurrentPrice(IssuesLastPriceTmpEntity tempIssuesLastPriceEntity, IssuesHistoricalEntity issuesHistoricalEntityLastRecord,
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntity, Integer idTypeCurrency) {
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntity, int idTypeCurrency) {
 		
 		IssueCurrentPricePojo issueCurrentPricePojo = getCurrentPrice(tempIssuesLastPriceEntity, issuesHistoricalEntityLastRecord);
 		

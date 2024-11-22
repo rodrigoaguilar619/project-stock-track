@@ -3,7 +3,6 @@ package project.stock.track.modules.controller.transactions;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +23,6 @@ public class LoadTransactionIssuesFileController {
 	LoadTransactionIssuesFileBusiness loadTransactionIssuesFileBusiness;
 	LoadTransactionMoneyFileBusiness loadTransactionMoneyFileBusiness;
 	
-	@Autowired
 	public LoadTransactionIssuesFileController(LoadTransactionIssuesFileBusiness loadTransactionIssuesFileBusiness, LoadTransactionMoneyFileBusiness loadTransactionMoneyFileBusiness) {
 		this.loadTransactionIssuesFileBusiness = loadTransactionIssuesFileBusiness;
 		this.loadTransactionMoneyFileBusiness = loadTransactionMoneyFileBusiness;

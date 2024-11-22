@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,10 +22,6 @@ import lib.base.backend.pojo.rest.GenericResponsePojo;
 import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectIntegrationTest;
 import project.stock.track.app.beans.pojos.petition.data.UpdateDollarPriceDataPojo;
-import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.BmxBean;
-import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DatosBean;
-import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DollarPriceBancoMexicoBean;
-import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.SerieBean;
 import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.DollarPriceCurrentLayerBean;
 import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.QuoteBean;
 

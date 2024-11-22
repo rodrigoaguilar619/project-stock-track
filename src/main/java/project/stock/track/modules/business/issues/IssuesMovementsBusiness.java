@@ -3,6 +3,7 @@ package project.stock.track.modules.business.issues;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -65,6 +67,11 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 	}
 	
+	private String getAlertSold(BigDecimal priceSold, Date dateSold) {
+		
+		return "SOLD: " + priceSold + " on " + dateFormatUtil.formatDate(dateSold, CatalogsStaticData.StaticData.DEFAULT_CURRENCY_FORMAT);
+	}
+	
 	private String getAlertSell(BigDecimal currentPrice, BigDecimal lastBuyPrice) {
 		
 		if (currentPrice == null)
@@ -82,7 +89,10 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 		String alert = null; 
 		
-		if (getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice()) != null) {
+		if (!issueMovementBuysPojos.isEmpty() && issueMovementBuysPojos.getFirst().getSellDate() != null) {
+			alert = getAlertSold(issueMovementBuysPojos.getFirst().getSellPrice(), new Date(issueMovementBuysPojos.getFirst().getSellDate()));
+		}
+		else if (getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice()) != null) {
 			
 			alert = getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice());
 		}
@@ -185,7 +195,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		return issueMovementTransactionTotalResumePojo;
 	}
 	
-	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, IssueCurrentPricePojo currentPriceData, Integer idTypeCurrency) {
+	private IssueMovementResumePojo buildIssueMovementData(IssuesMovementsEntity issueMovement, List<IssueMovementBuyEntityPojo> issueMovementBuysPojoList, IssueCurrentPricePojo currentPriceData, int idTypeCurrency) {
 		
 		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
