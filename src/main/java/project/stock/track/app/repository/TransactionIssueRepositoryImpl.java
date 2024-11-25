@@ -87,7 +87,7 @@ public class TransactionIssueRepositoryImpl {
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
 			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
-			cb.equal(root.get(TransactionIssueEntity_.idDate).as(Date.class), date));
+			cb.equal(root.get(TransactionIssueEntity_.buyDate).as(Date.class), date));
 		
 		cq.where( predicateAnd );
 		
@@ -129,7 +129,7 @@ public class TransactionIssueRepositoryImpl {
 
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue));
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idUser), idUser));
-		predicatesAnd.add(cb.greaterThanOrEqualTo(root.get(TransactionIssueEntity_.idDate), startDate));
+		predicatesAnd.add(cb.greaterThanOrEqualTo(root.get(TransactionIssueEntity_.buyDate), startDate));
 		
 		Expression<Object> selectedPriceBuy = getSelectedPrice(cb, root, false);
 		Expression<Object> selectedPriceSell = getSelectedPrice(cb, root, true);
@@ -138,7 +138,7 @@ public class TransactionIssueRepositoryImpl {
 		
 		
 		cq.select(cb.construct(IssueTransactionsByDateTuplePojo.class,
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP,Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP,Long.class, root.get(TransactionIssueEntity_.buyDate)), 1000L),
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP,Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000L),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)),
 				selectedPriceBuy,
@@ -148,8 +148,8 @@ public class TransactionIssueRepositoryImpl {
 				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.acronym),
 				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY).get(CatalogTypeCurrencyEntity_.DESCRIPTION)));
 
-		cq.groupBy(root.get(TransactionIssueEntity_.idBroker), root.get(TransactionIssueEntity_.idDate), root.get(TransactionIssueEntity_.sellDate), root.get(TransactionIssueEntity_.priceBuy), root.get(TransactionIssueEntity_.priceSell));
-		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.idDate)));
+		cq.groupBy(root.get(TransactionIssueEntity_.idBroker), root.get(TransactionIssueEntity_.buyDate), root.get(TransactionIssueEntity_.sellDate), root.get(TransactionIssueEntity_.priceBuy), root.get(TransactionIssueEntity_.priceSell));
+		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.buyDate)));
 
 		cq.where(predicatesAnd.toArray(new Predicate[0]));
 
@@ -175,7 +175,7 @@ public class TransactionIssueRepositoryImpl {
 				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.DESCRIPTION),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)), selectedPriceTotalBuy,
 				cb.sum(selectedPriceTotalBuy.as(BigDecimal.class)),
-				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.idDate)), 1000L),
+				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.buyDate)), 1000L),
 				selectedPriceTotalSell,
 				cb.sum(selectedPriceTotalSell.as(BigDecimal.class)),
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000L),
@@ -187,10 +187,10 @@ public class TransactionIssueRepositoryImpl {
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue));
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idUser), idUser));
 
-		cq.groupBy(joinBroker.get(CatalogBrokerEntity_.ID), root.get(TransactionIssueEntity_.idDate),
+		cq.groupBy(joinBroker.get(CatalogBrokerEntity_.ID), root.get(TransactionIssueEntity_.buyDate),
 				root.get(TransactionIssueEntity_.priceTotalBuy), root.get(TransactionIssueEntity_.sellDate),
 				root.get(TransactionIssueEntity_.priceTotalSell));
-		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.idDate)));
+		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.buyDate)));
 
 		cq.where(predicatesAnd.toArray(new Predicate[0]));
 
@@ -392,7 +392,7 @@ public class TransactionIssueRepositoryImpl {
 		
 		List<String> parameterslist = Arrays.asList(
 			"ift." + TransactionIssueEntity_.ID_ISSUE,
-			"ift." + TransactionIssueEntity_.ID_DATE,
+			"ift." + TransactionIssueEntity_.BUY_DATE,
 			"ift." + TransactionIssueEntity_.PRICE_BUY,
 			"ift." + TransactionIssueEntity_.COMMISION_PERCENTAGE,
 			"ift." + TransactionIssueEntity_.PRICE_TOTAL_BUY,

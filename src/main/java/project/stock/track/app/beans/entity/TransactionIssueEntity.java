@@ -33,8 +33,8 @@ public class TransactionIssueEntity implements Serializable {
 	@Column(name = "id_user")
 	private Integer idUser;
 	
-	@Column(name = "id_date")
-	private Date idDate;
+	@Column(name = "buy_date")
+	private Date buyDate;
 	
 	@Column(name = "price_buy")
 	private BigDecimal priceBuy;

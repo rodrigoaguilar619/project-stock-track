@@ -58,6 +58,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		GetIssueMovementRequestPojo requestPojo = new GetIssueMovementRequestPojo();
 		requestPojo.setUserName(userName);
 		requestPojo.setIdIssueMovement(1);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
 		
 		ResponseEntity<GenericResponsePojo<GetIssueMovementDataPojo>> response = issuesMovementsController.getIssueMovement(requestPojo);
 		
@@ -91,6 +92,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		requestPojo.setIdStatus(CatalogStatusIssueMovement.ACTIVE);
 		requestPojo.setIssue("AAL");
 		requestPojo.setIssueMovementBuysList(issueMovementBuysList);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
 		
 		ResponseEntity<GenericResponsePojo<Void>> response = issuesMovementsController.saveIssueMovement(requestPojo);
 		
@@ -123,6 +125,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		requestPojo.setIdStatus(CatalogStatusIssueMovement.ACTIVE);
 		requestPojo.setIssue("AAL");
 		requestPojo.setIssueMovementBuysList(issueMovementBuysList);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
 		
 		ResponseEntity<GenericResponsePojo<Void>> response = issuesMovementsController.updateIssueMovement(requestPojo);
 		

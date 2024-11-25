@@ -17,7 +17,7 @@ public abstract class TransactionIssueEntity_ {
 	public static SingularAttribute<TransactionIssueEntity, CatalogBrokerEntity> catalogBrokerEntity;
 	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceBuy;
 	public static SingularAttribute<TransactionIssueEntity, BigDecimal> priceBuyMxn;
-	public static SingularAttribute<TransactionIssueEntity, Date> idDate;
+	public static SingularAttribute<TransactionIssueEntity, Date> buyDate;
 	public static SingularAttribute<TransactionIssueEntity, IssuesLastPriceTmpEntity> issuesLastPriceTmpEntity;
 	public static SingularAttribute<TransactionIssueEntity, IssuesManagerEntity> issuesManagerEntity;
 	public static SingularAttribute<TransactionIssueEntity, BigDecimal> commisionPercentage;
@@ -45,7 +45,7 @@ public abstract class TransactionIssueEntity_ {
 	public static final String CATALOG_BROKER_ENTITY = "catalogBrokerEntity";
 	public static final String PRICE_BUY = "priceBuy";
 	public static final String PRICE_BUY_MXN = "priceBuyMxn";
-	public static final String ID_DATE = "idDate";
+	public static final String BUY_DATE = "buyDate";
 	public static final String ISSUES_LAST_PRICE_TMP_ENTITY = "issuesLastPriceTmpEntity";
 	public static final String ISSUES_MANAGER_ENTITY = "issuesManagerEntity";
 	public static final String COMMISION_PERCENTAGE = "commisionPercentage";

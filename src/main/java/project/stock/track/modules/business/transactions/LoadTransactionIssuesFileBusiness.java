@@ -69,7 +69,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
 		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 		transactionIssueEntity.setIdUser(userEntity.getId());
-		transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
+		transactionIssueEntity.setBuyDate(new Date(transactionIssueFilePojo.getDate()));
 		transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
 		transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 		transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
@@ -119,7 +119,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
 		
 		if (issuesFundsTransactionsEntityVerify != null) {
-			messages.add("Issue transaction found issue: " + transactionIssueFilePojo.getIssue() + MSG_DATE + issuesFundsTransactionsEntityVerify.getIdDate());
+			messages.add("Issue transaction found issue: " + transactionIssueFilePojo.getIssue() + MSG_DATE + issuesFundsTransactionsEntityVerify.getBuyDate());
 			return messages;
 		}
 			
@@ -139,7 +139,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 					if (i < transactionIssueEntities.size()) {
 						
 						TransactionIssueEntity transactionIssueEntity = transactionIssueEntities.get(i);
-						transactionIssueEntity.setIdDate(new Date(transactionIssueFilePojo.getDate()));
+						transactionIssueEntity.setBuyDate(new Date(transactionIssueFilePojo.getDate()));
 						transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
 						transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 						transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());

@@ -1,0 +1,1 @@
+ALTER TABLE transaction_issue CHANGE id_date buy_date datetime NULL;
