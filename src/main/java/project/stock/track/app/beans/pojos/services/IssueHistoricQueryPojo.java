@@ -1,6 +1,6 @@
 package project.stock.track.app.beans.pojos.services;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,9 @@ public class IssueHistoricQueryPojo {
 
 	private String issue;
 	
-	private Date dateFrom;
+	private LocalDateTime dateFrom;
 	
-	private Date dateTo;
+	private LocalDateTime dateTo;
 	
 	private Boolean isStandarPoors;
 }

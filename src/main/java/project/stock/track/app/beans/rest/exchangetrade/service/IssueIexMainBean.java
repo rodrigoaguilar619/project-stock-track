@@ -1,7 +1,7 @@
 package project.stock.track.app.beans.rest.exchangetrade.service;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -25,9 +25,9 @@ public class IssueIexMainBean {
 	
 	private BigDecimal high;
 	
-	private Date timestamp;
+	private OffsetDateTime timestamp;
 	
-	private Date lastSaleTimestamp;
+	private OffsetDateTime lastSaleTimestamp;
 	
 	@Override
 	public String toString() {

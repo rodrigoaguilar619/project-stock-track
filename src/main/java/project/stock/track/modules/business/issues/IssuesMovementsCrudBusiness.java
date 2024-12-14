@@ -1,6 +1,5 @@
 package project.stock.track.modules.business.issues;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -78,20 +77,20 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		if (issueMovementBuyEntity == null)
 			issueMovementBuyEntity = new IssuesMovementsBuyEntity();
 		
-		DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(issueMovementBuyEntityPojo.getBuyDate()));
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(issueMovementBuyEntityPojo.getBuyDate()));
 		
 		if(dollarHistoricalPriceEntityBuy == null)
-			throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("buy", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getBuyDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
+			throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("buy", dateFormatUtil.formatLocalDateTime(dateUtil.getLocalDateTime(issueMovementBuyEntityPojo.getBuyDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
 		
 		CurrencyValuesPojo currencyValuesBuyPojo = currencyDataHelper.getCurrencyValues(idTypeCurrency, dollarHistoricalPriceEntityBuy.getPrice(), issueMovementBuyEntityPojo.getBuyPrice());
 		CurrencyValuesPojo currencyValuesSellPojo = new CurrencyValuesPojo();
 		
 		if(issueMovementBuyEntityPojo.getSellDate() != null) {
 			
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(new Date(issueMovementBuyEntityPojo.getSellDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(issueMovementBuyEntityPojo.getSellDate()));
 			
 			if(dollarHistoricalPriceEntitySell == null)
-				throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("sell", dateFormatUtil.formatDate(new Date(issueMovementBuyEntityPojo.getSellDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound("sell", dateFormatUtil.formatLocalDateTime(dateUtil.getLocalDateTime(issueMovementBuyEntityPojo.getSellDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
 			
 			currencyValuesSellPojo = currencyDataHelper.getCurrencyValues(idTypeCurrency, dollarHistoricalPriceEntitySell.getPrice(), issueMovementBuyEntityPojo.getSellPrice());
 		}
@@ -103,11 +102,11 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		issueMovementBuyEntity.setId(pk);
 		issueMovementBuyEntity.setBuyPrice(currencyValuesBuyPojo.getValueUsd());
 		issueMovementBuyEntity.setBuyPriceMxn(currencyValuesBuyPojo.getValueMxn());
-		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
-		issueMovementBuyEntity.setBuyDate(issueMovementBuyEntityPojo.getBuyDate() != null ? new Date(issueMovementBuyEntityPojo.getBuyDate()) : null);
+		issueMovementBuyEntity.setBuyDate(dateUtil.getLocalDateTime(issueMovementBuyEntityPojo.getBuyDate()));
+		issueMovementBuyEntity.setBuyDate(dateUtil.getLocalDateTime(issueMovementBuyEntityPojo.getBuyDate()));
 		issueMovementBuyEntity.setSellPrice(currencyValuesSellPojo.getValueUsd());
 		issueMovementBuyEntity.setSellPriceMxn(currencyValuesSellPojo.getValueMxn());
-		issueMovementBuyEntity.setSellDate(issueMovementBuyEntityPojo.getSellDate() != null ? new Date(issueMovementBuyEntityPojo.getSellDate()) : null);
+		issueMovementBuyEntity.setSellDate(dateUtil.getLocalDateTime(issueMovementBuyEntityPojo.getSellDate()));
 		issueMovementBuyEntity.setTotalShares(issueMovementBuyEntityPojo.getTotalShares());
 		
 		genericPersistance.save(issueMovementBuyEntity);

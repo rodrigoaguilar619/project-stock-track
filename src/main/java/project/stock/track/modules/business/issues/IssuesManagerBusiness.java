@@ -1,7 +1,6 @@
 package project.stock.track.modules.business.issues;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -92,7 +91,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 			issueEntityPojo.setInitials(catalogIssuesEntity.getInitials());
 			issueEntityPojo.setDescription(catalogIssuesEntity.getDescription());
 			issueEntityPojo.setIsSp500(catalogIssuesEntity.getIsSp500());
-			issueEntityPojo.setHistoricalStartDate(dataUtil.getValueOrNull(catalogIssuesEntity.getHistoricalStartDate(), Date::getTime));
+			issueEntityPojo.setHistoricalStartDate(dateUtil.getMillis(catalogIssuesEntity.getHistoricalStartDate()));
 			issueEntityPojo.setIsInvest(dataUtil.getValueOrNull(issuesManagerTrackPropertiesEntity, IssuesManagerTrackPropertiesEntity::getIsInvest));
 			issueEntityPojo.setIdSector(catalogIssuesEntity.getIdSector());
 			issueEntityPojo.setIdTypeStock(catalogIssuesEntity.getIdTypeStock());

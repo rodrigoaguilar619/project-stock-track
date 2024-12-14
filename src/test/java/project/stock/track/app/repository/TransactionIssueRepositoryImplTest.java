@@ -1,7 +1,6 @@
 package project.stock.track.app.repository;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -25,10 +24,9 @@ class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 		
 		ExecuteMethodUtil.execute("EXECUTING testFindIssueTransactionsBuys", () -> {
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Integer idUser = 1;
 			Integer idIssue = 4;
-			Date date = sdf.parse("2021-02-18");
+			LocalDateTime date = LocalDateTime.of(2021, 2, 18, 0, 0);
 			
 			List<IssueTransactionsByDateTuplePojo> issueTransactionsByDateTuplePojos = transactionIssueRepository.findIssueTransactionsBuys(idUser, idIssue, date);
 			

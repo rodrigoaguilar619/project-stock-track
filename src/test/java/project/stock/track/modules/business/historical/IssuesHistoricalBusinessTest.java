@@ -9,9 +9,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +77,6 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @SuppressWarnings({ "deprecation" })
 	@Test
     void testExecuteGetIssueHistorical() {
 
@@ -100,19 +99,19 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
 
         DollarHistoricalPriceEntity dollarHistoricalPriceEntity = new DollarHistoricalPriceEntity();
         dollarHistoricalPriceEntity.setPrice(BigDecimal.valueOf(20.0));
-        dollarHistoricalPriceEntity.setIdDate(new Date(1980, Calendar.JANUARY, 1));
+        dollarHistoricalPriceEntity.setIdDate(LocalDate.of(2023, 11, 14));
         when(dollarHistoricalPriceRespository.findLastRecord()).thenReturn(dollarHistoricalPriceEntity);
 
         IssueHistoricalEntityPojo issueHistoricalEntityPojo = new IssueHistoricalEntityPojo();
         issueHistoricalEntityPojo.setIssueData(new CatalogIssuesEntityDesPojo());
-        when(issueHistoricalHelper.buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class))).thenReturn(issueHistoricalEntityPojo);
+        when(issueHistoricalHelper.buildIssueHistoricalData(eq(issuesManagerEntity), any(LocalDateTime.class))).thenReturn(issueHistoricalEntityPojo);
 
         IssuesHistoricalEntity issuesHistoricalEntityLastRecord = new IssuesHistoricalEntity();
-        issuesHistoricalEntityLastRecord.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(requestPojo.getIdIssue(), new Date()));
+        issuesHistoricalEntityLastRecord.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(requestPojo.getIdIssue(), LocalDateTime.now()));
         when(issuesHistoricalRepository.findLastRecord(1)).thenReturn(issuesHistoricalEntityLastRecord);
 
         IssueTransactionResumeTuplePojo issueTransactionResumeTuplePojo = new IssueTransactionResumeTuplePojo();
-        issueTransactionResumeTuplePojo.setBuyDate(new Date().getTime());
+        issueTransactionResumeTuplePojo.setBuyDate(System.currentTimeMillis());
         issueTransactionResumeTuplePojo.setDescriptionBroker("Broker test");
         issueTransactionResumeTuplePojo.setDescriptionTypeCurrency("currency test");
         issueTransactionResumeTuplePojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
@@ -129,7 +128,7 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         assertNotNull(result);
         assertEquals(issueHistoricalEntityPojo, result.getIssueHistoricalData());
         verify(userRepository, times(1)).findByUserName(requestPojo.getUserName());
-        verify(issueHistoricalHelper, times(1)).buildIssueHistoricalData(eq(issuesManagerEntity), any(Date.class));
+        verify(issueHistoricalHelper, times(1)).buildIssueHistoricalData(eq(issuesManagerEntity), any(LocalDateTime.class));
     }
 
 

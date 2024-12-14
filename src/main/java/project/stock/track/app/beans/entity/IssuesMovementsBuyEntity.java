@@ -2,7 +2,7 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -30,7 +30,7 @@ public class IssuesMovementsBuyEntity implements Serializable {
 	private BigDecimal buyPriceMxn;
 	
 	@Column(name = "buy_date")
-	private Date buyDate;
+	private LocalDateTime buyDate;
 
 	@Column(name="sell_price")
 	private BigDecimal sellPrice;
@@ -39,7 +39,7 @@ public class IssuesMovementsBuyEntity implements Serializable {
 	private BigDecimal sellPriceMxn;
 	
 	@Column(name = "sell_date")
-	private Date sellDate;
+	private LocalDateTime sellDate;
 	
 	@Column(name="total_shares")
 	private BigDecimal totalShares;

@@ -7,9 +7,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ class IssueTrackTiingoServiceImplTest {
 		fail("Not yet implemented");
 	}*/
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	@Test
 	void testGetIssueHistoric() throws BusinessException {
 		
@@ -60,11 +61,11 @@ class IssueTrackTiingoServiceImplTest {
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean1 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean1.setClose("20");
-		shareHistoryDayTiingoBean1.setDate("2024-04-01");
+		shareHistoryDayTiingoBean1.setDate("2024-04-01 00:00:00");
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean2 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean2.setClose("25");
-		shareHistoryDayTiingoBean2.setDate("2024-04-02");
+		shareHistoryDayTiingoBean2.setDate("2024-04-02 00:00:00");
 		
 		ShareHistoryDayTiingoBean[] issueHistoricDaysBean = new ShareHistoryDayTiingoBean[2];
 		issueHistoricDaysBean[0] = shareHistoryDayTiingoBean1;
@@ -79,7 +80,7 @@ class IssueTrackTiingoServiceImplTest {
 		when(configControlRepository.getParameterValue(anyString())).thenReturn(configControlEntity);
 
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
-		issueHistoricQueryPojo.setDateTo(new Date(2024, 6, 1));
+		issueHistoricQueryPojo.setDateTo(LocalDateTime.of(2024, 6, 1, 0, 0, 0, 0));
 		issueHistoricQueryPojo.setIssue("AAL");
 		
 		IssueHistoricMainBean issueHistoricMainBean = issueTrackTiingoService.getIssueHistoric(token, issueHistoricQueryPojo);
@@ -95,12 +96,12 @@ class IssueTrackTiingoServiceImplTest {
 		IssueIexDataTiingoBean issueIexDataTiingoBean1 = new IssueIexDataTiingoBean();
 		issueIexDataTiingoBean1.setLast(new BigDecimal(10));
 		issueIexDataTiingoBean1.setTicker("AAL");
-		issueIexDataTiingoBean1.setLastSaleTimestamp(new Date());
+		issueIexDataTiingoBean1.setLastSaleTimestamp(OffsetDateTime.now());
 		
 		IssueIexDataTiingoBean issueIexDataTiingoBean2 = new IssueIexDataTiingoBean();
 		issueIexDataTiingoBean2.setLast(new BigDecimal(20));
 		issueIexDataTiingoBean2.setTicker("CCL");
-		issueIexDataTiingoBean2.setLastSaleTimestamp(new Date());
+		issueIexDataTiingoBean2.setLastSaleTimestamp(OffsetDateTime.now());
 		
 		IssueIexDataTiingoBean[] issueIexDataTiingoBeans = new IssueIexDataTiingoBean[2];
 		issueIexDataTiingoBeans[0] = issueIexDataTiingoBean1;
@@ -124,7 +125,6 @@ class IssueTrackTiingoServiceImplTest {
 		assertNotNull(mapResult);
 	}
 
-	@SuppressWarnings({ "deprecation" })
 	@Test
 	void testGetCryptoHistoric() {
 
@@ -132,11 +132,11 @@ class IssueTrackTiingoServiceImplTest {
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean1 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean1.setClose("20");
-		shareHistoryDayTiingoBean1.setDate("2024-04-01");
+		shareHistoryDayTiingoBean1.setDate("2024-04-01 00:00:00");
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean2 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean2.setClose("25");
-		shareHistoryDayTiingoBean2.setDate("2024-04-02");
+		shareHistoryDayTiingoBean2.setDate("2024-04-02 00:00:00");
 		
 		List<ShareHistoryDayTiingoBean> issueHistoricDaysBeans = new ArrayList<>(Arrays.asList(shareHistoryDayTiingoBean1, shareHistoryDayTiingoBean2));
 		
@@ -157,7 +157,7 @@ class IssueTrackTiingoServiceImplTest {
 		when(configControlRepository.getParameterValue(anyString())).thenReturn(configControlEntity);
 
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
-		issueHistoricQueryPojo.setDateTo(new Date(2024, 6, 1));
+		issueHistoricQueryPojo.setDateTo(LocalDateTime.of(2024, 6, 1, 0, 0, 0, 0));
 		issueHistoricQueryPojo.setIssue("BTC");
 		
 		IssueHistoricMainBean issueHistoricMainBean = issueTrackTiingoService.getCryptoHistoric(token, issueHistoricQueryPojo);

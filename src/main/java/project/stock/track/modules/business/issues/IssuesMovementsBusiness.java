@@ -2,8 +2,8 @@ package project.stock.track.modules.business.issues;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -67,9 +67,9 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 	}
 	
-	private String getAlertSold(BigDecimal priceSold, Date dateSold) {
+	private String getAlertSold(BigDecimal priceSold, LocalDateTime dateSold) {
 		
-		return "SOLD: " + priceSold + " on " + dateFormatUtil.formatDate(dateSold, CatalogsStaticData.StaticData.DEFAULT_CURRENCY_FORMAT);
+		return "SOLD: " + priceSold + " on " + dateFormatUtil.formatLocalDateTime(dateSold, CatalogsStaticData.StaticData.DEFAULT_CURRENCY_FORMAT);
 	}
 	
 	private String getAlertSell(BigDecimal currentPrice, BigDecimal lastBuyPrice) {
@@ -90,7 +90,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		String alert = null; 
 		
 		if (!issueMovementBuysPojos.isEmpty() && issueMovementBuysPojos.getFirst().getSellDate() != null) {
-			alert = getAlertSold(issueMovementBuysPojos.getFirst().getSellPrice(), new Date(issueMovementBuysPojos.getFirst().getSellDate()));
+			alert = getAlertSold(issueMovementBuysPojos.getFirst().getSellPrice(), dateUtil.getLocalDateTime(issueMovementBuysPojos.getFirst().getSellDate()));
 		}
 		else if (getAlertSell(currentPrice, issueMovementBuysPojos.getLast().getBuyPrice()) != null) {
 			

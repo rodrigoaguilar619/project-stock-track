@@ -2,7 +2,6 @@ package project.stock.track.app.utils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import lib.base.backend.entity.generic.GenericCatalogIntEntity;
@@ -30,8 +29,8 @@ public class MapEntityToPojoUtil {
 			tempIssueLastPricePojo = new IssueLastPriceTmpEntityPojo();
 		
 		tempIssueLastPricePojo.setCurrentPrice(tempIssuesLastPriceEntity.getLast());
-		tempIssueLastPricePojo.setDatePrice(tempIssuesLastPriceEntity.getTimestamp() != null ? dateUtil.getDateWithoutTime(tempIssuesLastPriceEntity.getTimestamp()).getTime() : null);
-		tempIssueLastPricePojo.setCurrentDatePrice(tempIssuesLastPriceEntity.getTimestamp() != null ? tempIssuesLastPriceEntity.getTimestamp().getTime() : null);
+		tempIssueLastPricePojo.setDatePrice(dateUtil.getMillis(tempIssuesLastPriceEntity.getTimestamp()));
+		tempIssueLastPricePojo.setCurrentDatePrice(dateUtil.getMillis(tempIssuesLastPriceEntity.getTimestamp()));
 		tempIssueLastPricePojo.setHighPrice(tempIssuesLastPriceEntity.getHigh());
 		tempIssueLastPricePojo.setIssue(tempIssuesLastPriceEntity.getCatalogIssuesEntity().getInitials());
 		tempIssueLastPricePojo.setIdIssue(tempIssuesLastPriceEntity.getIdIssue());
@@ -50,7 +49,7 @@ public class MapEntityToPojoUtil {
 		catalogIssuesEntityPojo.setIdIssue(catalogIssuesEntity.getId());
 		catalogIssuesEntityPojo.setInitials(catalogIssuesEntity.getInitials());
 		catalogIssuesEntityPojo.setDescription(catalogIssuesEntity.getDescription());
-		catalogIssuesEntityPojo.setHistoricalStartDate(dataUtil.getValueOrNull(catalogIssuesEntity.getHistoricalStartDate(), Date::getTime));
+		catalogIssuesEntityPojo.setHistoricalStartDate(dateUtil.getMillis(catalogIssuesEntity.getHistoricalStartDate()));
 		catalogIssuesEntityPojo.setIdSector(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogSectorEntity(), GenericCatalogIntEntity::getId));
 		catalogIssuesEntityPojo.setIdTypeStock(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogTypeStockEntity(), CatalogTypeStockEntity::getId));
 		catalogIssuesEntityPojo.setIdStatusIssue(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogStatusIssueEntity(), GenericStatusEntity::getId));
@@ -87,8 +86,8 @@ public class MapEntityToPojoUtil {
 		
 		issueMovementBuyPojo.setBuyPrice(buyPrice);
 		issueMovementBuyPojo.setSellPrice(sellPrice);
-		issueMovementBuyPojo.setBuyDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getBuyDate(), Date::getTime));
-		issueMovementBuyPojo.setSellDate(dataUtil.getValueOrNull(issueMovementBuyEntity.getSellDate(), Date::getTime));
+		issueMovementBuyPojo.setBuyDate(dateUtil.getMillis(issueMovementBuyEntity.getBuyDate()));
+		issueMovementBuyPojo.setSellDate(dateUtil.getMillis(issueMovementBuyEntity.getSellDate()));
 		issueMovementBuyPojo.setBuyTransactionNumber(issueMovementBuyEntity.getId().getBuyTransactionNumber());
 		issueMovementBuyPojo.setTotalShares(issueMovementBuyEntity.getTotalShares());
 		

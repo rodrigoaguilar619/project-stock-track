@@ -2,7 +2,7 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,10 +41,10 @@ public class IssuesLastPriceTmpEntity implements Serializable {
 	private BigDecimal high;
 	
 	@Column(name = "timestamp")
-	private Date timestamp;
+	private LocalDateTime timestamp;
 	
 	@Column(name = "last_sale_timestamp")
-	private Date lastSaleTimestamp;
+	private LocalDateTime lastSaleTimestamp;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_issue")

@@ -2,12 +2,10 @@ package project.stock.track.modules.business.historical;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,9 +80,7 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 	@Transactional(rollbackFor = Exception.class)
 	public GetIssueHistoricalDataPojo executeGetIssueHistorical(GetIssueHistoricalRequestPojo requestPojo) {
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(1980, Calendar.JANUARY, 1);
-		Date startDate = calendar.getTime();
+		LocalDateTime startDate = LocalDateTime.of(1980, 1, 1, 0, 0, 0);
 
 		UserEntity userEntity = userRepository.findByUserName(requestPojo.getUserName());
 		IssuesManagerEntity issuesManagerEntity = (IssuesManagerEntity) genericPersistance.findById(IssuesManagerEntity.class, new IssuesManagerEntityPk(requestPojo.getIdIssue(), userEntity.getId()));
@@ -101,7 +97,7 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		
 		IssueCalculateResumePojo issueCalculateResumePojo = new IssueCalculateResumePojo();
 		issueCalculateResumePojo.setCurrentDollarPrice(dollarHistoricalPriceEntity.getPrice());
-		issueCalculateResumePojo.setCurrentDollarDate(dollarHistoricalPriceEntity.getIdDate().getTime());
+		issueCalculateResumePojo.setCurrentDollarDate(dateUtil.getMillis(dollarHistoricalPriceEntity.getIdDate()));
 		issueCalculateResumePojo.setDollarPriceDeprecatePercentage(CatalogsStaticData.StaticData.DEFAULT_DOLAR_PRICE_DEPRECATE_PERCENTAGE);
 		issueCalculateResumePojo.setCurrentIssuePrice(issueCurrentPricePojo.getCurrentPrice());
 		issueCalculateResumePojo.setCurrentDollarPriceAfterDeprecate(dollarPriceAfterDeprecate);
@@ -143,7 +139,7 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		return dataPojo;
 	}
 	
-	public List<IssueHistoricalEntityPojo> generateIssuesHistoricalData(List<IssuesManagerEntity> issuesManagerEntities, Date startDate) {
+	public List<IssueHistoricalEntityPojo> generateIssuesHistoricalData(List<IssuesManagerEntity> issuesManagerEntities, LocalDateTime startDate) {
 		
 		List<IssueHistoricalEntityPojo> issueHistoricalEntityPojos = new ArrayList<>();
 		
@@ -159,7 +155,9 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 		TimeElapseUtil timeElapseUtil = new TimeElapseUtil("MAIN GetIssuesHistorical");
 		timeElapseUtil.printStart();
 		
-		Date startDate = new DateTime(new Date()).minusYears(2).toDate();
+		LocalDateTime startDate = LocalDateTime.now();
+		startDate = startDate.minusYears(2);
+		
 		UserEntity userEntity = userRepository.findByUserName(requestPojo.getUserName());
 		
 		List<IssuesManagerEntity> issuesManagerEntities = issuesHistoricalRepository.findAllWithStatusActive(userEntity.getId(), new DataTableUtil().getStartLimit(requestPojo.getDataTableConfig()), requestPojo.getDataTableConfig().getRowsPerPage(), requestPojo.getDataTableConfig().getFilters());

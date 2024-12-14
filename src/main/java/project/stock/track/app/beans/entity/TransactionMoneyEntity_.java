@@ -1,7 +1,7 @@
 package project.stock.track.app.beans.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.SingularAttribute;
@@ -19,7 +19,7 @@ public abstract class TransactionMoneyEntity_ {
 	public static SingularAttribute<TransactionMoneyEntity, Integer> idUser;
 	public static SingularAttribute<TransactionMoneyEntity, Integer> idIssue;
 	public static SingularAttribute<TransactionMoneyEntity, Integer> idTypeMovement;
-	public static SingularAttribute<TransactionMoneyEntity, Date> dateTransaction;
+	public static SingularAttribute<TransactionMoneyEntity, LocalDateTime> dateTransaction;
 	public static SingularAttribute<TransactionMoneyEntity, CatalogBrokerEntity> catalogBrokerEntity;
 	public static SingularAttribute<TransactionMoneyEntity, CatalogTypeMovementEntity> catalogTypeMovementEntity;
 	public static SingularAttribute<TransactionMoneyEntity, UserEntity> userEntity;

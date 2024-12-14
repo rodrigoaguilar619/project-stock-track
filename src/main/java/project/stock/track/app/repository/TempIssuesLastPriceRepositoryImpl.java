@@ -1,6 +1,6 @@
 package project.stock.track.app.repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -34,13 +34,13 @@ public class TempIssuesLastPriceRepositoryImpl {
         this.em.createQuery(delete).executeUpdate();
 	}
 	
-	public List<IssuesLastPriceTmpEntity> findLastPrices(Date date) {
+	public List<IssuesLastPriceTmpEntity> findLastPrices(LocalDateTime date) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<IssuesLastPriceTmpEntity> cq = cb.createQuery(IssuesLastPriceTmpEntity.class);
 		Root<IssuesLastPriceTmpEntity> root = cq.from(IssuesLastPriceTmpEntity.class);
 		
-		cq.where( cb.greaterThanOrEqualTo(root.get(IssuesLastPriceTmpEntity_.timestamp).as(Date.class), date ));
+		cq.where( cb.greaterThanOrEqualTo(root.get(IssuesLastPriceTmpEntity_.timestamp).as(LocalDateTime.class), date ));
 		
 		return em.createQuery(cq).getResultList();
 	}

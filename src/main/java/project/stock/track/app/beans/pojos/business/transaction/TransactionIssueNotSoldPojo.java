@@ -1,7 +1,7 @@
 package project.stock.track.app.beans.pojos.business.transaction;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class TransactionIssueNotSoldPojo {
 	
 	private String issue;
 	
-	private Date idDate;
+	private LocalDateTime idDate;
 	
 	private Integer idBroker;
 	

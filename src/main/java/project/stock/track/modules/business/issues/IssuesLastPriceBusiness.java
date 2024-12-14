@@ -1,12 +1,12 @@
 package project.stock.track.modules.business.issues;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +37,7 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 	private final IssuesRepositoryImpl issuesRepository;
 	
 	CalculatorUtil calculatorUtil = new CalculatorUtil();
+	DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
 	
 	@SuppressWarnings("unchecked")
 	public void storeIssuesLastPrice() {
@@ -84,10 +85,10 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 			tempIssuesLastPriceEntity.setHigh(issueIexMainBean.getHigh());
 			tempIssuesLastPriceEntity.setIdIssue(catalogIssuesEntity.getId());
 			tempIssuesLastPriceEntity.setLast(issueIexMainBean.getLast());
-			tempIssuesLastPriceEntity.setLastSaleTimestamp(issueIexMainBean.getLastSaleTimestamp());
+			tempIssuesLastPriceEntity.setLastSaleTimestamp(issueIexMainBean.getLastSaleTimestamp() != null ? issueIexMainBean.getLastSaleTimestamp().toLocalDateTime() : null);
 			tempIssuesLastPriceEntity.setOpen(issueIexMainBean.getOpen());
 			tempIssuesLastPriceEntity.setPrevClose(issueIexMainBean.getPrevClose());
-			tempIssuesLastPriceEntity.setTimestamp(issueIexMainBean.getTimestamp());
+			tempIssuesLastPriceEntity.setTimestamp(issueIexMainBean.getTimestamp() != null ? issueIexMainBean.getTimestamp().toLocalDateTime() : null);
 			tempIssuesLastPriceEntity.setVolume(issueIexMainBean.getVolume());
 			tempIssuesLastPriceEntity.setCatalogIssuesEntity(catalogIssuesEntity);
 			
@@ -97,7 +98,7 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 	
 	public List<IssueLastPriceTmpEntityPojo> getIssuesLastPrices() {
 		
-		List<IssuesLastPriceTmpEntity> tempIssuesLastPriceEntities = tempIssuesLastPriceRepository.findLastPrices(dateUtil.getDateWithoutTime(new Date()));
+		List<IssuesLastPriceTmpEntity> tempIssuesLastPriceEntities = tempIssuesLastPriceRepository.findLastPrices(dateUtil.getDateWithoutTime(LocalDateTime.now()));
 		
 		List<IssueLastPriceTmpEntityPojo> tempIssueLastPricePojos = new ArrayList<>();
 		
@@ -112,10 +113,10 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 	
 	public Map<String, IssueLastPriceTmpEntityPojo> getIssuesLastPricesMap() {
 		
-		Date currentDate = new Date();
+		LocalDateTime currentDate = LocalDateTime.now();
 		
-		while (new DateFinantialUtil().isWeekend(currentDate))
-			currentDate = new DateTime(currentDate).minusDays(1).toDate();
+		while (dateFinantialUtil.isWeekend(currentDate))
+			currentDate = currentDate.minus(1, ChronoUnit.DAYS);
 		
 		List<IssuesLastPriceTmpEntity> tempIssuesLastPriceEntities = tempIssuesLastPriceRepository.findAll();
 		

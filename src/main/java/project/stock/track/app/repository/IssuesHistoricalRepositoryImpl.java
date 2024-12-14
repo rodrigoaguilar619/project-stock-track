@@ -1,7 +1,7 @@
 package project.stock.track.app.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -39,7 +39,7 @@ public class IssuesHistoricalRepositoryImpl {
 		this.em = em;
 	}
 	
-	public List<IssuesHistoricalEntity> findIssueHistorical(Integer idIssue, Date startDate) {
+	public List<IssuesHistoricalEntity> findIssueHistorical(Integer idIssue, LocalDateTime startDate) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<IssuesHistoricalEntity> cq = cb.createQuery(IssuesHistoricalEntity.class);
@@ -47,7 +47,7 @@ public class IssuesHistoricalRepositoryImpl {
 		
 		Predicate predicateAnd = cb.and( 
 				cb.equal(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idIssue), idIssue),
-				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(Date.class), startDate));
+				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class), startDate));
 		
 		cq.where( predicateAnd );
 		
@@ -55,14 +55,14 @@ public class IssuesHistoricalRepositoryImpl {
 		
 	}
 	
-	public List<IssuesHistoricalEntity> findIssueHistoricalDateGreater(Date startDate) {
+	public List<IssuesHistoricalEntity> findIssueHistoricalDateGreater(LocalDateTime startDate) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<IssuesHistoricalEntity> cq = cb.createQuery(IssuesHistoricalEntity.class);
 		Root<IssuesHistoricalEntity> root = cq.from(IssuesHistoricalEntity.class);
 		
 		Predicate predicateAnd = cb.and( 
-				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(Date.class), startDate));
+				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class), startDate));
 		
 		cq.where( predicateAnd );
 		
@@ -77,7 +77,7 @@ public class IssuesHistoricalRepositoryImpl {
 		Root<IssuesHistoricalEntity> root = cq.from(IssuesHistoricalEntity.class);
 		
 		cq.where(cb.equal(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idIssue), idIssue));
-		cq.orderBy(cb.desc(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(Date.class)));
+		cq.orderBy(cb.desc(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class)));
 		
 		List<IssuesHistoricalEntity> issuesHistoricalEntities = em.createQuery(cq).setMaxResults(1).getResultList();
 		return (issuesHistoricalEntities.isEmpty()) ? null : issuesHistoricalEntities.get(0);

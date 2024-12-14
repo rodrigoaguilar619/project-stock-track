@@ -8,6 +8,7 @@ import java.util.List;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.utils.NumberDataUtil;
 import lib.base.backend.utils.date.DateFormatUtil;
+import lib.base.backend.utils.date.DateUtil;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionMoneyFilePojo;
 import project.stock.track.app.utils.CustomArraysUtil;
@@ -19,6 +20,7 @@ public abstract class ReadCsvTransactionIssues {
 	DateFormatUtil dateFormatUtil = new DateFormatUtil();
 	NumberDataUtil numberDataUtil = new NumberDataUtil();
 	CustomArraysUtil customArraysUtil = new CustomArraysUtil();
+	DateUtil dateUtil = new DateUtil();
 	
 	public static final String TYPE_TRANSACTION_BUY = "BUY";
 	public static final String TYPE_TRANSACTION_SELL = "SELL";

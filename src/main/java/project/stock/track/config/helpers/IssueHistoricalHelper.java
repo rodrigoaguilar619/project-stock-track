@@ -1,12 +1,11 @@
 package project.stock.track.config.helpers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import lib.base.backend.utils.DataUtil;
 import lib.base.backend.utils.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
@@ -28,12 +27,11 @@ public class IssueHistoricalHelper {
 	
 	private MapEntityToPojoUtil mapEntityToPojoUtil = new MapEntityToPojoUtil();
 	private DateUtil dateUtil = new DateUtil();
-	private DataUtil dataUtil = new DataUtil();
 	
 	private final IssuesHistoricalRepositoryImpl issuesHistoricalRepository;
 	private final TransactionIssueRepositoryImpl transactionIssueRepository;
 
-	public IssueHistoricalEntityPojo buildIssueHistoricalData(IssuesManagerEntity issuesManagerEntity, Date startDate) {
+	public IssueHistoricalEntityPojo buildIssueHistoricalData(IssuesManagerEntity issuesManagerEntity, LocalDateTime startDate) {
 		
 		List<IssuesHistoricalEntity> issuesHistoricalEntities = issuesHistoricalRepository.findIssueHistorical(issuesManagerEntity.getId().getIdIssue(), startDate);
 		
@@ -43,7 +41,7 @@ public class IssueHistoricalHelper {
 			
 			IssueHistoricalDayEntityPojo issueHistoricalDayEntityPojo = new IssueHistoricalDayEntityPojo();
 			issueHistoricalDayEntityPojo.setClose(issuesHistoricalEntity.getClose());
-			issueHistoricalDayEntityPojo.setDate(issuesHistoricalEntity.getIssuesHistoricalEntityId().getIdDate().getTime());
+			issueHistoricalDayEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalEntity.getIssuesHistoricalEntityId().getIdDate()));
 			
 			issueHistoricalDayEntityPojos.add(issueHistoricalDayEntityPojo);
 		}
@@ -55,7 +53,7 @@ public class IssueHistoricalHelper {
 			
 			IssueHistoricalDayEntityPojo issueHistoricalDayEntityPojo = new IssueHistoricalDayEntityPojo();
 			issueHistoricalDayEntityPojo.setClose(issuesLastPriceTmpEntity.getLast());
-			issueHistoricalDayEntityPojo.setDate(dateUtil.getDateWithoutTime(issuesLastPriceTmpEntity.getTimestamp()).getTime());
+			issueHistoricalDayEntityPojo.setDate(dateUtil.getMillis(issuesLastPriceTmpEntity.getTimestamp()));
 			
 			issueHistoricalDayEntityPojos.add(issueHistoricalDayEntityPojo);
 		}
@@ -74,12 +72,12 @@ public class IssueHistoricalHelper {
 		if (issuesLastPriceTmpEntity != null) {
 			
 			issueHistoricalTrackResumenPojo.setCurrentPrice(issuesLastPriceTmpEntity.getLast());
-			issueHistoricalTrackResumenPojo.setCurrentPriceDate(dataUtil.getValueOrNull(issuesLastPriceTmpEntity.getTimestamp(), Date::getTime));
+			issueHistoricalTrackResumenPojo.setCurrentPriceDate(dateUtil.getMillis(issuesLastPriceTmpEntity.getTimestamp()));
 		}
 		if (!issuesHistoricalEntities.isEmpty()) {
 			
 			issueHistoricalTrackResumenPojo.setPreviousClosePrice(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getClose());
-			issueHistoricalTrackResumenPojo.setPreviousClosePriceDate(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getIssuesHistoricalEntityId().getIdDate().getTime());
+			issueHistoricalTrackResumenPojo.setPreviousClosePriceDate(dateUtil.getMillis(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getIssuesHistoricalEntityId().getIdDate()));
 		}
 		
 		List<IssueTransactionsByDateTuplePojo> issueTransactionsByDateTuplePojos = transactionIssueRepository.findIssueTransactionsBuys(issuesManagerEntity.getId().getIdUser(), issuesManagerEntity.getId().getIdIssue(),  startDate);

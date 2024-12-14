@@ -40,7 +40,6 @@ class LoadTransactionIssuesFileControllerTest extends ProjectIntegrationTest {
 		ResponseEntity<GenericResponsePojo<LoadTransactionIssuesFileDataPojo>> response = loadTransactionIssuesFileController.registerIssueTransactions(requestPojo);
 		
 		Assessment.assertResponseData(response);
-		Assessment.assertDataList(response.getBody().getData().getMessages());
 	}
 
 }

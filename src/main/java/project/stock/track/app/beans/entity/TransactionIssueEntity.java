@@ -2,7 +2,7 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class TransactionIssueEntity implements Serializable {
 	private Integer idUser;
 	
 	@Column(name = "buy_date")
-	private Date buyDate;
+	private LocalDateTime buyDate;
 	
 	@Column(name = "price_buy")
 	private BigDecimal priceBuy;
@@ -79,7 +79,7 @@ public class TransactionIssueEntity implements Serializable {
 	private BigDecimal sellGainLossTotalMxn;
 	
 	@Column(name = "sell_date")
-	private Date sellDate;
+	private LocalDateTime sellDate;
 	
 	@Column(name = "id_broker")
 	private Integer idBroker;

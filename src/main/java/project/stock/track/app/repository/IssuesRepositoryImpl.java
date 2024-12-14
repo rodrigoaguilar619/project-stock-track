@@ -1,7 +1,7 @@
 package project.stock.track.app.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -138,7 +138,7 @@ public class IssuesRepositoryImpl {
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
 		Root<CatalogIssuesEntity> root = cq.from(CatalogIssuesEntity.class);
 		
-		Subquery sub = cq.subquery(Date.class);
+		Subquery sub = cq.subquery(LocalDateTime.class);
 		Root<IssuesHistoricalEntity> subRoot = sub.from(IssuesHistoricalEntity.class);
 		sub.select(cb.max(subRoot.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.ID_DATE)));
 		sub.where(cb.equal(subRoot.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.ID_ISSUE), root.get(CatalogIssuesEntity_.ID)));

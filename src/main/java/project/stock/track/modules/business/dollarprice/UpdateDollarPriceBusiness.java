@@ -3,9 +3,7 @@ package project.stock.track.modules.business.dollarprice;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +42,7 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 		
 		boolean flagDollarPriceExist = true;
 		
-		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = (DollarHistoricalPriceEntity) genericPersistance.findById(DollarHistoricalPriceEntity.class, new Date(dollarPriceBean.getDate()));
+		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = (DollarHistoricalPriceEntity) genericPersistance.findById(DollarHistoricalPriceEntity.class, dateUtil.getLocalDate(dollarPriceBean.getDate()));
 		
 		if (dollarHistoricalPriceEntity == null) {
 			
@@ -56,7 +54,7 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 			updateDollarPriceResponsePojo.setNewRegister(false);
 		}
 		
-		dollarHistoricalPriceEntity.setIdDate(new Date(dollarPriceBean.getDate()));
+		dollarHistoricalPriceEntity.setIdDate(dateUtil.getLocalDate(dollarPriceBean.getDate()));
 		dollarHistoricalPriceEntity.setPrice(new BigDecimal(dollarPriceBean.getPrice()));
 		
 		if (!flagDollarPriceExist)
@@ -76,41 +74,33 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 	public UpdateDollarPriceDataPojo executeUpdateDollarPriceHistorical() throws ParseException {
 		
 		Boolean isNewRegister = true;
-		Date dateCurrent = dateFinantialUtil.getLastBusinessDay(new Date());
-		Date dateStart = null;
-		Date dateEnd = null;
+		LocalDate dateCurrent = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now()).toLocalDate();
+		LocalDate dateStart = null;
+		LocalDate dateEnd = null;
 		
 		DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 		
 		if (dollarHistoricalPriceEntity == null) {
-			
-			LocalDate localDate = LocalDate.of(2020, 1, 1);
-			dateStart = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			dateStart = LocalDate.of(2020, 1, 1);
 		}
 		else
 			dateStart = dollarHistoricalPriceEntity.getIdDate();
 		
 		if (dollarHistoricalPriceEntity != null) {
-			Calendar calendarStart = Calendar.getInstance();
-			calendarStart.setTime(dateStart);
-			calendarStart.add(Calendar.DAY_OF_MONTH, 1);
-			dateStart = calendarStart.getTime();
+			dateStart = dateStart.plusDays(1);
 		}
 		
-		Calendar calendarEnd = Calendar.getInstance();
-        calendarEnd.setTime(dateStart);
-        calendarEnd.add(Calendar.YEAR, 1);
-		dateEnd = calendarEnd.getTime();
+		dateEnd = dateStart.plusYears(1);	
 		
-		if(dateUtil.compareDatesNotTime(dateEnd, dateCurrent) > 0)
+		if(dateEnd.isAfter(dateCurrent))
 			dateEnd = dateCurrent;
 		
-		if(dateUtil.compareDatesNotTime(dateStart, dateEnd) < 0) {
-			List<DollarPriceBean> dollarPriceBeans = dollarPriceServiceCurrentLayer.getDollarPriceHistorical(dateStart.getTime(), dateEnd.getTime());
+		if(dateStart.isBefore(dateEnd)) {
+			List<DollarPriceBean> dollarPriceBeans = dollarPriceServiceCurrentLayer.getDollarPriceHistorical(dateStart, dateEnd);
 			
 			for (DollarPriceBean dollarPriceBean : dollarPriceBeans) {
 				DollarHistoricalPriceEntity dollarHistoricalPriceEntityNew = new DollarHistoricalPriceEntity();
-				dollarHistoricalPriceEntityNew.setIdDate(new Date(dollarPriceBean.getDate()));
+				dollarHistoricalPriceEntityNew.setIdDate(dateUtil.getLocalDate(dollarPriceBean.getDate()));
 				dollarHistoricalPriceEntityNew.setPrice(new BigDecimal(dollarPriceBean.getPrice()));
 				
 				genericPersistance.save(dollarHistoricalPriceEntityNew);
@@ -125,7 +115,7 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 		
 		UpdateDollarPriceDataPojo dataPojo = new UpdateDollarPriceDataPojo();
 		dataPojo.setNewRegister(isNewRegister);
-		dataPojo.setDate(dollarHistoricalPriceEntity.getIdDate().getTime());
+		dataPojo.setDate(dateUtil.getMillis(dollarHistoricalPriceEntity.getIdDate()));
 		dataPojo.setPrice(dollarHistoricalPriceEntity.getPrice());
 		
 		return dataPojo;

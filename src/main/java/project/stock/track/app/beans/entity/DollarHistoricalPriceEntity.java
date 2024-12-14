@@ -2,8 +2,7 @@ package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-
+import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,7 +19,7 @@ public class DollarHistoricalPriceEntity implements Serializable {
 
 	@Id
 	@Column(name = "id_date")
-	private Date idDate;
+	private LocalDate idDate;
 	
 	@Column(name = "price")
 	private BigDecimal price;

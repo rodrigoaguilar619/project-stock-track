@@ -1,15 +1,10 @@
 package project.stock.track.services.exchangetrade.impl;
 
-import java.text.ParseException;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -38,15 +33,12 @@ public class IssueTrackAlphaVantageServiceImpl implements IssueTrackService {
 	
 	private final RestTemplate restTemplate;
 	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
-	
-	private static final Logger log = LoggerFactory.getLogger(IssueTrackAlphaVantageServiceImpl.class);
 
 	public IssueHistoricMainBean getIssueHistoric(String token, IssueHistoricQueryPojo issueHistoricQueryPojo ) {
 	    
 	    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 	    map.add("function", "TIME_SERIES_DAILY");
 		map.add("symbol", issueHistoricQueryPojo.getIssue());
-		map.add("outputsize", issueHistoricQueryPojo.getDateFrom() == null || ChronoUnit.DAYS.between(issueHistoricQueryPojo.getDateFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()) > 100 ? "full" : "compact");
 		map.add("apikey", configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_ALPHA_TOKEN).getValue());
 		
 		String envAlpha = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_ALPHA_URI).getValue();
@@ -67,16 +59,8 @@ public class IssueTrackAlphaVantageServiceImpl implements IssueTrackService {
 			
 			for(Map.Entry<String, ShareHistoryDayAlphaVantageBean> entry : new TreeMap<String, ShareHistoryDayAlphaVantageBean>(issueHistoricAlphaVantageBean.getHistory()).entrySet()) {
 				
-				Date dateKey = null;
-				try 
-				{
-					dateKey = dateFormatUtil.formatDate(entry.getKey(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
-				}
-				catch(ParseException pe) {
-					log.error("Error parsing date", pe);
-					continue;
-				}
-				
+				LocalDateTime dateKey = dateFormatUtil.formatLocalDateTime(entry.getKey(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
+
 				if (issueHistoricQueryPojo.getDateFrom() == null || dateUtil.compareDatesNotTime(dateKey, issueHistoricQueryPojo.getDateFrom()) > 0) {
 				
 					IssueHistoryDayBean issueHistoyDayBean = new IssueHistoryDayBean();

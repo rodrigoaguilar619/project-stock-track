@@ -1,9 +1,9 @@
 package project.stock.track.app.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -77,7 +77,7 @@ public class TransactionIssueRepositoryImpl {
 				.otherwise(root.get(priceTotalUsd));
 	}
 	
-	public TransactionIssueEntity findTransactionIssueBuy(Integer idUser, Integer idIssue, Integer idBroker, Date date) {
+	public TransactionIssueEntity findTransactionIssueBuy(Integer idUser, Integer idIssue, Integer idBroker, LocalDateTime date) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TransactionIssueEntity> cq = cb.createQuery(TransactionIssueEntity.class);
@@ -87,7 +87,7 @@ public class TransactionIssueRepositoryImpl {
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
 			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
-			cb.equal(root.get(TransactionIssueEntity_.buyDate).as(Date.class), date));
+			cb.equal(root.get(TransactionIssueEntity_.buyDate).as(LocalDateTime.class), date));
 		
 		cq.where( predicateAnd );
 		
@@ -98,7 +98,7 @@ public class TransactionIssueRepositoryImpl {
 			return null;
 	}
 	
-	public TransactionIssueEntity findTransactionIssueSell(Integer idUser, Integer idIssue, int idBroker, Date date) {
+	public TransactionIssueEntity findTransactionIssueSell(Integer idUser, Integer idIssue, int idBroker, LocalDateTime date) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TransactionIssueEntity> cq = cb.createQuery(TransactionIssueEntity.class);
@@ -108,7 +108,7 @@ public class TransactionIssueRepositoryImpl {
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
 			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
-			cb.equal(root.get(TransactionIssueEntity_.sellDate).as(Date.class), date));
+			cb.equal(root.get(TransactionIssueEntity_.sellDate).as(LocalDateTime.class), date));
 		
 		cq.where( predicateAnd );
 		
@@ -119,7 +119,7 @@ public class TransactionIssueRepositoryImpl {
 			return null;
 	}
 
-	public List<IssueTransactionsByDateTuplePojo> findIssueTransactionsBuys(Integer idUser, Integer idIssue, Date startDate) {
+	public List<IssueTransactionsByDateTuplePojo> findIssueTransactionsBuys(Integer idUser, Integer idIssue, LocalDateTime startDate) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<IssueTransactionsByDateTuplePojo> cq = cb.createQuery(IssueTransactionsByDateTuplePojo.class);
@@ -417,7 +417,7 @@ public class TransactionIssueRepositoryImpl {
 			
 			TransactionIssueNotSoldPojo transactionsNotSoldCustomPojo = new TransactionIssueNotSoldPojo();
 			transactionsNotSoldCustomPojo.setIdIssue((int) object[0]);
-			transactionsNotSoldCustomPojo.setIdDate((Date) object[1]);
+			transactionsNotSoldCustomPojo.setIdDate((LocalDateTime) object[1]);
 			transactionsNotSoldCustomPojo.setPriceBuy((BigDecimal) object[2]);
 			transactionsNotSoldCustomPojo.setCommisionPercentage((BigDecimal) object[3]);
 			transactionsNotSoldCustomPojo.setPriceTotalBuy((BigDecimal) object[4]);

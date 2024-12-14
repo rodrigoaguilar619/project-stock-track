@@ -3,7 +3,6 @@ package project.stock.track.modules.business.transactions;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -75,7 +74,7 @@ public class TransactionIssuesBusiness extends MainBusiness {
 			TransactionIssueTrackPojo transactionIssueTrackPojo = new TransactionIssueTrackPojo();
 			transactionIssueTrackPojo.setIdIssue(transactionIssueNotSoldPojo.getIdIssue());
 			transactionIssueTrackPojo.setIssue(transactionIssueNotSoldPojo.getIssue());
-			transactionIssueTrackPojo.setDate(transactionIssueNotSoldPojo.getIdDate().getTime());
+			transactionIssueTrackPojo.setDate(dateUtil.getMillis(transactionIssueNotSoldPojo.getIdDate()));
 			transactionIssueTrackPojo.setPriceBuy(transactionIssueNotSoldPojo.getPriceBuy());
 			transactionIssueTrackPojo.setCommisionPercentage(transactionIssueNotSoldPojo.getCommisionPercentage());
 			transactionIssueTrackPojo.setPriceTotalBuy(transactionIssueNotSoldPojo.getPriceTotalBuy());
@@ -92,8 +91,8 @@ public class TransactionIssuesBusiness extends MainBusiness {
 			transactionIssueTrackPojo.setOpen(issuesLastPriceTmpEntity.getOpen());
 			transactionIssueTrackPojo.setVolume(issuesLastPriceTmpEntity.getVolume());
 			transactionIssueTrackPojo.setHigh(issuesLastPriceTmpEntity.getHigh());
-			transactionIssueTrackPojo.setTimestamp(dataUtil.getValueOrNull(issuesLastPriceTmpEntity.getTimestamp(), Date::getTime));
-			transactionIssueTrackPojo.setLastSaleTimestamp(dataUtil.getValueOrNull(issuesLastPriceTmpEntity.getLastSaleTimestamp(), Date::getTime));
+			transactionIssueTrackPojo.setTimestamp(dateUtil.getMillis(issuesLastPriceTmpEntity.getTimestamp()));
+			transactionIssueTrackPojo.setLastSaleTimestamp(dateUtil.getMillis(issuesLastPriceTmpEntity.getLastSaleTimestamp()));
 			transactionIssueTrackPojo.setIsDownPercentageFromBuyPrice((calculatorUtil.calculatePercentageUpDown(transactionIssueNotSoldPojo.getPriceTotalBuy(), sellEstimate).compareTo(BigDecimal.valueOf(7)) < 0) + "");
 			transactionIssueTrackPojo.setIsDownPercentageFromCurrentPrice((issuesLastPriceTmpEntity.getLast().compareTo(issuesLastPriceTmpEntity.getOpen().subtract(calculatorUtil.calculatePercentage(issuesLastPriceTmpEntity.getOpen(), BigDecimal.valueOf(7)))) < 1) + "");
 			transactionIssueTrackPojo.setIsUpPercentageFromBuyPrice((calculatorUtil.calculatePercentageUpDown(transactionIssueNotSoldPojo.getPriceTotalBuy(), sellEstimate).compareTo(BigDecimal.valueOf(7)) > 0) + "");		

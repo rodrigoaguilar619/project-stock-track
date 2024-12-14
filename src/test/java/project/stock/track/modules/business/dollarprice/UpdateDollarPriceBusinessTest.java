@@ -8,7 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
         mockDollarPriceBean.setPrice("20.50");
         
         DollarHistoricalPriceEntity dollarHistoricalPriceEntity = new DollarHistoricalPriceEntity();
-        dollarHistoricalPriceEntity.setIdDate(new Date(1661740800000L));
+        dollarHistoricalPriceEntity.setIdDate(LocalDate.of(2022, 8, 29));
         dollarHistoricalPriceEntity.setPrice(new BigDecimal("19.50"));
 
         when(dollarPriceService.getDollarPrice()).thenReturn(mockDollarPriceBean);
@@ -73,10 +74,10 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
         when(dollarPriceService.getDollarPrice()).thenReturn(mockDollarPriceBean);
 
         DollarHistoricalPriceEntity dollarHistoricalPriceEntity = new DollarHistoricalPriceEntity();
-        dollarHistoricalPriceEntity.setIdDate(new Date(1661740800000L));
+        dollarHistoricalPriceEntity.setIdDate(LocalDate.of(2022, 8, 29));
         dollarHistoricalPriceEntity.setPrice(new BigDecimal("19.50"));
 
-        when(genericPersistance.findById(DollarHistoricalPriceEntity.class, new Date(1661740800000L))).thenReturn(dollarHistoricalPriceEntity);
+        when(genericPersistance.findById(DollarHistoricalPriceEntity.class, LocalDate.of(2022, 8, 29))).thenReturn(dollarHistoricalPriceEntity);
         when(genericPersistance.update(any(DollarHistoricalPriceEntity.class))).thenReturn(1);
         UpdateDollarPriceDataPojo result = updateDollarPriceBusiness.executeUpdateDollarPrice();
 

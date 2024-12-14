@@ -1,7 +1,7 @@
 package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -16,7 +16,7 @@ public class IssuesHistoricalEntityId implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public IssuesHistoricalEntityId(Integer idIssue, Date idDate) {
+	public IssuesHistoricalEntityId(Integer idIssue, LocalDateTime idDate) {
 		super();
 		this.idIssue = idIssue;
 		this.idDate = idDate;
@@ -30,6 +30,6 @@ public class IssuesHistoricalEntityId implements Serializable {
 	private Integer idIssue;
 	
 	@Column(name = "id_date")
-	private Date idDate;
+	private LocalDateTime idDate;
 	
 }

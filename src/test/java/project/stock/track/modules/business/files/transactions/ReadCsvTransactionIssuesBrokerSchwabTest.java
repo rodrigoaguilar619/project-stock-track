@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +49,7 @@ class ReadCsvTransactionIssuesBrokerSchwabTest extends ProjectUnitTest {
     		    Arrays.asList("05/20/2024", "Buy", "ALK", "ALASKA AIR GROUP INC", "2", "$43.9199", "", "-$87.84")
     		);
 
-        when(dateFormatUtil.formatDate(anyString(), anyString())).thenReturn(new java.util.Date(1700000000000L));
+        when(dateFormatUtil.formatLocalDateTime(anyString(), anyString())).thenReturn(LocalDateTime.of(2023, 11, 14, 22, 13, 20));
         when(numberDataUtil.hasFractionalPart(anyDouble())).thenReturn(false);
 
         List<TransactionIssueFilePojo> result = readCsvTransactionIssuesBrokerSchwab.readCsvFileIssues(records);

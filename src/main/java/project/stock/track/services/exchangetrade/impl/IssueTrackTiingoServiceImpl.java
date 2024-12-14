@@ -1,16 +1,17 @@
 package project.stock.track.services.exchangetrade.impl;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,18 +46,18 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	
 	private DateFormatUtil dateFormatUtil = new DateFormatUtil();
 	private DateUtil dateUtil = new DateUtil();
+	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
 	
 	private final RestTemplate restTemplate;
 	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
 	private boolean validateRangeDate(String dateFrom, String dateTo) throws ParseException {
 		
-		 SimpleDateFormat sdformat = new SimpleDateFormat(CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
-		 Date dFrom = sdformat.parse(dateFrom);
-	     Date dTo = sdformat.parse(dateTo);
-	     
-	     return dFrom.compareTo(dTo) < 0;
-		 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(CatalogsStaticData.ServiceTiingo.DATE_FORMAT_RANGE);
+		LocalDate dFrom = LocalDate.parse(dateFrom, formatter);
+        LocalDate dTo = LocalDate.parse(dateTo, formatter);
+
+        return dFrom.isBefore(dTo);	 
 	}
 	
 	private static final String MAP_KEY_START_DATE = "startDate";
@@ -64,15 +65,15 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	
 	public MultiValueMap<String, String> getDataQuery(IssueHistoricQueryPojo issueHistoricQueryPojo, String defaultDate) {
 		
-		Date dateTo = issueHistoricQueryPojo.getDateTo() != null ? issueHistoricQueryPojo.getDateTo() : new Date();
+		LocalDateTime dateTo = issueHistoricQueryPojo.getDateTo() != null ? issueHistoricQueryPojo.getDateTo() : LocalDateTime.now();
 				
-		while (new DateFinantialUtil().isWeekend(dateTo))
-			dateTo = new DateTime(dateTo).minusDays(1).toDate();
+		while (dateFinantialUtil.isWeekend(dateTo))
+			dateTo = dateTo.minus(1, ChronoUnit.DAYS);
 		
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
-		map.add(MAP_KEY_START_DATE, issueHistoricQueryPojo.getDateFrom() != null ? dateFormatUtil.formatDate(issueHistoricQueryPojo.getDateFrom(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT) : defaultDate);
-		map.add(MAP_KEY_END_DATE, dateFormatUtil.formatDate(dateTo, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT));
+		map.add(MAP_KEY_START_DATE, issueHistoricQueryPojo.getDateFrom() != null ? dateFormatUtil.formatLocalDate(issueHistoricQueryPojo.getDateFrom().toLocalDate(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_RANGE) : defaultDate);
+		map.add(MAP_KEY_END_DATE, dateFormatUtil.formatLocalDate(dateTo.toLocalDate(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_RANGE));
 		
 		return map;
 	}
@@ -137,15 +138,10 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		
 		for (ShareHistoryDayTiingoBean issueHistoryDayTiingoBean: issueHistoricTiingoBean.getHistory()) {
 			
-			Date dateKey = null;
-			try 
-			{
-				dateKey = dateFormatUtil.formatDate(issueHistoryDayTiingoBean.getDate(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
-			}
-			catch(ParseException pe) {
-				log.error("Error parsing date", pe);
-				continue;
-			}
+			LocalDateTime dateTime = LocalDateTime.parse( issueHistoryDayTiingoBean.getDate().replace("Z", ""));
+			String date = dateFormatUtil.formatLocalDateTime(dateTime, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
+			
+			LocalDateTime dateKey = dateFormatUtil.formatLocalDateTime(date, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
 		
 			if (issueHistoricQueryPojo.getDateFrom() == null || dateUtil.compareDatesNotTime(dateKey, issueHistoricQueryPojo.getDateFrom()) >= 0) {
 				
@@ -156,7 +152,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 				issueHistoyDayBean.setLow(issueHistoryDayTiingoBean.getLow());
 				issueHistoyDayBean.setVolume(issueHistoryDayTiingoBean.getVolume());
 				
-				issueHistoricalDays.put(issueHistoryDayTiingoBean.getDate(), issueHistoyDayBean);
+				issueHistoricalDays.put(date, issueHistoyDayBean);
 				
 			}
 		}
@@ -269,15 +265,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		
 		for (ShareHistoryDayTiingoBean cryptoHistoryDayTiingoBean: issueHistoricTiingoBean.getHistory()) {
 			
-			Date dateKey = null;
-			try 
-			{
-				dateKey = dateFormatUtil.formatDate(cryptoHistoryDayTiingoBean.getDate(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
-			}
-			catch(ParseException pe) {
-				log.error("Error parsing date", pe);
-				continue;
-			}
+			LocalDateTime dateKey = dateFormatUtil.formatLocalDateTime(cryptoHistoryDayTiingoBean.getDate(), CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
 		
 			if (issueHistoricQueryPojo.getDateFrom() == null || dateUtil.compareDatesNotTime(dateKey, issueHistoricQueryPojo.getDateFrom()) >= 0) {
 				

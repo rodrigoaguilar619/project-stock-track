@@ -6,14 +6,14 @@
 	<parent>
 		<groupId>com.parent.project.web</groupId>
 		<artifactId>lib-parent-project-web</artifactId>
-		<version>4.0.0</version>
+		<version>5.0.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>project.stock.track</groupId>
 	<artifactId>project-stock-track</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>${prop.packaging.type}</packaging>
 	<name>project-stock-track</name>
 	<description>Stock track project</description>
@@ -22,6 +22,17 @@
 		<jar.name>${server.servlet.context-path}</jar.name>
 		<prop.main.class>project.stock.track.config.starter.AppStockTrack</prop.main.class>
 		<test.skip>true</test.skip>
+		<custom.base.version>4.0.0</custom.base.version>
 	</properties>
+	
+	<dependencies>
+		
+		<!-- custom dependencies -->
+		<dependency>
+			<groupId>lib.base.backend</groupId>
+			<artifactId>lib-base-backend</artifactId>
+			<version>${custom.base.version}</version>
+		</dependency>
+	</dependencies>
 
 </project>

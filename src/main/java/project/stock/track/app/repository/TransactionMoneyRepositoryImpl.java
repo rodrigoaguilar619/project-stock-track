@@ -1,8 +1,8 @@
 package project.stock.track.app.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -55,7 +55,7 @@ public class TransactionMoneyRepositoryImpl {
 		
 	}
 	
-	public TransactionMoneyEntity findTransactionMoney(Integer idUser, Integer idIssue, int idBroker, Date date, Integer idTypeMovement) {
+	public TransactionMoneyEntity findTransactionMoney(Integer idUser, Integer idIssue, int idBroker, LocalDateTime date, Integer idTypeMovement) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TransactionMoneyEntity> cq = cb.createQuery(TransactionMoneyEntity.class);
@@ -65,7 +65,7 @@ public class TransactionMoneyRepositoryImpl {
 		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idUser), idUser));
 		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idBroker), idBroker));
 		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.idTypeMovement), idTypeMovement));
-		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.dateTransaction).as(Date.class), date));
+		predicatesAnd.add(cb.equal(root.get(TransactionMoneyEntity_.dateTransaction).as(LocalDateTime.class), date));
 		
 		if(idIssue == null)
 			predicatesAnd.add(cb.isNull(root.get(TransactionMoneyEntity_.idIssue)));

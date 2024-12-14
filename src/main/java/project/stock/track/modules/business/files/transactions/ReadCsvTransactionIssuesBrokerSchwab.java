@@ -17,6 +17,8 @@ import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 
 public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssues {
 	
+	private static final String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
+	
 	private List<String> TYPE_TRANSACTION_COMMON_IGNORE = Arrays.asList("Wire Funds Received", "Journal", "Special Qual Div", "Qualified Div Adj",
 			"Journaled Shares", "MoneyLink Deposit", "Reverse Split", "Spin-off", "Stock Merger", "Stock Split", "Reorganized Issue", "Reorg Adj",
 			"Other");
@@ -35,7 +37,7 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 	private Long buildDate(String date, int addSeconds) throws ParseException {
 		
 		String newDate = date + " " + "00:00:00";
-		Long dateMillis = dateFormatUtil.formatDate(newDate, "MM/dd/yyyy hh:mm:ss").getTime();
+		Long dateMillis = dateUtil.getMillis(dateFormatUtil.formatLocalDateTime(newDate, DATE_FORMAT));
 		
 		return new DateTime(dateMillis).plusSeconds(addSeconds).toDate().getTime();
 	}

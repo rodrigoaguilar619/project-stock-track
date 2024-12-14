@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -57,7 +58,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 		date = replaceMonth(date, "nov", "11");
 		date = replaceMonth(date, "dic", "12");
 		
-		Long dateMillis = dateFormatUtil.formatDate(date, "dd/MM/yyyy hh:mm:ss").getTime();
+		Long dateMillis = dateUtil.getMillis(dateFormatUtil.formatLocalDateTime(date, "dd/MM/yyyy HH:mm:ss"));
 
 		return new DateTime(dateMillis).plusSeconds(addSeconds).toDate().getTime();
 	}
@@ -182,11 +183,12 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			if (rowCount == 1 || determineSkipRow(CsvReportsHeaders.CSV_HEADER_HOMEBROKER_MONEY.size(), rowRecord))
 				continue;
 			
-			Date date = dateFormatUtil.formatDate(rowRecord.get(1) + " " +rowRecord.get(2), "dd/MM/yyyy hh:mm:ss");
-			date = new DateTime(date.getTime()).plusSeconds(++timeSeconds).toDate();
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			LocalDateTime dateTime = LocalDateTime.parse(rowRecord.get(1) + " " + rowRecord.get(2), dateTimeFormatter);
+			dateTime = dateTime.plusSeconds(++timeSeconds);
 			
 			TransactionMoneyFilePojo transactionMoneyFilePojo = new TransactionMoneyFilePojo();
-			transactionMoneyFilePojo.setDate(date.getTime());
+			transactionMoneyFilePojo.setDate(dateUtil.getMillis(dateTime));
 			transactionMoneyFilePojo.setTypeTransaction(buildTypeTransactionMoney(rowRecord.get(4)));
 			transactionMoneyFilePojo.setIssue(buildIssue(rowRecord.get(5)));
 			transactionMoneyFilePojo.setAmount(buildPrice(rowRecord.get(6)).abs());

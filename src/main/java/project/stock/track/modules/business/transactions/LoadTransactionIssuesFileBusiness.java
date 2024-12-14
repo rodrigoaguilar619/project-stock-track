@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,7 +68,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		TransactionIssueEntity transactionIssueEntity = new TransactionIssueEntity();
 		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 		transactionIssueEntity.setIdUser(userEntity.getId());
-		transactionIssueEntity.setBuyDate(new Date(transactionIssueFilePojo.getDate()));
+		transactionIssueEntity.setBuyDate(dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 		transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
 		transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 		transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
@@ -89,7 +88,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		
 		transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 		transactionIssueEntity.setSellTaxesPercentage(transactionIssueFilePojo.getTaxesPercentage());
-		transactionIssueEntity.setSellDate(new Date(transactionIssueFilePojo.getDate()));
+		transactionIssueEntity.setSellDate(dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 		transactionIssueEntity.setPriceSell(currencyValuesPriceSellPojo.getValueUsd());
 		transactionIssueEntity.setPriceSellMxn(currencyValuesPriceSellPojo.getValueMxn());
 		transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
@@ -116,7 +115,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		if (catalogIssuesEntityVerify == null)
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 		
-		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
+		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueBuy(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 		
 		if (issuesFundsTransactionsEntityVerify != null) {
 			messages.add("Issue transaction found issue: " + transactionIssueFilePojo.getIssue() + MSG_DATE + issuesFundsTransactionsEntityVerify.getBuyDate());
@@ -127,7 +126,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			
 			genericCustomPersistance.startTransaction();
 			
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionIssueFilePojo.getDate()));
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionIssueFilePojo.getPrice());
 			
 			if (!transactionIssueFilePojo.getIsSlice()) {
@@ -139,7 +138,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 					if (i < transactionIssueEntities.size()) {
 						
 						TransactionIssueEntity transactionIssueEntity = transactionIssueEntities.get(i);
-						transactionIssueEntity.setBuyDate(new Date(transactionIssueFilePojo.getDate()));
+						transactionIssueEntity.setBuyDate(dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 						transactionIssueEntity.setPriceBuy(currencyValuesPriceBuyPojo.getValueUsd());
 						transactionIssueEntity.setPriceBuyMxn(currencyValuesPriceBuyPojo.getValueMxn());
 						transactionIssueEntity.setCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());
@@ -191,7 +190,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		if (catalogIssuesEntityVerify == null)
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 		
-		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
+		TransactionIssueEntity issuesFundsTransactionsEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 		
 		if (issuesFundsTransactionsEntityVerify != null && issuesFundsTransactionsEntityVerify.getSellDate() != null) {
 			messages.add("Issue transaction sell found issue: " + catalogIssuesEntityVerify.getInitials() + MSG_DATE + issuesFundsTransactionsEntityVerify.getSellDate());
@@ -203,7 +202,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			genericCustomPersistance.startTransaction();
 			
 			List<TransactionIssueEntity> transactionIssueEntities = transactionIssueRepository.findTransactionIssuesNotSoldLower(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), transactionIssueFilePojo.getIsSlice());
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntitySell = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionIssueFilePojo.getDate()));
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntitySell.getPrice(), transactionIssueFilePojo.getPrice());
 			
 			if(transactionIssueFilePojo.getIsSlice()) {
@@ -248,7 +247,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 			messages.add(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionIssueFilePojo.getIssue()));
 		}
 		else {
-			TransactionIssueEntity transactionIssueEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionIssueFilePojo.getDate()));
+			TransactionIssueEntity transactionIssueEntityVerify = transactionIssueRepository.findTransactionIssueSell(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 			
 			if (transactionIssueEntityVerify != null && transactionIssueEntityVerify.getSellDate() != null) {
 				messages.add("Issue transaction short sell found issue: " + transactionIssueEntityVerify.getIdIssue() + MSG_DATE + transactionIssueEntityVerify.getSellDate());
@@ -259,7 +258,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 				
 				genericCustomPersistance.startTransaction();
 				
-				DollarHistoricalPriceEntity dollarHistoricalPriceEntityShortSell = dollarHistoricalPriceRepository.findByDate(new Date(transactionIssueFilePojo.getDate()));
+				DollarHistoricalPriceEntity dollarHistoricalPriceEntityShortSell = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionIssueFilePojo.getDate()));
 				CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionIssueFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityShortSell.getPrice(), transactionIssueFilePojo.getPrice());
 				
 				for (int i = 0; i < transactionIssueFilePojo.getTitles().intValue(); i++) {
@@ -269,7 +268,7 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 					transactionIssueEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 					transactionIssueEntity.setIdUser(userEntity.getId());
 					transactionIssueEntity.setSellTaxesPercentage(transactionIssueFilePojo.getTaxesPercentage());
-					transactionIssueEntity.setSellDate(new Date(transactionIssueFilePojo.getDate()));
+					transactionIssueEntity.setSellDate(dateUtil.getLocalDateTime(transactionIssueFilePojo.getDate()));
 					transactionIssueEntity.setPriceSell(currencyValuesPriceBuyPojo.getValueUsd());
 					transactionIssueEntity.setPriceSellMxn(currencyValuesPriceBuyPojo.getValueMxn());
 					transactionIssueEntity.setSellCommisionPercentage(transactionIssueFilePojo.getComissionPercentage());

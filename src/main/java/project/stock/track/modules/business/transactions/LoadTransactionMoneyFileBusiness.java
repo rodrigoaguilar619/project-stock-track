@@ -2,8 +2,8 @@ package project.stock.track.modules.business.transactions;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,7 +55,7 @@ private final GenericPersistence genericPersistance;
 
 	private CustomArraysUtil customArraysUtil = new CustomArraysUtil();
 	
-	private boolean validateRowRegistered(Integer idUser, Integer idIssue, int idBroker, Date date, Integer idTypeMovement) {
+	private boolean validateRowRegistered(Integer idUser, Integer idIssue, int idBroker, LocalDateTime date, Integer idTypeMovement) {
 		
 		return transactionMoneyRepository.findTransactionMoney(idUser, idIssue, idBroker, date, idTypeMovement) != null;
 	}
@@ -80,14 +80,14 @@ private final GenericPersistence genericPersistance;
 		if (catalogIssuesEntityVerify == null)
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionMoneyFilePojo.getIssue()));
 		
-		if(validateRowRegistered(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), new Date(transactionMoneyFilePojo.getDate()), idTypeMovement))
+		if(validateRowRegistered(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
 			return messages;
 			
 		try {
 			
 			genericCustomPersistance.startTransaction();
 			
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(transactionMoneyFilePojo.getDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionMoneyFilePojo.getDate()));
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionMoneyFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionMoneyFilePojo.getAmount());
 			
 			TransactionMoneyEntity transactionMoneyEntity = new TransactionMoneyEntity();
@@ -96,7 +96,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setIdIssue(catalogIssuesEntityVerify.getId());
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
-			transactionMoneyEntity.setDateTransaction(new Date(transactionMoneyFilePojo.getDate()));
+			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
 			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			
@@ -123,14 +123,14 @@ private final GenericPersistence genericPersistance;
 		
 		List<String> messages = new ArrayList<>();
 		
-		if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), new Date(transactionMoneyFilePojo.getDate()), idTypeMovement))
+		if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
 			return messages;
 			
 		try {
 			
 			genericCustomPersistance.startTransaction();
 			
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(transactionMoneyFilePojo.getDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionMoneyFilePojo.getDate()));
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionMoneyFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionMoneyFilePojo.getAmount());
 			
 			TransactionMoneyEntity transactionMoneyEntity = new TransactionMoneyEntity();
@@ -138,7 +138,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setIdUser(userEntity.getId());
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
-			transactionMoneyEntity.setDateTransaction(new Date(transactionMoneyFilePojo.getDate()));
+			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
 			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			
@@ -167,12 +167,12 @@ private final GenericPersistence genericPersistance;
 			
 		try {
 			
-			if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), new Date(transactionMoneyFilePojo.getDate()), idTypeMovement))
+			if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
 				return messages;
 			
 			genericCustomPersistance.startTransaction();
 			
-			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(new Date(transactionMoneyFilePojo.getDate()));
+			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionMoneyFilePojo.getDate()));
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionMoneyFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionMoneyFilePojo.getAmount());
 			
 			TransactionMoneyEntity transactionMoneyEntity = new TransactionMoneyEntity();
@@ -180,7 +180,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setIdUser(userEntity.getId());
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
-			transactionMoneyEntity.setDateTransaction(new Date(transactionMoneyFilePojo.getDate()));
+			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
 			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			

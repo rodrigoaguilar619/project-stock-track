@@ -1,8 +1,8 @@
 package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -47,7 +47,7 @@ public class CatalogIssuesEntity implements Serializable {
 	private Boolean isSp500;
 	
 	@Column(name = "historical_start_date")
-	private Date historicalStartDate;
+	private LocalDateTime historicalStartDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_sector", insertable = false, updatable = false)

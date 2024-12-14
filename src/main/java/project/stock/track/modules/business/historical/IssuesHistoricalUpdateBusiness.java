@@ -1,14 +1,12 @@
 package project.stock.track.modules.business.historical;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,6 +42,8 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 	private final GenericPersistence genericCustomPersistance;
 	private final IssuesRepositoryImpl issuesRepository;
 	private final IssueTrackService issueTrackService;
+	
+	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
 
 	@SuppressWarnings("unchecked")
 	public void saveIssueHistorical(String dateIssue, IssueHistoryDayBean issueHistoricBean, CatalogIssuesEntity catalogIssuesEntity) {
@@ -54,7 +54,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 
 			IssuesHistoricalEntity issuesHistoricalEntity = new IssuesHistoricalEntity();
 			issuesHistoricalEntity.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(catalogIssuesEntity.getId(),
-					dateFormatUtil.formatDate(dateIssue, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT)));
+					dateFormatUtil.formatLocalDateTime(dateIssue, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT)));
 			issuesHistoricalEntity.setClose(
 					issueHistoricBean.getClose() != null ? new BigDecimal(issueHistoricBean.getClose()) : null);
 			issuesHistoricalEntity
@@ -68,8 +68,8 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 
 			genericCustomPersistance.save(issuesHistoricalEntity);
 			genericCustomPersistance.commitTransaction();
-		} catch (ParseException pe) {
-			log.error("Error parsing issue: " + catalogIssuesEntity.getInitials() + " date: " + dateIssue, pe);
+		} catch (Exception pe) {
+			log.error("Error processing issue: " + catalogIssuesEntity.getInitials() + " date: " + dateIssue, pe);
 			genericCustomPersistance.rollBackTransaction();
 		} finally {
 			genericCustomPersistance.closeEntityManager();
@@ -109,21 +109,18 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		return issueDateHistoricalResultPojos;
 	}
 
-	public IssueHistoricalResultPojo updateIssueHistorical(CatalogIssuesEntity catalogIssuesEntity)
-			throws BusinessException {
+	public IssueHistoricalResultPojo updateIssueHistorical(CatalogIssuesEntity catalogIssuesEntity) throws BusinessException {
 
-		Date dateFrom = null;
-
+		LocalDateTime dateFrom = null;
+		
 		if (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty()
-				&& catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null) {
-			dateFrom = new DateTime(
-					catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate())
-					.plusDays(1).toDate();
-		} else {
-			dateFrom = catalogIssuesEntity.getHistoricalStartDate() != null
-					? catalogIssuesEntity.getHistoricalStartDate()
-					: null;
-		}
+	            && catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null) {
+	        dateFrom = catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate().plusDays(1);
+	    } else {
+	        dateFrom = catalogIssuesEntity.getHistoricalStartDate() != null
+	                ? catalogIssuesEntity.getHistoricalStartDate()
+	                : null;
+	    }
 
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
 		issueHistoricQueryPojo.setIssue(catalogIssuesEntity.getInitials());
@@ -137,8 +134,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 			historicBean = issueTrackService.getIssueHistoric(null, issueHistoricQueryPojo);
 
 		if (log.isInfoEnabled()) {
-			log.info(String.format("FINANTIAL SERVICE START. uri: %s",
-					(historicBean != null ? historicBean.getUri() : "--")));
+			log.info(String.format("FINANTIAL SERVICE START. uri: %s", (historicBean != null ? historicBean.getUri() : "--")));
 			log.info(String.format("FINANTIAL SERVICE START. total records found: %s",
 					(historicBean != null && historicBean.getHistory() != null ? historicBean.getHistory().size() + ""
 							: "0")));
@@ -162,21 +158,19 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 
 	public UpdateIssuesHistoricalDataPojo executeUpdateIssuesHistoricals() throws BusinessException {
 
-		Date lastBusinessDay = new DateFinantialUtil().getLastBusinessDay(new Date());
+		LocalDateTime lastBusinessDay = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now());
 
 		List<CatalogIssuesEntity> catalogIssuesEntities = getIssuesToUpdate();
 		List<IssueHistoricalResultPojo> issueHistoricalResultPojos = new ArrayList<>();
 
 		for (CatalogIssuesEntity catalogIssuesEntity : catalogIssuesEntities) {
 
-			Date currentDate = (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty()
+			LocalDateTime currentDate = (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty()
 					&& catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null)
-							? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId()
-									.getIdDate()
+							? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate()
 							: null;
 
-			if (currentDate == null || (dateUtil.compareDatesNotTime(new DateTime(currentDate).plusDays(1).toDate(),
-					lastBusinessDay) <= 0)) {
+			if (currentDate == null || (dateUtil.compareDatesNotTime(currentDate.plusDays(1), lastBusinessDay) <= 0)) {
 				IssueHistoricalResultPojo issueHistoricalResultPojo = updateIssueHistorical(catalogIssuesEntity);
 				issueHistoricalResultPojos.add(issueHistoricalResultPojo);
 			}

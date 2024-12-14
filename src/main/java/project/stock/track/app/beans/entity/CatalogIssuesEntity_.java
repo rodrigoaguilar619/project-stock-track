@@ -1,6 +1,6 @@
 package project.stock.track.app.beans.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.ListAttribute;
@@ -14,7 +14,7 @@ public abstract class CatalogIssuesEntity_ {
 	public static SingularAttribute<CatalogIssuesEntity, Integer> id;
 	public static SingularAttribute<CatalogIssuesEntity, String> description;
 	public static SingularAttribute<CatalogIssuesEntity, String> initials;
-	public static SingularAttribute<CatalogIssuesEntity, Date> historicalStartDate;
+	public static SingularAttribute<CatalogIssuesEntity, LocalDateTime> historicalStartDate;
 	public static SingularAttribute<CatalogIssuesEntity, Boolean> isSp500;
 	public static SingularAttribute<CatalogIssuesEntity, Integer> idSector;
 	public static SingularAttribute<CatalogIssuesEntity, Integer> idStatusIssue;

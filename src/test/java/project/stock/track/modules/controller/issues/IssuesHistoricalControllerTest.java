@@ -86,7 +86,7 @@ class IssuesHistoricalControllerTest extends ProjectIntegrationTest {
 		issueHistoryDayBean.setClose("2");
 		
 		Map<String, IssueHistoryDayBean> history = new LinkedHashMap<>();
-		history.put("1979-01-01", issueHistoryDayBean);
+		history.put("1979-01-01 00:00:00", issueHistoryDayBean);
 		
 		IssueHistoricMainBean issueHistoricMainBean = new IssueHistoricMainBean();
 		issueHistoricMainBean.setHistory(history);

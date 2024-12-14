@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,13 +39,7 @@ class IssueTrackAlphaVantageServiceImplTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
-	/*@Test
-	void testGetDataQuery() {
-		fail("Not yet implemented");
-	}*/
-
-	@SuppressWarnings({ "deprecation" })
+	
 	@Test
 	void testGetIssueHistoric() throws BusinessException {
 		
@@ -64,7 +58,7 @@ class IssueTrackAlphaVantageServiceImplTest {
 		issueHistoricDaysBean[1] = shareHistoryDayAlphaVantageBean2;
 		
 		Map<String, ShareHistoryDayAlphaVantageBean> map = new LinkedHashMap<>();
-		map.put("2024-04-01", shareHistoryDayAlphaVantageBean1);
+		map.put("2024-04-01 00:00:00", shareHistoryDayAlphaVantageBean1);
 		
 		IssueHistoricAlphaVantageBean issueHistoricAlphaVantageBean = new IssueHistoricAlphaVantageBean();
 		issueHistoricAlphaVantageBean.setName("Name test");
@@ -80,7 +74,7 @@ class IssueTrackAlphaVantageServiceImplTest {
 		when(configControlRepository.getParameterValue(anyString())).thenReturn(configControlEntity);
 
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
-		issueHistoricQueryPojo.setDateTo(new Date(2024, 6, 1));
+		issueHistoricQueryPojo.setDateTo(LocalDateTime.of(2024, 6, 1, 0, 0, 0, 0));
 		issueHistoricQueryPojo.setIssue("AAL");
 		
 		IssueHistoricMainBean issueHistoricMainBean = issueTrackAlphaVantageService.getIssueHistoric(token, issueHistoricQueryPojo);

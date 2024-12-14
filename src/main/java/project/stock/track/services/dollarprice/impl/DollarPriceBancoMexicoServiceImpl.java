@@ -1,6 +1,7 @@
 package project.stock.track.services.dollarprice.impl;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lib.base.backend.utils.date.DateFormatUtil;
+import lib.base.backend.utils.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DollarPriceBancoMexicoBean;
@@ -26,6 +28,7 @@ public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 	private final ConfigControlRepositoryImpl configControlRepositoryImpl;
 	
 	private DateFormatUtil dateFormatUtil = new DateFormatUtil();
+	private DateUtil dateUtil = new DateUtil();
 
 	@Override
 	public DollarPriceBean getDollarPrice() throws ParseException {
@@ -47,7 +50,7 @@ public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 		DollarPriceBean dollarPriceBean = new DollarPriceBean();
 		
 		if (dollarPriceBancoMexicoBean != null && dollarPriceBancoMexicoBean.getBmx() != null) {
-			dollarPriceBean.setDate(dateFormatUtil.formatDate(dollarPriceBancoMexicoBean.getBmx().getSeries().get(0).getDatos().get(0).getFecha(), CatalogsStaticData.PriceDollar.DATE_FORMAT_DEFAULT_BANCO_MEXICO).getTime());
+			dollarPriceBean.setDate(dateUtil.getMillis(dateFormatUtil.formatLocalDateTime(dollarPriceBancoMexicoBean.getBmx().getSeries().get(0).getDatos().get(0).getFecha(), CatalogsStaticData.PriceDollar.DATE_FORMAT_DEFAULT_BANCO_MEXICO)));
 			dollarPriceBean.setPrice(dollarPriceBancoMexicoBean.getBmx().getSeries().get(0).getDatos().get(0).getDato());
 		}
 		
@@ -55,7 +58,7 @@ public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 	}
 
 	@Override
-	public List<DollarPriceBean> getDollarPriceHistorical(long dateStart, long dateEnd) {
+	public List<DollarPriceBean> getDollarPriceHistorical(LocalDate dateStart, LocalDate dateEnd) {
 		return new ArrayList<>();
 	}
 
