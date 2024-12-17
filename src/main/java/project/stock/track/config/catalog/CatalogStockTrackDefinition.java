@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lib.base.backend.modules.catalog.interaface.CatalogDefinition;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
+import project.stock.track.app.beans.entity.CatalogIndexEntity;
 import project.stock.track.app.beans.entity.CatalogSectorEntity;
 import project.stock.track.app.beans.entity.CatalogStatusIssueEntity;
 import project.stock.track.app.beans.entity.CatalogStatusIssueMovementEntity;
@@ -26,6 +27,7 @@ public class CatalogStockTrackDefinition implements CatalogDefinition {
 		catalogs.put("typeMovement", CatalogTypeMovementEntity.class);
 		catalogs.put("statusIssue", CatalogStatusIssueEntity.class);
 		catalogs.put("statusIssueMovement", CatalogStatusIssueMovementEntity.class);
+		catalogs.put("index", CatalogIndexEntity.class);
 	}
 
 	@SuppressWarnings("rawtypes")

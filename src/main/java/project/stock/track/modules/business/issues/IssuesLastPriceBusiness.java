@@ -51,7 +51,7 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 		
 		for (CatalogIssuesEntity catalogIssuesEntity: catalogIssuesEntities) {
 			
-			if (Boolean.TRUE.equals(catalogIssuesEntity.getIsSp500()))
+			if (catalogIssuesEntity.getIdIndex().equals(CatalogsEntity.CatalogIndex.SP500))
 				issuesStandardPoorsList.add(catalogIssuesEntity.getInitials());
 			else
 				issuesOthersList.add(catalogIssuesEntity.getInitials());

@@ -46,7 +46,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
     void testExecuteUpdateDollarPrice_NewEntry() throws ParseException {
 
         DollarPriceBean mockDollarPriceBean = new DollarPriceBean();
-        mockDollarPriceBean.setDate(1661740800000L);
+        mockDollarPriceBean.setDate(1661749200000L);
         mockDollarPriceBean.setPrice("20.50");
         
         DollarHistoricalPriceEntity dollarHistoricalPriceEntity = new DollarHistoricalPriceEntity();
@@ -60,7 +60,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
 
         verify(genericPersistance, times(1)).save(any(DollarHistoricalPriceEntity.class));
         assertEquals(true, result.isNewRegister());
-        assertEquals(1661740800000L, result.getDate());
+        assertEquals(1661749200000L, result.getDate());
         assertEquals(new BigDecimal("20.50"), result.getPrice());
     }
 
@@ -68,7 +68,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
     void testExecuteUpdateDollarPrice_ExistingEntry() throws ParseException {
         // Mock the dollar price service response
         DollarPriceBean mockDollarPriceBean = new DollarPriceBean();
-        mockDollarPriceBean.setDate(1661740800000L);
+        mockDollarPriceBean.setDate(1661749200000L);
         mockDollarPriceBean.setPrice("20.50");
 
         when(dollarPriceService.getDollarPrice()).thenReturn(mockDollarPriceBean);
@@ -83,7 +83,7 @@ class UpdateDollarPriceBusinessTest extends ProjectUnitTest {
 
         verify(genericPersistance, times(1)).update(any(DollarHistoricalPriceEntity.class));
         assertEquals(false, result.isNewRegister());
-        assertEquals(1661740800000L, result.getDate());
+        assertEquals(1661749200000L, result.getDate());
         assertEquals(new BigDecimal("20.50"), result.getPrice());
     }
 

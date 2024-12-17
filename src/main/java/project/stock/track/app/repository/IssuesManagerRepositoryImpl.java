@@ -13,6 +13,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import project.stock.track.app.beans.entity.CatalogIndexEntity_;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
 import project.stock.track.app.beans.entity.CatalogSectorEntity_;
@@ -61,6 +62,8 @@ public class IssuesManagerRepositoryImpl {
 				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogSectorEntity).get(CatalogSectorEntity_.ID), filtersPojo.getIdSector()));
 			if (filtersPojo.getIdTypeStock() != null)
 				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.ID), filtersPojo.getIdTypeStock()));
+			if (filtersPojo.getIdIndex() != null)
+				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.ID), filtersPojo.getIdIndex()));
 			if (filtersPojo.getIsInvest() != null) {
 				
 				List<Predicate> predicatesOr = new ArrayList<>();
@@ -71,8 +74,6 @@ public class IssuesManagerRepositoryImpl {
 				
 				predicatesAnd.add(cb.or(predicatesOr.toArray(new Predicate[0])));
 			}
-			if (filtersPojo.getIsSp500() != null)
-				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.isSp500), filtersPojo.getIsSp500()));
 		}
 
 		cq.where( predicatesAnd.toArray(new Predicate[0]) );

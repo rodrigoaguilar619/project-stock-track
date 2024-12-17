@@ -12,8 +12,6 @@ public class IssueManagerResumePojo {
 	
 	private String initials;
 	
-	private Boolean isSp500;
-	
 	private Long historicalStartDate;
 	
 	private Integer idSector;
@@ -26,6 +24,8 @@ public class IssueManagerResumePojo {
 	
 	private Integer idStatusIssueTrading;
 	
+	private Integer idIndex;
+	
 	private String descriptionSector;
 	
 	private String descriptionTypeStock;
@@ -35,6 +35,8 @@ public class IssueManagerResumePojo {
 	private String descriptionStatusIssueQuick;
 	
 	private String descriptionStatusIssueTrading;
+	
+	private String descriptionIndex;
 	
 	private Boolean isInvest;
 }

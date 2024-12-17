@@ -12,7 +12,9 @@ public class IssuesMovementsFiltersPojo {
 	
 	private Integer idBroker;
 	
-	private Integer year;
+	private Integer idIndex;
+	
+	private Integer year;	
 	
 	private Boolean isSold;
 }

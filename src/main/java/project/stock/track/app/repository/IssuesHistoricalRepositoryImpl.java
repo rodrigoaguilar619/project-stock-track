@@ -109,6 +109,8 @@ public class IssuesHistoricalRepositoryImpl {
 				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
 			if (filters.getIdTypeStock() != null)
 				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_TYPE_STOCK), filters.getIdTypeStock()));
+			if (filters.getIdIndex() != null)
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_INDEX), filters.getIdIndex()));
 			if (filters.getIsInvest() != null)
 				predicatesAnd.add(cb.equal(joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.IS_INVEST), filters.getIsInvest()));
 			if (filters.getIdStatusQuick() != null)

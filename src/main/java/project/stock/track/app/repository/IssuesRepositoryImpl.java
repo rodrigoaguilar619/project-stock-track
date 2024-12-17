@@ -16,6 +16,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import project.stock.track.app.beans.entity.CatalogIndexEntity_;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
 import project.stock.track.app.beans.entity.CatalogSectorEntity_;
@@ -82,8 +83,9 @@ public class IssuesRepositoryImpl {
 				predicatesAnd.add(
 						cb.equal(root.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.ID),
 								filtersPojo.getIdTypeStock()));
-			if (filtersPojo.getIsSp500() != null)
-				predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.isSp500), filtersPojo.getIsSp500()));
+			if (filtersPojo.getIdIndex() != null)
+				predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.ID),
+						filtersPojo.getIdIndex()));
 		}
 
 		cq.where(predicatesAnd.toArray(new Predicate[0]));

@@ -103,6 +103,16 @@ public class CatalogsEntity {
 		public static final Integer INACTIVE = 2;
 	}
 	
+	public static final class CatalogIndex {
+		
+		private CatalogIndex() {
+		 }
+		
+		public static final Integer SP500 = 1;
+		public static final Integer NASDAQ = 2;
+		public static final Integer OTHER = 3;
+	}
+	
 	public static final class ConfigControl {
 		
 		private ConfigControl() {

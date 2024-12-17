@@ -12,8 +12,6 @@ public class CatalogIssuesEntityPojo {
 	
 	private String initials;
 	
-	private Boolean isSp500;
-	
 	private Long historicalStartDate;
 	
 	private Integer idSector;
@@ -21,4 +19,6 @@ public class CatalogIssuesEntityPojo {
 	private Integer idTypeStock;
 	
 	private Integer idStatusIssue;
+	
+	private Integer idIndex;
 }

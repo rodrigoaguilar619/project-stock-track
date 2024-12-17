@@ -78,6 +78,8 @@ public class IssuesMovementsRepositoryImpl {
 				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
 			if (filters.getYear() != null)
 				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.BUY_DATE)), filters.getYear()));
+			if (filters.getIdIndex() != null)
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_INDEX), filters.getIdIndex()));
 			if (filters.getIsSold() != null) {
 				if (filters.getIsSold())
 					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNotNull());

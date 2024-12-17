@@ -11,4 +11,6 @@ public class CatalogIssuesEntityDesPojo extends CatalogIssuesEntityPojo {
 	private String descriptionTypeStock;
 	
 	private String descriptionStatusIssue;
+	
+	private String descriptionIndex;
 }

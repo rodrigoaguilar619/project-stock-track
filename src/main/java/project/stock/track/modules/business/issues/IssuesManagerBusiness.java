@@ -12,6 +12,7 @@ import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
 import lombok.RequiredArgsConstructor;
+import project.stock.track.app.beans.entity.CatalogIndexEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogSectorEntity;
 import project.stock.track.app.beans.entity.CatalogStatusIssueEntity;
@@ -90,7 +91,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 			issueEntityPojo.setIdIssue(issueManagerEntity.getId().getIdIssue());
 			issueEntityPojo.setInitials(catalogIssuesEntity.getInitials());
 			issueEntityPojo.setDescription(catalogIssuesEntity.getDescription());
-			issueEntityPojo.setIsSp500(catalogIssuesEntity.getIsSp500());
+			issueEntityPojo.setIdIndex(catalogIssuesEntity.getIdIndex());
 			issueEntityPojo.setHistoricalStartDate(dateUtil.getMillis(catalogIssuesEntity.getHistoricalStartDate()));
 			issueEntityPojo.setIsInvest(dataUtil.getValueOrNull(issuesManagerTrackPropertiesEntity, IssuesManagerTrackPropertiesEntity::getIsInvest));
 			issueEntityPojo.setIdSector(catalogIssuesEntity.getIdSector());
@@ -103,6 +104,7 @@ public class IssuesManagerBusiness extends MainBusiness {
 			issueEntityPojo.setDescriptionStatusIssueQuick(dataUtil.getValueOrNull(issueManagerEntity.getCatalogStatusIssueQuickEntity(), CatalogStatusIssueEntity::getDescription));
 			issueEntityPojo.setDescriptionStatusIssueTrading(dataUtil.getValueOrNull(issueManagerEntity.getCatalogStatusIssueTradingEntity(), CatalogStatusIssueEntity::getDescription));
 			issueEntityPojo.setDescriptionTypeStock(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogTypeStockEntity(), CatalogTypeStockEntity::getDescription));
+			issueEntityPojo.setDescriptionIndex(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogIndexEntity(), CatalogIndexEntity::getDescription));
 			
 			issueEntityPojos.add(issueEntityPojo);
 		}

@@ -138,7 +138,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		
 		for (ShareHistoryDayTiingoBean issueHistoryDayTiingoBean: issueHistoricTiingoBean.getHistory()) {
 			
-			LocalDateTime dateTime = LocalDateTime.parse( issueHistoryDayTiingoBean.getDate().replace("Z", ""));
+			LocalDateTime dateTime = LocalDateTime.parse(issueHistoryDayTiingoBean.getDate().replace("Z", ""));
 			String date = dateFormatUtil.formatLocalDateTime(dateTime, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);
 			
 			LocalDateTime dateKey = dateFormatUtil.formatLocalDateTime(date, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT);

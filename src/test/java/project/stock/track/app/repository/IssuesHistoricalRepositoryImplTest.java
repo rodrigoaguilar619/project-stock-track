@@ -9,6 +9,7 @@ import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectJpaTest;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.pojos.business.historical.IssuesHistoricalFilterPojo;
+import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeStock;
 
@@ -28,7 +29,7 @@ class IssuesHistoricalRepositoryImplTest extends ProjectJpaTest {
 		filterPojo.setFairValuePriceOverPercentage(5);
 		filterPojo.setIdTypeStock(CatalogTypeStock.ISSUE);
 		filterPojo.setIsInvest(false);
-		filterPojo.setIsSp500(true);
+		filterPojo.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 
 		List<IssuesManagerEntity> result = issuesHistoricalRepository.findAllWithStatusActive(idUser, 1, 10, filterPojo);
 		

@@ -125,8 +125,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
 		issueHistoricQueryPojo.setIssue(catalogIssuesEntity.getInitials());
 		issueHistoricQueryPojo.setDateFrom(dateFrom);
-		issueHistoricQueryPojo
-				.setIsStandarPoors(catalogIssuesEntity.getIsSp500());
+		issueHistoricQueryPojo.setIsStandarPoors(catalogIssuesEntity.getIdIndex() == CatalogsEntity.CatalogIndex.SP500);
 
 		IssueHistoricMainBean historicBean = null;
 

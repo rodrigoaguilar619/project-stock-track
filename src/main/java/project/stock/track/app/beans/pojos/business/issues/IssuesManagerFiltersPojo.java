@@ -16,7 +16,7 @@ public class IssuesManagerFiltersPojo {
 	
 	private Integer idStatusTrading;
 	
-	private Boolean isSp500;
+	private Integer idIndex;
 	
 	private Boolean isInvest;
 }

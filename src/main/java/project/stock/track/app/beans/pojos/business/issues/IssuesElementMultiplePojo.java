@@ -10,7 +10,7 @@ public class IssuesElementMultiplePojo {
 	
 	private String initials;
 	
-	private Boolean isSp500;
-	
 	private Integer idSector;
+	
+	private Integer idIndex;
 }

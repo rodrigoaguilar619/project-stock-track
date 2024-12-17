@@ -43,8 +43,8 @@ public class CatalogIssuesEntity implements Serializable {
 	@Column(name = "id_sector")
 	private Integer idSector;
 	
-	@Column(name = "is_sp_500")
-	private Boolean isSp500;
+	@Column(name = "id_index")
+	private Integer idIndex;
 	
 	@Column(name = "historical_start_date")
 	private LocalDateTime historicalStartDate;
@@ -60,6 +60,10 @@ public class CatalogIssuesEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_type_stock", insertable = false, updatable = false)
 	private CatalogTypeStockEntity catalogTypeStockEntity;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_index", insertable = false, updatable = false)
+	private CatalogIndexEntity catalogIndexEntity;
 	
 	@OneToMany(mappedBy = "catalogIssuesEntity", fetch = FetchType.LAZY)
 	private List<IssuesHistoricalEntity> issuesHistoricalEntities = new ArrayList<>();

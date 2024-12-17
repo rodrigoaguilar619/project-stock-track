@@ -130,7 +130,7 @@ public class IssuesBusiness extends MainBusiness {
 			catalogIssuesEntityPojo.setIdTypeStock(requestPojo.getIdTypeStock());
 			catalogIssuesEntityPojo.setIdSector(issueElementEntityPojo.getIdSector());
 			catalogIssuesEntityPojo.setIdStatusIssue(requestPojo.getIdStatusIssue());
-			catalogIssuesEntityPojo.setIsSp500(issueElementEntityPojo.getIsSp500());
+			catalogIssuesEntityPojo.setIdIndex(issueElementEntityPojo.getIdIndex());
 			catalogIssuesEntityPojo.setHistoricalStartDate(requestPojo.getHistoricalStartDate());
 			
 			CatalogIssuesEntity catalogIssuesEntity = setAddUpdateIssue(new CatalogIssuesEntity(), catalogIssuesEntityPojo, CrudOptionsEnum.SAVE);

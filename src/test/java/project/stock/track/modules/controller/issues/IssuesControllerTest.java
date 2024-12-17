@@ -55,7 +55,7 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		catalogIssuesEntityPojo.setDescription("Test description");
 		catalogIssuesEntityPojo.setIdStatusIssue(CatalogsEntity.CatalogStatusIssue.ACTIVE);
 		catalogIssuesEntityPojo.setIdTypeStock(CatalogsEntity.CatalogTypeStock.ISSUE);
-		catalogIssuesEntityPojo.setIsSp500(true);
+		catalogIssuesEntityPojo.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 		
 		UpdateIssueRequestPojo requestDto = new UpdateIssueRequestPojo();
 		requestDto.setUserName(userName);
@@ -77,17 +77,17 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		issuesElementMultiplePojoA.setDescription("Test description A");
 		issuesElementMultiplePojoA.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
 		issuesElementMultiplePojoA.setInitials("AAA");
-		issuesElementMultiplePojoA.setIsSp500(true);
+		issuesElementMultiplePojoA.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 		
 		issuesElementMultiplePojoB.setDescription("Test description B");
 		issuesElementMultiplePojoB.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
 		issuesElementMultiplePojoB.setInitials("BBB");
-		issuesElementMultiplePojoB.setIsSp500(true);
+		issuesElementMultiplePojoB.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 		
 		issuesElementMultiplePojoC.setDescription("Test description C");
 		issuesElementMultiplePojoC.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
 		issuesElementMultiplePojoC.setInitials("CCC");
-		issuesElementMultiplePojoC.setIsSp500(true);
+		issuesElementMultiplePojoC.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 
 		List<IssuesElementMultiplePojo> issues = new ArrayList<>();
 		issues.add(issuesElementMultiplePojoA);
@@ -114,12 +114,12 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		issuesElementMultiplePojoA.setDescription("Test description AAL");
 		issuesElementMultiplePojoA.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
 		issuesElementMultiplePojoA.setInitials("AAL");
-		issuesElementMultiplePojoA.setIsSp500(true);
+		issuesElementMultiplePojoA.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 		
 		issuesElementMultiplePojoB.setDescription("Test description BBB");
 		issuesElementMultiplePojoB.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
 		issuesElementMultiplePojoB.setInitials("BBB");
-		issuesElementMultiplePojoB.setIsSp500(true);
+		issuesElementMultiplePojoB.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
 
 		List<IssuesElementMultiplePojo> issues = new ArrayList<>();
 		issues.add(issuesElementMultiplePojoA);

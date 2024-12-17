@@ -12,5 +12,5 @@ public class IssuesFiltersPojo {
 	
 	private Integer idTypeStock;
 	
-	private Boolean isSp500;
+	private Integer idIndex;
 }

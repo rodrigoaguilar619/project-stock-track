@@ -8,6 +8,7 @@ import lib.base.backend.entity.generic.GenericCatalogIntEntity;
 import lib.base.backend.entity.generic.GenericStatusEntity;
 import lib.base.backend.utils.DataUtil;
 import lib.base.backend.utils.date.DateUtil;
+import project.stock.track.app.beans.entity.CatalogIndexEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogTypeStockEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
@@ -53,7 +54,7 @@ public class MapEntityToPojoUtil {
 		catalogIssuesEntityPojo.setIdSector(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogSectorEntity(), GenericCatalogIntEntity::getId));
 		catalogIssuesEntityPojo.setIdTypeStock(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogTypeStockEntity(), CatalogTypeStockEntity::getId));
 		catalogIssuesEntityPojo.setIdStatusIssue(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogStatusIssueEntity(), GenericStatusEntity::getId));
-		catalogIssuesEntityPojo.setIsSp500(catalogIssuesEntity.getIsSp500());
+		catalogIssuesEntityPojo.setIdIndex(catalogIssuesEntity.getIdIndex());
 		
 		return catalogIssuesEntityPojo;
 	}
@@ -67,6 +68,7 @@ public class MapEntityToPojoUtil {
 		catalogIssuesEntityDesPojo.setDescriptionSector(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogSectorEntity(), GenericCatalogIntEntity::getDescription));
 		catalogIssuesEntityDesPojo.setDescriptionTypeStock(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogTypeStockEntity(), CatalogTypeStockEntity::getDescription));
 		catalogIssuesEntityDesPojo.setDescriptionStatusIssue(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogStatusIssueEntity(), GenericStatusEntity::getDescription));
+		catalogIssuesEntityDesPojo.setDescriptionIndex(dataUtil.getValueOrNull(catalogIssuesEntity.getCatalogIndexEntity(), CatalogIndexEntity::getDescription));
 		
 		return catalogIssuesEntityDesPojo;
 	}

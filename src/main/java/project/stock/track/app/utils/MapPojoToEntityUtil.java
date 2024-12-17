@@ -19,7 +19,7 @@ public class MapPojoToEntityUtil {
 		catalogIssuesEntity.setInitials(catalogIssuesEntityPojo.getInitials());
 		catalogIssuesEntity.setIdStatusIssue(catalogIssuesEntityPojo.getIdStatusIssue());
 		catalogIssuesEntity.setIdTypeStock(catalogIssuesEntityPojo.getIdTypeStock());
-		catalogIssuesEntity.setIsSp500(catalogIssuesEntityPojo.getIsSp500());
+		catalogIssuesEntity.setIdIndex(catalogIssuesEntityPojo.getIdIndex());
 		catalogIssuesEntity.setHistoricalStartDate(dateUtil.getLocalDateTime(catalogIssuesEntityPojo.getHistoricalStartDate()));
 		
 		return catalogIssuesEntity;

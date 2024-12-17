@@ -61,11 +61,11 @@ class IssueTrackTiingoServiceImplTest {
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean1 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean1.setClose("20");
-		shareHistoryDayTiingoBean1.setDate("2024-04-01 00:00:00");
+		shareHistoryDayTiingoBean1.setDate("2024-04-01T00:00:00Z");
 		
 		ShareHistoryDayTiingoBean shareHistoryDayTiingoBean2 = new ShareHistoryDayTiingoBean();
 		shareHistoryDayTiingoBean2.setClose("25");
-		shareHistoryDayTiingoBean2.setDate("2024-04-02 00:00:00");
+		shareHistoryDayTiingoBean2.setDate("2024-04-02T00:00:00Z");
 		
 		ShareHistoryDayTiingoBean[] issueHistoricDaysBean = new ShareHistoryDayTiingoBean[2];
 		issueHistoricDaysBean[0] = shareHistoryDayTiingoBean1;
