@@ -30,6 +30,7 @@ import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeMovement;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.config.helpers.CurrencyDataHelper;
@@ -88,6 +89,10 @@ private final GenericPersistence genericPersistance;
 			genericCustomPersistance.startTransaction();
 			
 			DollarHistoricalPriceEntity dollarHistoricalPriceEntityBuy = dollarHistoricalPriceRepository.findByDate(dateUtil.getLocalDate(transactionMoneyFilePojo.getDate()));
+			
+			if (dollarHistoricalPriceEntityBuy == null)
+				throw new BusinessException(CatalogsErrorMessage.getErrorMsgDollarHistoricalPriceBuySellNotFound(catalogIssuesEntityVerify.getInitials(), dateFormatUtil.formatLocalDateTime(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), StaticData.DEFAULT_CURRENCY_FORMAT)));
+			
 			CurrencyValuesPojo currencyValuesPriceBuyPojo = currencyDataHelper.getCurrencyValues(transactionMoneyFilePojo.getTypeCurrency(), dollarHistoricalPriceEntityBuy.getPrice(), transactionMoneyFilePojo.getAmount());
 			
 			TransactionMoneyEntity transactionMoneyEntity = new TransactionMoneyEntity();

@@ -25,7 +25,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			"Retiro de Títulos por Escisión", "Deposito de Títulos por Escisión", "Deposito Titulos por Escision, Cust. Normal", "Deposito Titulos Dividendo Especie, Cust. Normal", "Retiro Titulos Canje, Cust. Normal",
 			"Deposito Titulos Canje, Cust. Normal");
 	private List<String> TYPE_TRANSACTION_ISSUE_IGNORE = new ArrayList<>(Arrays.asList("ISR 10 % POR DIVIDENDOS SIC", "ABONO DIVIDENDO EMISORA EXTRANJERA", "Abono Efectivo Dividendo, Cust. Normal", "COMPLEMENTO ABONO DIVIDENDO EMISORA EXT.",
-			"DEPOSITO DE EFECTIVO", "CARGO DE EFECTIVO", "RETIRO DE EFECTIVO", "PAGO DE FRACCIONES POR DERECHO", "REEMBOLSO DISTRIBUCION DE CAPITAL", "ABONO PAGO DE FRACCIONES EN EFECTIVO"));
+			"DEPOSITO DE EFECTIVO", "CARGO DE EFECTIVO", "RETIRO DE EFECTIVO", "PAGO DE FRACCIONES POR DERECHO", "REEMBOLSO DISTRIBUCION DE CAPITAL", "ABONO PAGO DE FRACCIONES EN EFECTIVO", "Compra en Reporto", "Vencimiento de Reporto"));
 	private List<String> TYPE_TRANSACTION_MONEY_IGNORE = new ArrayList<>(Arrays.asList("Venta", "Compra de Acciones."));
 	
 	public ReadCsvTransactionIssuesBrokerGbm() {
@@ -65,7 +65,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 	
 	private String buildTypeTransactionIssues(String transactionDescription) throws BusinessException {
 		
-		if (TYPE_TRANSACTION_ISSUE_IGNORE.contains(transactionDescription))
+		if (TYPE_TRANSACTION_ISSUE_IGNORE.contains(transactionDescription.trim()))
 			return null;
 		
 		if (transactionDescription.contains("Venta"))
@@ -126,6 +126,8 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 				return "ASURB";
 			case "OXY1":
 				return "OXY";
+			case "DKNG1":
+				return "DKNG";
 			default:
 				return buildIssueCommon(issue);
 		}

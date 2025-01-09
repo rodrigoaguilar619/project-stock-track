@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -352,7 +353,29 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		ReadCsvTransactionIssues readCsvTransactionIssues = getReadTransactionIssues(catalogBrokerEntity.getId());
 		
 		List<TransactionIssueFilePojo> transactionIssueFilePojos = readCsvTransactionIssues.readCsvFileIssues(csvData);
-		return registerTransactionIssuesFromFile(userEntity, catalogBrokerEntity, transactionIssueFilePojos);	
+		List<TransactionIssueFilePojo> transactionIssueFilePojosSplit = new ArrayList<>();
+		
+		for(TransactionIssueFilePojo transactionIssueFilePojo: transactionIssueFilePojos) {
+			
+			if(transactionIssueFilePojo.getIsSlice() && transactionIssueFilePojo.getTitles().compareTo(BigDecimal.ONE) > 0 
+					&& transactionIssueFilePojo.getTitles().remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) != 0) {
+
+				TransactionIssueFilePojo transactionEven = SerializationUtils.clone(transactionIssueFilePojo);
+				TransactionIssueFilePojo transactionOdd =  SerializationUtils.clone(transactionIssueFilePojo);
+				
+				transactionEven.setTitles(new BigDecimal(transactionIssueFilePojo.getTitles().intValue()));
+				transactionEven.setIsSlice(false);
+				transactionOdd.setTitles(transactionIssueFilePojo.getTitles().remainder(BigDecimal.ONE));
+				
+				transactionIssueFilePojosSplit.add(transactionEven);
+				transactionIssueFilePojosSplit.add(transactionOdd);
+			}
+			else {
+				transactionIssueFilePojosSplit.add(transactionIssueFilePojo);
+			}
+		}
+		
+		return registerTransactionIssuesFromFile(userEntity, catalogBrokerEntity, transactionIssueFilePojosSplit);	
 	}
 	
 	@SuppressWarnings("unchecked")
