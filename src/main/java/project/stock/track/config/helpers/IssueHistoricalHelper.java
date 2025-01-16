@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import lib.base.backend.utils.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
+import project.stock.track.app.beans.entity.IssuesHistoricalFairValueEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity;
@@ -16,6 +17,7 @@ import project.stock.track.app.beans.pojos.business.issues.IssueHistoricalTrackR
 import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityDesPojo;
 import project.stock.track.app.beans.pojos.entity.IssueHistoricalDayEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueHistoricalEntityPojo;
+import project.stock.track.app.beans.pojos.entity.IssueHistoricalFairValueEntityPojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
 import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
@@ -36,7 +38,17 @@ public class IssueHistoricalHelper {
 		List<IssuesHistoricalEntity> issuesHistoricalEntities = issuesHistoricalRepository.findIssueHistorical(issuesManagerEntity.getId().getIdIssue(), startDate);
 		
 		List<IssueHistoricalDayEntityPojo> issueHistoricalDayEntityPojos = new ArrayList<>();
+		List<IssueHistoricalFairValueEntityPojo> issueHistoricalFairValueEntityPojos = new ArrayList<>();
 		
+		for (IssuesHistoricalFairValueEntity issuesHistoricalFairValueEntity: issuesManagerEntity.getCatalogIssueEntity().getIssuesHistoricalFairValueEntities()) {
+		
+			IssueHistoricalFairValueEntityPojo issueHistoricalFairValueEntityPojo = new IssueHistoricalFairValueEntityPojo();
+			issueHistoricalFairValueEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalFairValueEntity.getIssuesHistoricalFairValueEntityId().getIdDate()));
+			issueHistoricalFairValueEntityPojo.setFairValue(issuesHistoricalFairValueEntity.getFairValue());
+			
+			issueHistoricalFairValueEntityPojos.add(issueHistoricalFairValueEntityPojo);
+		}
+	
 		for (IssuesHistoricalEntity issuesHistoricalEntity: issuesHistoricalEntities) {
 			
 			IssueHistoricalDayEntityPojo issueHistoricalDayEntityPojo = new IssueHistoricalDayEntityPojo();
@@ -87,6 +99,7 @@ public class IssueHistoricalHelper {
 		issueHistoricalEntityPojo.setIssueTrackProperties(issueHistoricalTrackResumenPojo);
 		issueHistoricalEntityPojo.setIssueHistorical(issueHistoricalDayEntityPojos);
 		issueHistoricalEntityPojo.setIssueTransactionBuys(issueTransactionsByDateTuplePojos);
+		issueHistoricalEntityPojo.setIssueHistoricalFairValues(issueHistoricalFairValueEntityPojos);
 		
 		return issueHistoricalEntityPojo;
 	}

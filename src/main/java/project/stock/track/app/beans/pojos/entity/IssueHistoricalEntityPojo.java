@@ -18,4 +18,6 @@ public class IssueHistoricalEntityPojo {
 	private List<IssueTransactionsByDateTuplePojo> issueTransactionBuys = new ArrayList<>();
 	
 	private List<IssueHistoricalDayEntityPojo> issueHistorical = new ArrayList<>();
+	
+	private List<IssueHistoricalFairValueEntityPojo> issueHistoricalFairValues = new ArrayList<>();
 }
