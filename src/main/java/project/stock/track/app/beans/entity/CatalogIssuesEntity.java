@@ -68,6 +68,9 @@ public class CatalogIssuesEntity implements Serializable {
 	@OneToMany(mappedBy = "catalogIssuesEntity", fetch = FetchType.LAZY)
 	private List<IssuesHistoricalEntity> issuesHistoricalEntities = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "catalogIssuesEntity", fetch = FetchType.LAZY)
+	private List<IssuesHistoricalFairValueEntity> issuesHistoricalFairValueEntities = new ArrayList<>();
+	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "catalogIssuesEntity")
 	IssuesLastPriceTmpEntity tempIssuesLastPriceEntity;
 	
