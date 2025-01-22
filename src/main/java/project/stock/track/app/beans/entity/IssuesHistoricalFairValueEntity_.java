@@ -5,7 +5,7 @@ import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
-@StaticMetamodel(IssuesHistoricalEntity.class)
+@StaticMetamodel(IssuesHistoricalFairValueEntity.class)
 public abstract class IssuesHistoricalFairValueEntity_ {
 
 	public static SingularAttribute<IssuesHistoricalFairValueEntity, IssuesHistoricalFairValueEntityId> issuesHistoricalEntityId;
