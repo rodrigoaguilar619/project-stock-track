@@ -1,23 +1,28 @@
 package project.stock.track.modules.business.historical;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.utils.RestUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntityId;
+import project.stock.track.app.beans.pojos.business.historical.IssuesHistoricalProgressPojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueHistoricalDateResultPojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueHistoricalResultPojo;
 import project.stock.track.app.beans.pojos.petition.data.UpdateIssuesHistoricalDataPojo;
@@ -30,6 +35,8 @@ import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
@@ -44,6 +51,16 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 	private final IssueTrackService issueTrackService;
 	
 	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
+	
+	private boolean verifyUpdateIssueHistorical(CatalogIssuesEntity catalogIssuesEntity) {
+		
+		LocalDateTime lastBusinessDay = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now());
+
+		LocalDateTime currentDate = (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty() && catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null)
+					? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate() : null;
+
+		return currentDate == null || (dateUtil.compareDatesNotTime(currentDate.plusDays(1), lastBusinessDay) <= 0);
+	}
 
 	@SuppressWarnings("unchecked")
 	public void saveIssueHistorical(String dateIssue, IssueHistoryDayBean issueHistoricBean, CatalogIssuesEntity catalogIssuesEntity) {
@@ -157,19 +174,12 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 
 	public UpdateIssuesHistoricalDataPojo executeUpdateIssuesHistoricals() throws BusinessException {
 
-		LocalDateTime lastBusinessDay = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now());
-
 		List<CatalogIssuesEntity> catalogIssuesEntities = getIssuesToUpdate();
 		List<IssueHistoricalResultPojo> issueHistoricalResultPojos = new ArrayList<>();
 
 		for (CatalogIssuesEntity catalogIssuesEntity : catalogIssuesEntities) {
 
-			LocalDateTime currentDate = (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty()
-					&& catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null)
-							? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate()
-							: null;
-
-			if (currentDate == null || (dateUtil.compareDatesNotTime(currentDate.plusDays(1), lastBusinessDay) <= 0)) {
+			if (verifyUpdateIssueHistorical(catalogIssuesEntity)) {
 				IssueHistoricalResultPojo issueHistoricalResultPojo = updateIssueHistorical(catalogIssuesEntity);
 				issueHistoricalResultPojos.add(issueHistoricalResultPojo);
 			}
@@ -179,5 +189,46 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		dataPojo.setIssueHistoricalResult(issueHistoricalResultPojos);
 
 		return dataPojo;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Flux<ResponseEntity> executeUpdateIssuesHistoricalsFlux() throws BusinessException {
+	    
+		List<CatalogIssuesEntity> catalogIssuesEntities = getIssuesToUpdate();
+	    AtomicInteger currentStock = new AtomicInteger(0);
+	    int window = 20;
+	    
+	    return Flux.fromIterable(catalogIssuesEntities)
+	            .window(window) // Collect items into batches of 10
+	            .delayElements(Duration.ofSeconds(0))
+	            .flatMapSequential(batch -> {
+	                // Process each batch and return a Mono of the entire batch's result
+	                return batch.collectList().flatMap(catalogIssuesEntitiesBatch -> {
+	                	
+                        List<ResponseEntity> pojos = new ArrayList<>();
+                        for (CatalogIssuesEntity catalogIssuesEntity : catalogIssuesEntitiesBatch) {
+                        	
+                        	if (verifyUpdateIssueHistorical(catalogIssuesEntity)) {
+                				try {
+									updateIssueHistorical(catalogIssuesEntity);
+								} catch (BusinessException e) {
+									throw new RuntimeException("Error processing issue: " + catalogIssuesEntity.getInitials()); 
+								}
+                			}
+
+                            int currentStockShow = currentStock.incrementAndGet();
+                            if (currentStockShow % window == 0) {
+                            	IssuesHistoricalProgressPojo issuesHistoricalProgressPojo = new IssuesHistoricalProgressPojo(catalogIssuesEntity.getInitials(), currentStockShow, catalogIssuesEntities.size());
+                            	pojos.add(new RestUtil().buildResponseSuccess(issuesHistoricalProgressPojo, "Issues historical batch data updated"));
+                            }
+                        }
+
+                        return Mono.just(pojos);
+                    });
+	            })
+	            .flatMap(pojos -> Flux.fromIterable(pojos))
+	            .onErrorResume(e -> {
+	            	return Mono.just(new RestUtil().buildResponseUnprocessable(e.getMessage()));
+	            });
 	}
 }

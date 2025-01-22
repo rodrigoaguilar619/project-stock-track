@@ -14,6 +14,7 @@ public class CatalogsUri {
 	public static final String API_ISSUES_MANAGER_INDIVIDUAL_UPDATE = "/api/manager/issues/updateIssueManager";
 	public static final String API_ISSUES_HISTORICAL_LIST_GET = "/api/historical/getIssuesHistorical";
 	public static final String API_ISSUES_HISTORICAL_LIST_UPDATE = "/api/historical/updateIssuesHistorical";
+	public static final String API_ISSUES_HISTORICAL_LIST_UPDATE_FLUX = "/api/historical/updateIssuesHistoricalFlux";
 	public static final String API_ISSUES_HISTORICAL_INDVIDUAL_GET = "/api/historical/getIssueHistorical";
 	public static final String API_ISSUES_LAST_PRICES_TEMP_GET = "/api/issuesLastPrices/getIssuesLastPrice";
 	public static final String API_ISSUES_LAST_PRICES_TEMP_UPDATE = "/api/issuesLastPrices/updateIssuesLastPrice";
