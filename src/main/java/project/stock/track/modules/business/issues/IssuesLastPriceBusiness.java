@@ -84,7 +84,7 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 			tempIssuesLastPriceEntity = new IssuesLastPriceTmpEntity();
 			tempIssuesLastPriceEntity.setHigh(issueIexMainBean.getHigh());
 			tempIssuesLastPriceEntity.setIdIssue(catalogIssuesEntity.getId());
-			tempIssuesLastPriceEntity.setLast(issueIexMainBean.getLast());
+			tempIssuesLastPriceEntity.setLast(issueIexMainBean.getTngoLast());
 			tempIssuesLastPriceEntity.setLastSaleTimestamp(issueIexMainBean.getLastSaleTimestamp() != null ? issueIexMainBean.getLastSaleTimestamp().toLocalDateTime() : null);
 			tempIssuesLastPriceEntity.setOpen(issueIexMainBean.getOpen());
 			tempIssuesLastPriceEntity.setPrevClose(issueIexMainBean.getPrevClose());
