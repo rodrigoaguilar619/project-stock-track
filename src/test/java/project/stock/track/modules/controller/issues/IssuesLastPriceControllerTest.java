@@ -60,13 +60,13 @@ class IssuesLastPriceControllerTest extends ProjectIntegrationTest {
 		issuesLastPriceQueryNotSp500Pojo.setIssues(issuesNotSp500);
 		
 		IssueIexMainBean issueIexMainBean_AAL = new IssueIexMainBean();
-		issueIexMainBean_AAL.setLast(new BigDecimal(100));
+		issueIexMainBean_AAL.setTngoLast(new BigDecimal(100));
 		
 		IssueIexMainBean issueIexMainBean_AZN = new IssueIexMainBean();
-		issueIexMainBean_AZN.setLast(new BigDecimal(200));
+		issueIexMainBean_AZN.setTngoLast(new BigDecimal(200));
 		
 		IssueIexMainBean issueIexMainBean_BYND = new IssueIexMainBean();
-		issueIexMainBean_BYND.setLast(new BigDecimal(300));
+		issueIexMainBean_BYND.setTngoLast(new BigDecimal(300));
 		
 		Map<String, IssueIexMainBean> mapSp500 = new LinkedHashMap<>();
 		mapSp500.put("AAL", issueIexMainBean_AAL);

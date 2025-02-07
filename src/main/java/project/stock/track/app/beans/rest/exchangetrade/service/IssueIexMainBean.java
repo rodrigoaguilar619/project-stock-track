@@ -13,7 +13,7 @@ public class IssueIexMainBean {
 	
 	private String ticker;
 
-	private BigDecimal last;
+	//private BigDecimal last;
 	
 	private BigDecimal open;
 	

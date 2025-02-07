@@ -226,7 +226,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 			
 			IssueIexMainBean issueIexMainBean = new IssueIexMainBean();
 			issueIexMainBean.setHigh(issueIexDataTiingoBean.getHigh());
-			issueIexMainBean.setLast(issueIexDataTiingoBean.getLast());
+			issueIexMainBean.setTngoLast(issueIexDataTiingoBean.getTngoLast());
 			issueIexMainBean.setLastSaleTimestamp(issueIexDataTiingoBean.getLastSaleTimestamp());
 			issueIexMainBean.setOpen(issueIexDataTiingoBean.getOpen());
 			issueIexMainBean.setPrevClose(issueIexDataTiingoBean.getPrevClose());

@@ -94,12 +94,12 @@ class IssueTrackTiingoServiceImplTest {
 		String token = "Token test";
 		
 		IssueIexDataTiingoBean issueIexDataTiingoBean1 = new IssueIexDataTiingoBean();
-		issueIexDataTiingoBean1.setLast(new BigDecimal(10));
+		issueIexDataTiingoBean1.setTngoLast(new BigDecimal(10));
 		issueIexDataTiingoBean1.setTicker("AAL");
 		issueIexDataTiingoBean1.setLastSaleTimestamp(OffsetDateTime.now());
 		
 		IssueIexDataTiingoBean issueIexDataTiingoBean2 = new IssueIexDataTiingoBean();
-		issueIexDataTiingoBean2.setLast(new BigDecimal(20));
+		issueIexDataTiingoBean2.setTngoLast(new BigDecimal(20));
 		issueIexDataTiingoBean2.setTicker("CCL");
 		issueIexDataTiingoBean2.setLastSaleTimestamp(OffsetDateTime.now());
 		
