@@ -23,7 +23,7 @@ import project.stock.track.app.beans.entity.CatalogSectorEntity_;
 import project.stock.track.app.beans.entity.CatalogStatusIssueEntity_;
 import project.stock.track.app.beans.entity.CatalogTypeStockEntity_;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
-import project.stock.track.app.beans.entity.IssuesHistoricalEntityId_;
+import project.stock.track.app.beans.entity.IssuesHistoricalEntityPk_;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity_;
 import project.stock.track.app.beans.pojos.business.issues.IssuesFiltersPojo;
 import project.stock.track.app.vo.catalogs.CatalogsEntity;
@@ -73,18 +73,18 @@ public class IssuesRepositoryImpl {
 
 			if (filtersPojo.getIdStatusIssue() != null)
 				predicatesAnd.add(cb.equal(
-						root.get(CatalogIssuesEntity_.catalogStatusIssueEntity).get(CatalogStatusIssueEntity_.ID),
+						root.get(CatalogIssuesEntity_.catalogStatusIssueEntity).get(CatalogStatusIssueEntity_.id),
 						filtersPojo.getIdStatusIssue()));
 			if (filtersPojo.getIdSector() != null)
 				predicatesAnd
-						.add(cb.equal(root.get(CatalogIssuesEntity_.catalogSectorEntity).get(CatalogSectorEntity_.ID),
+						.add(cb.equal(root.get(CatalogIssuesEntity_.catalogSectorEntity).get(CatalogSectorEntity_.id),
 								filtersPojo.getIdSector()));
 			if (filtersPojo.getIdTypeStock() != null)
 				predicatesAnd.add(
-						cb.equal(root.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.ID),
+						cb.equal(root.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.id),
 								filtersPojo.getIdTypeStock()));
 			if (filtersPojo.getIdIndex() != null)
-				predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.ID),
+				predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.id),
 						filtersPojo.getIdIndex()));
 		}
 
@@ -114,7 +114,7 @@ public class IssuesRepositoryImpl {
 		Root<CatalogIssuesEntity> root = cq.from(CatalogIssuesEntity.class);
 
 		List<Predicate> predicatesAnd = new ArrayList<>();
-		predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.ID), idIssue));
+		predicatesAnd.add(cb.equal(root.get(CatalogIssuesEntity_.id), idIssue));
 
 		cq.select(cb.count(root)).where(predicatesAnd.toArray(new Predicate[0]));
 		return em.createQuery(cq).getSingleResult() > 0;
@@ -142,11 +142,11 @@ public class IssuesRepositoryImpl {
 		
 		Subquery sub = cq.subquery(LocalDateTime.class);
 		Root<IssuesHistoricalEntity> subRoot = sub.from(IssuesHistoricalEntity.class);
-		sub.select(cb.max(subRoot.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.ID_DATE)));
-		sub.where(cb.equal(subRoot.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.ID_ISSUE), root.get(CatalogIssuesEntity_.ID)));
+		sub.select(cb.greatest(subRoot.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate)));
+		sub.where(cb.equal(subRoot.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idIssue), root.get(CatalogIssuesEntity_.id)));
 		
 		Join<CatalogIssuesEntity, IssuesHistoricalEntity> joinIssuesManager = root.join(CatalogIssuesEntity_.issuesHistoricalEntities, JoinType.LEFT);
-		root.fetch(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY, JoinType.LEFT);
+		root.fetch(CatalogIssuesEntity_.tempIssuesLastPriceEntity, JoinType.LEFT);
 		cq.multiselect(root, joinIssuesManager);
 		
 		List<Predicate> predicatesOr = new ArrayList<>();
@@ -154,7 +154,7 @@ public class IssuesRepositoryImpl {
 		if(isGetWithHistoricalNull)
 			predicatesOr.add(cb.isNull(sub));
 		else
-			predicatesOr.add(cb.equal(joinIssuesManager.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate), sub));
+			predicatesOr.add(cb.equal(joinIssuesManager.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate), sub));
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		predicatesAnd.add(cb.and(cb.equal(root.get(CatalogIssuesEntity_.idStatusIssue), CatalogsEntity.CatalogStatusIssue.ACTIVE), cb.or(predicatesOr.toArray(new Predicate[0]))));

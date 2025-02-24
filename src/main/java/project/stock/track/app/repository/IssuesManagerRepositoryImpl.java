@@ -57,13 +57,13 @@ public class IssuesManagerRepositoryImpl {
 		if (filtersPojo != null) {
 			
 			if (filtersPojo.getIdStatusIssue() != null)
-				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogStatusIssueEntity).get(CatalogStatusIssueEntity_.ID), filtersPojo.getIdStatusIssue()));
+				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogStatusIssueEntity).get(CatalogStatusIssueEntity_.id), filtersPojo.getIdStatusIssue()));
 			if (filtersPojo.getIdSector() != null)
-				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogSectorEntity).get(CatalogSectorEntity_.ID), filtersPojo.getIdSector()));
+				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogSectorEntity).get(CatalogSectorEntity_.id), filtersPojo.getIdSector()));
 			if (filtersPojo.getIdTypeStock() != null)
-				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.ID), filtersPojo.getIdTypeStock()));
+				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogTypeStockEntity).get(CatalogTypeStockEntity_.id), filtersPojo.getIdTypeStock()));
 			if (filtersPojo.getIdIndex() != null)
-				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.ID), filtersPojo.getIdIndex()));
+				predicatesAnd.add(cb.equal(joinCatalogIssues.get(CatalogIssuesEntity_.catalogIndexEntity).get(CatalogIndexEntity_.id), filtersPojo.getIdIndex()));
 			if (filtersPojo.getIsInvest() != null) {
 				
 				List<Predicate> predicatesOr = new ArrayList<>();

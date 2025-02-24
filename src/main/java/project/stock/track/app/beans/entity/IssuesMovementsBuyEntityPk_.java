@@ -11,8 +11,5 @@ public abstract class IssuesMovementsBuyEntityPk_ {
 	public static SingularAttribute<IssuesMovementsBuyEntityPk, Integer> idIssueMovement;
 	public static SingularAttribute<IssuesMovementsBuyEntityPk, Integer> buyTransactionNumber;
 
-	public static final String ID_ISSUE_MOVEMENT = "idIssueMovement";
-	public static final String BUY_TRANSACTION_NUMBER = "buyTransactionNumber";
-
 }
 

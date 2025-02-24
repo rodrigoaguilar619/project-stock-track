@@ -1,7 +1,7 @@
 package project.stock.track.app.beans.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -12,17 +12,17 @@ import lombok.Setter;
 @Getter @Setter
 @EqualsAndHashCode
 @Embeddable
-public class IssuesHistoricalEarningEntityId implements Serializable {
+public class IssuesHistoricalEntityPk implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public IssuesHistoricalEarningEntityId(Integer idIssue, LocalDate idDate) {
+	public IssuesHistoricalEntityPk(Integer idIssue, LocalDateTime idDate) {
 		super();
 		this.idIssue = idIssue;
 		this.idDate = idDate;
 	}
 
-	public IssuesHistoricalEarningEntityId() {
+	public IssuesHistoricalEntityPk() {
 		super();
 	}
 
@@ -30,6 +30,6 @@ public class IssuesHistoricalEarningEntityId implements Serializable {
 	private Integer idIssue;
 	
 	@Column(name = "id_date")
-	private LocalDate idDate;
+	private LocalDateTime idDate;
 	
 }

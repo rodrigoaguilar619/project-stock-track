@@ -21,7 +21,7 @@ public class IssuesHistoricalFairValueEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private IssuesHistoricalFairValueEntityId issuesHistoricalFairValueEntityId;
+	private IssuesHistoricalFairValueEntityPk id;
 	
 	@Column(name = "fair_value")
 	private BigDecimal fairValue;

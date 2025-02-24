@@ -12,17 +12,17 @@ import lombok.Setter;
 @Getter @Setter
 @EqualsAndHashCode
 @Embeddable
-public class IssuesHistoricalFairValueEntityId implements Serializable {
+public class IssuesHistoricalEarningEntityPk implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	public IssuesHistoricalFairValueEntityId(Integer idIssue, LocalDate idDate) {
+	public IssuesHistoricalEarningEntityPk(Integer idIssue, LocalDate idDate) {
 		super();
 		this.idIssue = idIssue;
 		this.idDate = idDate;
 	}
 
-	public IssuesHistoricalFairValueEntityId() {
+	public IssuesHistoricalEarningEntityPk() {
 		super();
 	}
 

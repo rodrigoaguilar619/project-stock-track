@@ -21,7 +21,7 @@ public class IssuesHistoricalEarningEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private IssuesHistoricalEarningEntityId issuesHistoricalEarningEntityId;
+	private IssuesHistoricalEarningEntityPk id;
 	
 	@Column(name = "earning_estimate")
 	private BigDecimal earningEstimate;

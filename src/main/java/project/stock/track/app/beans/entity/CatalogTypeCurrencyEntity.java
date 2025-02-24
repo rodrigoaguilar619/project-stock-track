@@ -11,11 +11,4 @@ import lib.base.backend.entity.generic.GenericCatalogIntEntity;
 public class CatalogTypeCurrencyEntity extends GenericCatalogIntEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
-	public CatalogTypeCurrencyEntity() {
-	}
-	
-	public CatalogTypeCurrencyEntity(int id) {
-		super(id);
-	}
 }

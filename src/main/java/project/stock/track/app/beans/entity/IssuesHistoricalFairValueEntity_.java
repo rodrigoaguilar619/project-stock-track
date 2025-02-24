@@ -8,11 +8,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(IssuesHistoricalFairValueEntity.class)
 public abstract class IssuesHistoricalFairValueEntity_ {
 
-	public static SingularAttribute<IssuesHistoricalFairValueEntity, IssuesHistoricalFairValueEntityId> issuesHistoricalEntityId;
+	public static SingularAttribute<IssuesHistoricalFairValueEntity, IssuesHistoricalFairValueEntityPk> id;
 	public static SingularAttribute<IssuesHistoricalFairValueEntity, CatalogIssuesEntity> catalogIssuesEntity;
-
-	public static final String ISSUES_HISTORICAL_FAIR_VALUE_ENTITY_ID = "issuesHistoricalEntityId";
-	public static final String CATALOG_ISSUES_ENTITY = "catalogIssuesEntity";
 
 }
 

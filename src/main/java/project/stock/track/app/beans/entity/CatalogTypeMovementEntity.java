@@ -11,11 +11,4 @@ import lib.base.backend.entity.generic.GenericCatalogIntEntity;
 public class CatalogTypeMovementEntity extends GenericCatalogIntEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
-	public CatalogTypeMovementEntity() {
-	}
-	
-	public CatalogTypeMovementEntity(int id) {
-		super(id);
-	}
 }

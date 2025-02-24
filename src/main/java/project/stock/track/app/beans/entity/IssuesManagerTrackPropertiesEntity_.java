@@ -19,14 +19,5 @@ public abstract class IssuesManagerTrackPropertiesEntity_ {
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, BigDecimal> trackBuyPrice;
 	public static SingularAttribute<IssuesManagerTrackPropertiesEntity, IssuesManagerEntity> issuesManagerEntity;
 
-	public static final String ID = "id";
-	public static final String IS_INVEST = "isInvest";
-	public static final String ID_ISSUE = "idIssue";
-	public static final String ID_USER = "idUser";
-	public static final String TRACK_SELL_PRICE = "trackSellPrice";
-	public static final String FAIR_VALUE = "fairValue";
-	public static final String TRACK_BUY_PRICE = "trackBuyPrice";
-	public static final String ISSUES_MANAGER_ENTITY = "issuesManagerEntity";
-
 }
 

@@ -21,7 +21,7 @@ import lib.base.backend.utils.RestUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
-import project.stock.track.app.beans.entity.IssuesHistoricalEntityId;
+import project.stock.track.app.beans.entity.IssuesHistoricalEntityPk;
 import project.stock.track.app.beans.pojos.business.historical.IssuesHistoricalProgressPojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueHistoricalDateResultPojo;
 import project.stock.track.app.beans.pojos.business.issues.IssueHistoricalResultPojo;
@@ -57,7 +57,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		LocalDateTime lastBusinessDay = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now());
 
 		LocalDateTime currentDate = (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty() && catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null)
-					? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate() : null;
+					? catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getId().getIdDate() : null;
 
 		return currentDate == null || (dateUtil.compareDatesNotTime(currentDate.plusDays(1), lastBusinessDay) <= 0);
 	}
@@ -70,7 +70,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 			genericCustomPersistance.startTransaction();
 
 			IssuesHistoricalEntity issuesHistoricalEntity = new IssuesHistoricalEntity();
-			issuesHistoricalEntity.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(catalogIssuesEntity.getId(),
+			issuesHistoricalEntity.setId(new IssuesHistoricalEntityPk(catalogIssuesEntity.getId(),
 					dateFormatUtil.formatLocalDateTime(dateIssue, CatalogsStaticData.ServiceTiingo.DATE_FORMAT_DEFAULT)));
 			issuesHistoricalEntity.setClose(
 					issueHistoricBean.getClose() != null ? new BigDecimal(issueHistoricBean.getClose()) : null);
@@ -132,7 +132,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		
 		if (!catalogIssuesEntity.getIssuesHistoricalEntities().isEmpty()
 	            && catalogIssuesEntity.getIssuesHistoricalEntities().get(0) != null) {
-	        dateFrom = catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getIssuesHistoricalEntityId().getIdDate().plusDays(1);
+	        dateFrom = catalogIssuesEntity.getIssuesHistoricalEntities().get(0).getId().getIdDate().plusDays(1);
 	    } else {
 	        dateFrom = catalogIssuesEntity.getHistoricalStartDate() != null
 	                ? catalogIssuesEntity.getHistoricalStartDate()

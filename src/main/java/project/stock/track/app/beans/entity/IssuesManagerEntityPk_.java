@@ -11,8 +11,5 @@ public abstract class IssuesManagerEntityPk_ {
 	public static SingularAttribute<IssuesManagerEntityPk, Integer> idIssue;
 	public static SingularAttribute<IssuesManagerEntityPk, Integer> idUser;
 
-	public static final String ID_ISSUE = "idIssue";
-	public static final String ID_USER = "idUser";
-
 }
 

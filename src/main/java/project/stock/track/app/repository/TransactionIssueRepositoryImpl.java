@@ -26,6 +26,7 @@ import lib.base.backend.utils.JpaUtil;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
+import project.stock.track.app.beans.entity.CatalogTypeCurrencyEntity;
 import project.stock.track.app.beans.entity.CatalogTypeCurrencyEntity_;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity_;
@@ -57,23 +58,23 @@ public class TransactionIssueRepositoryImpl {
 	
 	private Expression<Object> getSelectedPriceTotal(CriteriaBuilder cb, Root<TransactionIssueEntity> root, boolean isSell) {
 		
-		String priceTotalUsd = isSell ? TransactionIssueEntity_.PRICE_TOTAL_SELL : TransactionIssueEntity_.PRICE_TOTAL_BUY;
-		String priceTotalMxn = isSell ? TransactionIssueEntity_.PRICE_TOTAL_SELL_MXN : TransactionIssueEntity_.PRICE_TOTAL_BUY_MXN;
+		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalUsd = isSell ? TransactionIssueEntity_.priceTotalSell : TransactionIssueEntity_.priceTotalBuy;
+		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalMxn = isSell ? TransactionIssueEntity_.priceTotalSellMxn : TransactionIssueEntity_.priceTotalBuyMxn;
 		
 		return cb.selectCase()
-				.when(cb.equal(root.get(TransactionIssueEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
-				.when(cb.equal(root.get(TransactionIssueEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
 				.otherwise(root.get(priceTotalUsd));
 	}
 	
 	private Expression<Object> getSelectedPrice(CriteriaBuilder cb, Root<TransactionIssueEntity> root, boolean isSell) {
 		
-		String priceTotalUsd = isSell ? TransactionIssueEntity_.PRICE_SELL : TransactionIssueEntity_.PRICE_BUY;
-		String priceTotalMxn = isSell ? TransactionIssueEntity_.PRICE_SELL_MXN : TransactionIssueEntity_.PRICE_BUY_MXN;
+		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalUsd = isSell ? TransactionIssueEntity_.priceSell : TransactionIssueEntity_.priceBuy;
+		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalMxn = isSell ? TransactionIssueEntity_.priceSellMxn : TransactionIssueEntity_.priceBuyMxn;
 		
 		return cb.selectCase()
-				.when(cb.equal(root.get(TransactionIssueEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
-				.when(cb.equal(root.get(TransactionIssueEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
 				.otherwise(root.get(priceTotalUsd));
 	}
 	
@@ -86,7 +87,7 @@ public class TransactionIssueRepositoryImpl {
 		Predicate predicateAnd = cb.and( 
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
-			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
+			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.id), idBroker),
 			cb.equal(root.get(TransactionIssueEntity_.buyDate).as(LocalDateTime.class), date));
 		
 		cq.where( predicateAnd );
@@ -107,7 +108,7 @@ public class TransactionIssueRepositoryImpl {
 		Predicate predicateAnd = cb.and( 
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
-			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
+			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.id), idBroker),
 			cb.equal(root.get(TransactionIssueEntity_.sellDate).as(LocalDateTime.class), date));
 		
 		cq.where( predicateAnd );
@@ -146,7 +147,7 @@ public class TransactionIssueRepositoryImpl {
 				selectedPriceSell,
 				cb.sum(selectedPriceTotalSell.as(BigDecimal.class)),
 				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.acronym),
-				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY).get(CatalogTypeCurrencyEntity_.DESCRIPTION)));
+				root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.catalogTypeCurrencyEntity).get(CatalogTypeCurrencyEntity_.description)));
 
 		cq.groupBy(root.get(TransactionIssueEntity_.idBroker), root.get(TransactionIssueEntity_.buyDate), root.get(TransactionIssueEntity_.sellDate), root.get(TransactionIssueEntity_.priceBuy), root.get(TransactionIssueEntity_.priceSell));
 		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.buyDate)));
@@ -162,32 +163,30 @@ public class TransactionIssueRepositoryImpl {
 		CriteriaQuery<Tuple> cq = cb.createTupleQuery();
 		Root<TransactionIssueEntity> root = cq.from(TransactionIssueEntity.class);
 
-		Join<TransactionIssueEntity, CatalogBrokerEntity> joinBroker = root
-				.join(TransactionIssueEntity_.CATALOG_BROKER_ENTITY, JoinType.LEFT);
-		Join<CatalogBrokerEntity, CatalogTypeCurrency> joinTypeCurrency = joinBroker
-				.join(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY, JoinType.LEFT);
+		Join<TransactionIssueEntity, CatalogBrokerEntity> joinBroker = root.join(TransactionIssueEntity_.catalogBrokerEntity, JoinType.LEFT);
+		Join<CatalogBrokerEntity, CatalogTypeCurrencyEntity> joinTypeCurrency = joinBroker.join(CatalogBrokerEntity_.catalogTypeCurrencyEntity, JoinType.LEFT);
 		
 		Expression<Object> selectedPriceTotalBuy = getSelectedPriceTotal(cb, root, false);
 		Expression<Object> selectedPriceTotalSell = getSelectedPriceTotal(cb, root, true);
 
-		cq.multiselect(joinBroker.get(CatalogBrokerEntity_.ID), joinBroker.get(CatalogBrokerEntity_.ACRONYM),
-				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.ID),
-				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.DESCRIPTION),
+		cq.multiselect(joinBroker.get(CatalogBrokerEntity_.id), joinBroker.get(CatalogBrokerEntity_.acronym),
+				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.id),
+				joinTypeCurrency.get(CatalogTypeCurrencyEntity_.description),
 				cb.sum(root.get(TransactionIssueEntity_.totalShares)), selectedPriceTotalBuy,
 				cb.sum(selectedPriceTotalBuy.as(BigDecimal.class)),
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.buyDate)), 1000L),
 				selectedPriceTotalSell,
 				cb.sum(selectedPriceTotalSell.as(BigDecimal.class)),
 				cb.prod(cb.function(CatalogsStaticData.StaticSql.UNIX_TIMESTAMP, Long.class, root.get(TransactionIssueEntity_.sellDate)), 1000L),
-				root.get(TransactionIssueEntity_.SELL_GAIN_LOSS_PERCENTAGE),
-				root.get(TransactionIssueEntity_.SELL_GAIN_LOSS_TOTAL));
+				root.get(TransactionIssueEntity_.sellGainLossPercentage),
+				root.get(TransactionIssueEntity_.sellGainLossTotal));
 
 		List<Predicate> predicatesAnd = new ArrayList<>();
 
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue));
 		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idUser), idUser));
 
-		cq.groupBy(joinBroker.get(CatalogBrokerEntity_.ID), root.get(TransactionIssueEntity_.buyDate),
+		cq.groupBy(joinBroker.get(CatalogBrokerEntity_.id), root.get(TransactionIssueEntity_.buyDate),
 				root.get(TransactionIssueEntity_.priceTotalBuy), root.get(TransactionIssueEntity_.sellDate),
 				root.get(TransactionIssueEntity_.priceTotalSell));
 		cq.orderBy(cb.asc(root.get(TransactionIssueEntity_.buyDate)));
@@ -242,8 +241,8 @@ public class TransactionIssueRepositoryImpl {
 		cq.select(cb.sum(root.<BigDecimal>get(priceTotalBuy)));
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
-		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.ID_BROKER), idBroker));
-		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.ID_USER), idUser));
+		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idBroker), idBroker));
+		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idUser), idUser));
 		
 		if (isSold) {
 			predicatesAnd.add(cb.isNotNull(root.get(priceTotalSell)));
@@ -283,12 +282,12 @@ public class TransactionIssueRepositoryImpl {
 			cq.select(cb.sum(root.<BigDecimal>get(priceTotalSell)));
 		}
 		else {
-			cq.select(cb.sum(root.<BigDecimal>get(TransactionIssueEntity_.ISSUES_LAST_PRICE_TMP_ENTITY).get(IssuesLastPriceTmpEntity_.LAST)));
+			cq.select(cb.sum(root.get(TransactionIssueEntity_.issuesLastPriceTmpEntity).get(IssuesLastPriceTmpEntity_.last)));
 		}
 
 		List<Predicate> predicatesAnd = new ArrayList<>();
-		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.ID_BROKER), idBroker));
-		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.ID_USER), idUser));
+		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idBroker), idBroker));
+		predicatesAnd.add(cb.equal(root.get(TransactionIssueEntity_.idUser), idUser));
 		
 		if (isSold) {
 			predicatesAnd.add(cb.isNotNull(root.get(priceTotalSell)));
@@ -311,12 +310,12 @@ public class TransactionIssueRepositoryImpl {
 		String priceTotalSell = null;
 		
 		if (idTypeCurrency == CatalogTypeCurrency.USD) {
-			priceTotalBuy = TransactionIssueEntity_.PRICE_TOTAL_BUY;
-			priceTotalSell = TransactionIssueEntity_.PRICE_TOTAL_SELL;
+			priceTotalBuy = TransactionIssueEntity_.priceTotalBuy.getName();
+			priceTotalSell = TransactionIssueEntity_.priceTotalSell.getName();
 		}
 		else if (idTypeCurrency == CatalogTypeCurrency.MXN) {
-			priceTotalBuy = TransactionIssueEntity_.PRICE_TOTAL_BUY_MXN;
-			priceTotalSell = TransactionIssueEntity_.PRICE_TOTAL_SELL_MXN;
+			priceTotalBuy = TransactionIssueEntity_.priceTotalBuyMxn.getName();
+			priceTotalSell = TransactionIssueEntity_.priceTotalSellMxn.getName();
 		}
 		
 		if (idTypeCurrency == CatalogTypeCurrency.MXN && !isSold) {
@@ -328,33 +327,33 @@ public class TransactionIssueRepositoryImpl {
 		final String JOIN_TRANSACTION_ISSUE = " LEFT JOIN transactionIssue.";
 		
 		List<String> parameterslist = Arrays.asList(
-			"transactionIssue." + TransactionIssueEntity_.ID_ISSUE,
-			"catalogIssues." + CatalogIssuesEntity_.INITIALS,
-			"catalogBroker." + CatalogBrokerEntity_.ID_TYPE_CURRENCY,
-			"SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ")",
-			"SUM(transactionIssue." + priceTotalBuy + ") / SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ") AS costAverageBuy",
+			"transactionIssue." + TransactionIssueEntity_.idIssue.getName(),
+			"catalogIssues." + CatalogIssuesEntity_.initials.getName(),
+			"catalogBroker." + CatalogBrokerEntity_.idTypeCurrency.getName(),
+			"SUM(transactionIssue." + TransactionIssueEntity_.totalShares.getName() + ")",
+			"SUM(transactionIssue." + priceTotalBuy + ") / SUM(transactionIssue." + TransactionIssueEntity_.totalShares.getName() + ") AS costAverageBuy",
 			"SUM(CASE WHEN :isSold = true THEN transactionIssue." + priceTotalSell + 
-	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * CAST(:dollarPrice as DOUBLE) END) / SUM(transactionIssue." + TransactionIssueEntity_.TOTAL_SHARES + ") AS costAverageSell",
+	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.last.getName() + ") * CAST(:dollarPrice as DOUBLE) END) / SUM(transactionIssue." + TransactionIssueEntity_.totalShares.getName() + ") AS costAverageSell",
 			"SUM(transactionIssue." + priceTotalBuy + ") AS costTotalBuy",
 			"SUM(CASE WHEN :isSold = true THEN transactionIssue." + priceTotalSell + 
-	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.LAST + ") * CAST(:dollarPrice as DOUBLE) END) AS costTotalSell",
-			"issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.TIMESTAMP
+	        " ELSE (issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.last.getName() + ") * CAST(:dollarPrice as DOUBLE) END) AS costTotalSell",
+			"issuesLastPriceTmp." + IssuesLastPriceTmpEntity_.timestamp.getName()
 		);
 		
 		List<String> parametersGroupBylist = Arrays.asList(
-				"transactionIssue." + TransactionIssueEntity_.ID_ISSUE,
-				"catalogBroker." + CatalogBrokerEntity_.ID_TYPE_CURRENCY
+				"transactionIssue." + TransactionIssueEntity_.idIssue.getName(),
+				"catalogBroker." + CatalogBrokerEntity_.idTypeCurrency.getName()
 			);
 		
 		Query query = em.createQuery(StringEscapeUtils.escapeSql("SELECT " + String.join(", ", parameterslist) +
     		" FROM " + jpaUtil.getTableMetaModel(TransactionIssueEntity_.class) + " transactionIssue" +
-    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.ISSUES_LAST_PRICE_TMP_ENTITY + " issuesLastPriceTmp" +
-    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.ISSUES_MANAGER_ENTITY + " managerIssues" +
-    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.CATALOG_BROKER_ENTITY + " catalogBroker" +
-    		" LEFT JOIN managerIssues." + IssuesManagerEntity_.CATALOG_ISSUES_ENTITY + " catalogIssues" +
-    		" WHERE transactionIssue." + TransactionIssueEntity_.PRICE_TOTAL_SELL + (isSold ? " IS NOT NULL" : " IS NULL") +
-    		" AND transactionIssue." + TransactionIssueEntity_.ID_USER + " = :idUser" +
-    		" AND transactionIssue." + TransactionIssueEntity_.CATALOG_BROKER_ENTITY + "." + CatalogBrokerEntity_.ID + " = :idBroker GROUP BY " + String.join(", ", parametersGroupBylist)));
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.issuesLastPriceTmpEntity.getName() + " issuesLastPriceTmp" +
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.issuesManagerEntity.getName() + " managerIssues" +
+    		JOIN_TRANSACTION_ISSUE + TransactionIssueEntity_.catalogBrokerEntity.getName() + " catalogBroker" +
+    		" LEFT JOIN managerIssues." + IssuesManagerEntity_.catalogIssueEntity.getName() + " catalogIssues" +
+    		" WHERE transactionIssue." + TransactionIssueEntity_.priceTotalSell.getName() + (isSold ? " IS NOT NULL" : " IS NULL") +
+    		" AND transactionIssue." + TransactionIssueEntity_.idUser.getName() + " = :idUser" +
+    		" AND transactionIssue." + TransactionIssueEntity_.catalogBrokerEntity.getName() + "." + CatalogBrokerEntity_.id.getName() + " = :idBroker GROUP BY " + String.join(", ", parametersGroupBylist)));
 		
 		query.setParameter("idBroker", idBroker);
 		query.setParameter("isSold", isSold);
@@ -391,21 +390,21 @@ public class TransactionIssueRepositoryImpl {
 	public List<TransactionIssueNotSoldPojo> findTransactionIssuesNotSoldList(Integer idUser) {
 		
 		List<String> parameterslist = Arrays.asList(
-			"ift." + TransactionIssueEntity_.ID_ISSUE,
-			"ift." + TransactionIssueEntity_.BUY_DATE,
-			"ift." + TransactionIssueEntity_.PRICE_BUY,
-			"ift." + TransactionIssueEntity_.COMMISION_PERCENTAGE,
-			"ift." + TransactionIssueEntity_.PRICE_TOTAL_BUY,
-			"ift." + TransactionIssueEntity_.ID_BROKER,
-			"catalogIssue." + CatalogIssuesEntity_.INITIALS
+			"ift." + TransactionIssueEntity_.idIssue.getName(),
+			"ift." + TransactionIssueEntity_.buyDate.getName(),
+			"ift." + TransactionIssueEntity_.priceBuy.getName(),
+			"ift." + TransactionIssueEntity_.commisionPercentage.getName(),
+			"ift." + TransactionIssueEntity_.priceTotalBuy.getName(),
+			"ift." + TransactionIssueEntity_.idBroker.getName(),
+			"catalogIssue." + CatalogIssuesEntity_.initials.getName()
 		);
 		
 		Query query = em.createQuery(StringEscapeUtils.escapeSql("SELECT " + String.join(", ", parameterslist) + ", COUNT(*) AS totalTitles "
 	        			+ "FROM " + jpaUtil.getTableMetaModel(TransactionIssueEntity_.class) + " ift"
-	        			+ " LEFT JOIN ift." + TransactionIssueEntity_.ISSUES_MANAGER_ENTITY + " managerIssue"
-	        			+ " LEFT JOIN managerIssue." + IssuesManagerEntity_.CATALOG_ISSUES_ENTITY + " catalogIssue"
-	        			+ " WHERE ift." + TransactionIssueEntity_.ID_USER + " = :idUser"
-	        			+ " AND ift." + TransactionIssueEntity_.PRICE_SELL + " IS NULL GROUP BY " + String.join(", ", parameterslist)));
+	        			+ " LEFT JOIN ift." + TransactionIssueEntity_.issuesManagerEntity.getName() + " managerIssue"
+	        			+ " LEFT JOIN managerIssue." + IssuesManagerEntity_.catalogIssueEntity.getName() + " catalogIssue"
+	        			+ " WHERE ift." + TransactionIssueEntity_.idUser.getName() + " = :idUser"
+	        			+ " AND ift." + TransactionIssueEntity_.priceSell.getName() + " IS NULL GROUP BY " + String.join(", ", parameterslist)));
 		
 		query.setParameter("idUser", idUser);
 		
@@ -440,7 +439,7 @@ public class TransactionIssueRepositoryImpl {
 		Predicate predicateAnd = cb.and( 
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
-			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
+			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.id), idBroker),
 			cb.equal(root.get(TransactionIssueEntity_.isShortSell), true),
 			cb.isNull(root.get(TransactionIssueEntity_.priceBuy)));
 		
@@ -458,7 +457,7 @@ public class TransactionIssueRepositoryImpl {
 		Predicate predicateAnd = cb.and( 
 			cb.equal(root.get(TransactionIssueEntity_.idIssue), idIssue),
 			cb.equal(root.get(TransactionIssueEntity_.idUser), idUser),
-			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.ID), idBroker),
+			cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.id), idBroker),
 			cb.equal(root.get(TransactionIssueEntity_.isSlice), isSlice),
 			cb.isNull(root.get(TransactionIssueEntity_.sellDate)));
 		

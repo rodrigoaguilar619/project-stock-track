@@ -18,7 +18,7 @@ import jakarta.persistence.criteria.Root;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity_;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
-import project.stock.track.app.beans.entity.IssuesHistoricalEntityId_;
+import project.stock.track.app.beans.entity.IssuesHistoricalEntityPk_;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity_;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity_;
@@ -46,8 +46,8 @@ public class IssuesHistoricalRepositoryImpl {
 		Root<IssuesHistoricalEntity> root = cq.from(IssuesHistoricalEntity.class);
 		
 		Predicate predicateAnd = cb.and( 
-				cb.equal(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idIssue), idIssue),
-				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class), startDate));
+				cb.equal(root.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idIssue), idIssue),
+				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate).as(LocalDateTime.class), startDate));
 		
 		cq.where( predicateAnd );
 		
@@ -62,7 +62,7 @@ public class IssuesHistoricalRepositoryImpl {
 		Root<IssuesHistoricalEntity> root = cq.from(IssuesHistoricalEntity.class);
 		
 		Predicate predicateAnd = cb.and( 
-				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class), startDate));
+				cb.greaterThanOrEqualTo(root.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate).as(LocalDateTime.class), startDate));
 		
 		cq.where( predicateAnd );
 		
@@ -76,47 +76,47 @@ public class IssuesHistoricalRepositoryImpl {
 		CriteriaQuery<IssuesHistoricalEntity> cq = cb.createQuery(IssuesHistoricalEntity.class);
 		Root<IssuesHistoricalEntity> root = cq.from(IssuesHistoricalEntity.class);
 		
-		cq.where(cb.equal(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idIssue), idIssue));
-		cq.orderBy(cb.desc(root.get(IssuesHistoricalEntity_.issuesHistoricalEntityId).get(IssuesHistoricalEntityId_.idDate).as(LocalDateTime.class)));
+		cq.where(cb.equal(root.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idIssue), idIssue));
+		cq.orderBy(cb.desc(root.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate).as(LocalDateTime.class)));
 		
 		List<IssuesHistoricalEntity> issuesHistoricalEntities = em.createQuery(cq).setMaxResults(1).getResultList();
 		return (issuesHistoricalEntities.isEmpty()) ? null : issuesHistoricalEntities.get(0);
 		
 	}
 	
-	public void buildPredicateFetchWithStatusActive(Root<?> root) {
+	public void buildPredicateFetchWithStatusActive(Root<IssuesManagerEntity> root) {
 		
-		Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = root.fetch(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY, JoinType.LEFT);
+		Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = root.fetch(IssuesManagerEntity_.catalogIssueEntity, JoinType.LEFT);
 		fetchIssues.fetch(CatalogIssuesEntity_.tempIssuesLastPriceEntity, JoinType.LEFT);
-		fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_SECTOR_ENTITY, JoinType.LEFT);
-		fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_TYPE_STOCK_ENTITY, JoinType.LEFT);
-		fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_STATUS_ISSUE_ENTITY, JoinType.LEFT);
-		root.fetch(IssuesManagerEntity_.ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY, JoinType.LEFT);
+		fetchIssues.fetch(CatalogIssuesEntity_.catalogSectorEntity, JoinType.LEFT);
+		fetchIssues.fetch(CatalogIssuesEntity_.catalogTypeStockEntity, JoinType.LEFT);
+		fetchIssues.fetch(CatalogIssuesEntity_.catalogStatusIssueEntity, JoinType.LEFT);
+		root.fetch(IssuesManagerEntity_.issuesManagerTrackPropertiesEntity, JoinType.LEFT);
 		
 	}
 
-	public List<Predicate> buildPredicateWithStatusActive(CriteriaBuilder cb, Root<?> root, IssuesHistoricalFilterPojo filters) {
+	public List<Predicate> buildPredicateWithStatusActive(CriteriaBuilder cb, Root<IssuesManagerEntity> root, IssuesHistoricalFilterPojo filters) {
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();	
 		
-		Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues = root.join(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY, JoinType.LEFT);
-		Join<IssuesManagerEntity, IssuesManagerTrackPropertiesEntity> joinIssuesManagerTrackProperties = root.join(IssuesManagerEntity_.ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY, JoinType.LEFT);
-		Join<CatalogIssuesEntity, IssuesLastPriceTmpEntity> joinTempIssueLastPrice = joinIssues.join(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY, JoinType.LEFT);
+		Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues = root.join(IssuesManagerEntity_.catalogIssueEntity, JoinType.LEFT);
+		Join<IssuesManagerEntity, IssuesManagerTrackPropertiesEntity> joinIssuesManagerTrackProperties = root.join(IssuesManagerEntity_.issuesManagerTrackPropertiesEntity, JoinType.LEFT);
+		Join<CatalogIssuesEntity, IssuesLastPriceTmpEntity> joinTempIssueLastPrice = joinIssues.join(CatalogIssuesEntity_.tempIssuesLastPriceEntity, JoinType.LEFT);
 			
 		if (filters != null) {
 			
 			if (filters.getIdSector() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idSector), filters.getIdSector()));
 			if (filters.getIdTypeStock() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_TYPE_STOCK), filters.getIdTypeStock()));
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idTypeStock), filters.getIdTypeStock()));
 			if (filters.getIdIndex() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_INDEX), filters.getIdIndex()));
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idIndex), filters.getIdIndex()));
 			if (filters.getIsInvest() != null)
-				predicatesAnd.add(cb.equal(joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.IS_INVEST), filters.getIsInvest()));
+				predicatesAnd.add(cb.equal(joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.isInvest), filters.getIsInvest()));
 			if (filters.getIdStatusQuick() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.ID_STATUS_ISSUE_QUICK), filters.getIdStatusQuick()));	
+				predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.idStatusIssueQuick), filters.getIdStatusQuick()));	
 			if (filters.getIdStatusTrading() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.ID_STATUS_ISSUE_TRADING), filters.getIdStatusTrading()));
+				predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.idStatusIssueTrading), filters.getIdStatusTrading()));
 			if (filters.getFairValuePriceOverPercentage() != null) {
 				
 				Expression<Number> expresionUnder = cb.diff(joinIssuesManagerTrackProperties.get(IssuesManagerTrackPropertiesEntity_.fairValue), joinTempIssueLastPrice.get(IssuesLastPriceTmpEntity_.last));
@@ -127,7 +127,7 @@ public class IssuesHistoricalRepositoryImpl {
 			}
 		}
 		
-		predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_STATUS_ISSUE), CatalogsEntity.CatalogStatusIssue.ACTIVE));
+		predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idStatusIssue), CatalogsEntity.CatalogStatusIssue.ACTIVE));
 		
 		return predicatesAnd;
 	}
@@ -140,10 +140,10 @@ public class IssuesHistoricalRepositoryImpl {
 		
 		buildPredicateFetchWithStatusActive(root);
 		List<Predicate> predicatesAnd = buildPredicateWithStatusActive(cb, root, filters);
-		predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.ID_USER), idUser));
+		predicatesAnd.add(cb.equal(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.idUser), idUser));
 		
 		cq.where(cb.and(predicatesAnd.toArray(new Predicate[0])));
-		cq.groupBy(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.ID_ISSUE));
+		cq.groupBy(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.idIssue));
 
 		return em.createQuery(cq).setFirstResult(startRow).setMaxResults(totalRow).getResultList();
 	}
@@ -157,7 +157,7 @@ public class IssuesHistoricalRepositoryImpl {
 		List<Predicate> predicatesAnd = buildPredicateWithStatusActive(cb, root, filters);
 		
 		cq.where(cb.and(predicatesAnd.toArray(new Predicate[0])));
-		cq.select(cb.count(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.ID_ISSUE)));
+		cq.select(cb.count(root.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.idIssue)));
 
 		return em.createQuery(cq).getSingleResult();
 		

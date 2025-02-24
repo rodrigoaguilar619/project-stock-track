@@ -21,7 +21,7 @@ public class IssuesHistoricalEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private IssuesHistoricalEntityId issuesHistoricalEntityId;
+	private IssuesHistoricalEntityPk id;
 	
 	@Column(name = "open")
 	private BigDecimal open;
