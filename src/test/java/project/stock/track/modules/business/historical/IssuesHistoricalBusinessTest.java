@@ -27,7 +27,7 @@ import project.stock.track.ProjectUnitTest;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
-import project.stock.track.app.beans.entity.IssuesHistoricalEntityId;
+import project.stock.track.app.beans.entity.IssuesHistoricalEntityPk;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntityPk;
@@ -107,7 +107,7 @@ class IssuesHistoricalBusinessTest extends ProjectUnitTest {
         when(issueHistoricalHelper.buildIssueHistoricalData(eq(issuesManagerEntity), any(LocalDateTime.class))).thenReturn(issueHistoricalEntityPojo);
 
         IssuesHistoricalEntity issuesHistoricalEntityLastRecord = new IssuesHistoricalEntity();
-        issuesHistoricalEntityLastRecord.setIssuesHistoricalEntityId(new IssuesHistoricalEntityId(requestPojo.getIdIssue(), LocalDateTime.now()));
+        issuesHistoricalEntityLastRecord.setId(new IssuesHistoricalEntityPk(requestPojo.getIdIssue(), LocalDateTime.now()));
         when(issuesHistoricalRepository.findLastRecord(1)).thenReturn(issuesHistoricalEntityLastRecord);
 
         IssueTransactionResumeTuplePojo issueTransactionResumeTuplePojo = new IssueTransactionResumeTuplePojo();

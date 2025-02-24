@@ -43,7 +43,7 @@ public class IssueHistoricalHelper {
 		for (IssuesHistoricalFairValueEntity issuesHistoricalFairValueEntity: issuesManagerEntity.getCatalogIssueEntity().getIssuesHistoricalFairValueEntities()) {
 		
 			IssueHistoricalFairValueEntityPojo issueHistoricalFairValueEntityPojo = new IssueHistoricalFairValueEntityPojo();
-			issueHistoricalFairValueEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalFairValueEntity.getIssuesHistoricalFairValueEntityId().getIdDate()));
+			issueHistoricalFairValueEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalFairValueEntity.getId().getIdDate()));
 			issueHistoricalFairValueEntityPojo.setFairValue(issuesHistoricalFairValueEntity.getFairValue());
 			
 			issueHistoricalFairValueEntityPojos.add(issueHistoricalFairValueEntityPojo);
@@ -53,7 +53,7 @@ public class IssueHistoricalHelper {
 			
 			IssueHistoricalDayEntityPojo issueHistoricalDayEntityPojo = new IssueHistoricalDayEntityPojo();
 			issueHistoricalDayEntityPojo.setClose(issuesHistoricalEntity.getClose());
-			issueHistoricalDayEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalEntity.getIssuesHistoricalEntityId().getIdDate()));
+			issueHistoricalDayEntityPojo.setDate(dateUtil.getMillis(issuesHistoricalEntity.getId().getIdDate()));
 			
 			issueHistoricalDayEntityPojos.add(issueHistoricalDayEntityPojo);
 		}
@@ -61,7 +61,7 @@ public class IssueHistoricalHelper {
 		IssuesHistoricalEntity lastIssueHistorical = !issuesHistoricalEntities.isEmpty() ? issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1) : null;
 		IssuesLastPriceTmpEntity issuesLastPriceTmpEntity = issuesManagerEntity.getCatalogIssueEntity().getTempIssuesLastPriceEntity();
 		
-		if (lastIssueHistorical != null && issuesLastPriceTmpEntity != null && dateUtil.compareDatesNotTime(issuesLastPriceTmpEntity.getTimestamp(), lastIssueHistorical.getIssuesHistoricalEntityId().getIdDate()) > 0) {
+		if (lastIssueHistorical != null && issuesLastPriceTmpEntity != null && dateUtil.compareDatesNotTime(issuesLastPriceTmpEntity.getTimestamp(), lastIssueHistorical.getId().getIdDate()) > 0) {
 			
 			IssueHistoricalDayEntityPojo issueHistoricalDayEntityPojo = new IssueHistoricalDayEntityPojo();
 			issueHistoricalDayEntityPojo.setClose(issuesLastPriceTmpEntity.getLast());
@@ -89,7 +89,7 @@ public class IssueHistoricalHelper {
 		if (!issuesHistoricalEntities.isEmpty()) {
 			
 			issueHistoricalTrackResumenPojo.setPreviousClosePrice(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getClose());
-			issueHistoricalTrackResumenPojo.setPreviousClosePriceDate(dateUtil.getMillis(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getIssuesHistoricalEntityId().getIdDate()));
+			issueHistoricalTrackResumenPojo.setPreviousClosePriceDate(dateUtil.getMillis(issuesHistoricalEntities.get(issuesHistoricalEntities.size() - 1).getId().getIdDate()));
 		}
 		
 		List<IssueTransactionsByDateTuplePojo> issueTransactionsByDateTuplePojos = transactionIssueRepository.findIssueTransactionsBuys(issuesManagerEntity.getId().getIdUser(), issuesManagerEntity.getId().getIdIssue(),  startDate);

@@ -35,8 +35,8 @@ public class TransactionMoneyRepositoryImpl {
 		Root<TransactionMoneyEntity> root = cq.from(TransactionMoneyEntity.class);
 		
 		Expression<Object> amountSelection = cb.selectCase()
-				.when(cb.equal(root.get(TransactionMoneyEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.USD), root.get(TransactionMoneyEntity_.AMOUNT))
-	            .when(cb.equal(root.get(TransactionMoneyEntity_.CATALOG_BROKER_ENTITY).get(CatalogBrokerEntity_.ID_TYPE_CURRENCY), CatalogTypeCurrency.MXN), root.get(TransactionMoneyEntity_.AMOUNT_MXN))
+				.when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(TransactionMoneyEntity_.amount))
+	            .when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(TransactionMoneyEntity_.amountMxn))
 	            .otherwise(cb.nullLiteral(BigDecimal.class));
 		
 		cq.select(cb.sum(amountSelection.as(BigDecimal.class)));

@@ -21,15 +21,5 @@ public abstract class IssuesLastPriceTmpEntity_ {
 	public static SingularAttribute<IssuesLastPriceTmpEntity, LocalDateTime> timestamp;
 	public static SingularAttribute<IssuesLastPriceTmpEntity, CatalogIssuesEntity> catalogIssuesEntity;
 
-	public static final String VOLUME = "volume";
-	public static final String LAST_SALE_TIMESTAMP = "lastSaleTimestamp";
-	public static final String HIGH = "high";
-	public static final String ID_ISSUE = "idIssue";
-	public static final String LAST = "last";
-	public static final String OPEN = "open";
-	public static final String PREV_CLOSE = "prevClose";
-	public static final String TIMESTAMP = "timestamp";
-	public static final String CATALOG_ISSUES_ENTITY = "catalogIssuesEntity";
-
 }
 

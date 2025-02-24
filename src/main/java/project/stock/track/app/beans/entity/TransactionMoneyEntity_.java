@@ -26,19 +26,5 @@ public abstract class TransactionMoneyEntity_ {
 	public static SingularAttribute<TransactionMoneyEntity, CatalogIssuesEntity> catalogIssueEntity;
 	public static SingularAttribute<TransactionMoneyEntity, String> information;
 
-	public static final String ID = "id";
-	public static final String AMOUNT_MXN = "amountMxn";
-	public static final String AMOUNT = "amount";
-	public static final String ID_BROKER = "idBroker";
-	public static final String ID_USER = "idUser";
-	public static final String ID_ISSUE = "idIssue";
-	public static final String ID_TYPE_MOVEMENT = "idTypeMovement";
-	public static final String INFORMATION = "information";
-	public static final String DATE_TRANSACTION = "dateTransaction";
-	public static final String CATALOG_BROKER_ENTITY = "catalogBrokerEntity";
-	public static final String CATALOG_TYPE_MOVEMENT_ENTITY = "catalogTypeMovementEntity";
-	public static final String USER_ENTITY = "userEntity";
-	public static final String ISSUE_ENTITY = "catalogIssueEntity";
-
 }
 

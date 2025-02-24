@@ -62,51 +62,54 @@ public class IssuesMovementsRepositoryImpl {
 			return null;
 	}
 	
-	public List<Predicate> buildFiltersPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager, Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues, Integer idUser, IssuesMovementsFiltersPojo filters) {
+	public List<Predicate> buildFiltersPredicateIssuesMovements(CriteriaBuilder cb, Root<IssuesMovementsEntity> root, Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager, Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues, Integer idUser, IssuesMovementsFiltersPojo filters) {
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
 		
-		predicatesAnd.add(cb.equal(joinIssuesManager.get(IssuesManagerEntity_.ID).get(IssuesManagerEntityPk_.ID_USER), idUser));
+		predicatesAnd.add(cb.equal(joinIssuesManager.get(IssuesManagerEntity_.id).get(IssuesManagerEntityPk_.idUser), idUser));
 		
 		if (filters != null) {
 			
 			if (filters.getIdSector() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_SECTOR), filters.getIdSector()));
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idSector), filters.getIdSector()));
 			if (filters.getIdBroker() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_BROKER), filters.getIdBroker()));
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idBroker), filters.getIdBroker()));
 			if (filters.getIdStatusIssueMovement() != null)
-				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.ID_STATUS), filters.getIdStatusIssueMovement()));
-			if (filters.getYear() != null)
-				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.BUY_DATE)), filters.getYear()));
+				predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idStatus), filters.getIdStatusIssueMovement()));
+			if (filters.getYear() != null) {
+				Join<IssuesMovementsEntity, IssuesMovementsBuyEntity> joinBuy = root.join(IssuesMovementsEntity_.issuesMovementsBuys);
+				predicatesAnd.add(cb.equal(cb.function("YEAR", Integer.class, joinBuy.get(IssuesMovementsBuyEntity_.buyDate)), filters.getYear()));
+			}
 			if (filters.getIdIndex() != null)
-				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.ID_INDEX), filters.getIdIndex()));
+				predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idIndex), filters.getIdIndex()));
 			if (filters.getIsSold() != null) {
+				Join<IssuesMovementsEntity, IssuesMovementsBuyEntity> joinBuy = root.join(IssuesMovementsEntity_.issuesMovementsBuys);
 				if (filters.getIsSold())
-					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNotNull());
+					predicatesAnd.add(joinBuy.get(IssuesMovementsBuyEntity_.sellDate).isNotNull());
 				else
-					predicatesAnd.add(root.get(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS).get(IssuesMovementsBuyEntity_.SELL_DATE).isNull());
+					predicatesAnd.add(joinBuy.get(IssuesMovementsBuyEntity_.sellDate).isNull());
 			}
 		}
 		
 		return predicatesAnd;
 	}
 	
-	public Predicate buildPredicateIssuesMovements(CriteriaBuilder cb, Root<?> root, Integer idUser, IssuesMovementsFiltersPojo filters, boolean isCountRows) {
+	public Predicate buildPredicateIssuesMovements(CriteriaBuilder cb, Root<IssuesMovementsEntity> root, Integer idUser, IssuesMovementsFiltersPojo filters, boolean isCountRows) {
 		
-		Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY, JoinType.LEFT);
-		Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues = joinIssuesManager.join(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY, JoinType.LEFT);
+		Join<IssuesMovementsEntity, IssuesManagerEntity> joinIssuesManager = root.join(IssuesMovementsEntity_.issuesManagerEntity, JoinType.LEFT);
+		Join<IssuesManagerEntity, CatalogIssuesEntity> joinIssues = joinIssuesManager.join(IssuesManagerEntity_.catalogIssueEntity, JoinType.LEFT);
 		
 		if(!isCountRows) {
-			root.fetch(IssuesMovementsEntity_.CATALOG_STATUS_ISSUE_MOVEMENT_ENTITY);
-			root.fetch(IssuesMovementsEntity_.ISSUES_MOVEMENTS_BUYS);
+			root.fetch(IssuesMovementsEntity_.catalogStatusIssueMovementEntity);
+			root.fetch(IssuesMovementsEntity_.issuesMovementsBuys);
 			
-			Fetch<IssuesMovementsEntity, CatalogBrokerEntity> fetchBroker = root.fetch(IssuesMovementsEntity_.CATALOG_BROKER_ENTITY);
-			Fetch<IssuesMovementsEntity, IssuesManagerEntity> fetchIssuesManager = root.fetch(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY);
-			Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = fetchIssuesManager.fetch(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY);
-			fetchIssuesManager.fetch(IssuesManagerEntity_.ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY);
-			fetchIssues.fetch(CatalogIssuesEntity_.CATALOG_SECTOR_ENTITY);
-			fetchIssues.fetch(CatalogIssuesEntity_.TEMP_ISSUES_LAST_PRICE_ENTITY, JoinType.LEFT);
-			fetchBroker.fetch(CatalogBrokerEntity_.CATALOG_TYPE_CURRENCY_ENTITY);
+			Fetch<IssuesMovementsEntity, CatalogBrokerEntity> fetchBroker = root.fetch(IssuesMovementsEntity_.catalogBrokerEntity);
+			Fetch<IssuesMovementsEntity, IssuesManagerEntity> fetchIssuesManager = root.fetch(IssuesMovementsEntity_.issuesManagerEntity);
+			Fetch<IssuesManagerEntity, CatalogIssuesEntity> fetchIssues = fetchIssuesManager.fetch(IssuesManagerEntity_.catalogIssueEntity);
+			fetchIssuesManager.fetch(IssuesManagerEntity_.issuesManagerTrackPropertiesEntity);
+			fetchIssues.fetch(CatalogIssuesEntity_.catalogSectorEntity);
+			fetchIssues.fetch(CatalogIssuesEntity_.tempIssuesLastPriceEntity, JoinType.LEFT);
+			fetchBroker.fetch(CatalogBrokerEntity_.catalogTypeCurrencyEntity);
 		}
 		
 		List<Predicate> predicatesAnd = buildFiltersPredicateIssuesMovements(cb, root, joinIssuesManager, joinIssues, idUser, filters);
@@ -137,7 +140,7 @@ public class IssuesMovementsRepositoryImpl {
 		
 		Predicate predicateAnd = buildPredicateIssuesMovements(cb, root, idUser, filters, false);
 		
-		cq.orderBy(cb.asc(root.get(IssuesMovementsEntity_.ISSUES_MANAGER_ENTITY).get(IssuesManagerEntity_.CATALOG_ISSUES_ENTITY).get(CatalogIssuesEntity_.INITIALS)));
+		cq.orderBy(cb.asc(root.get(IssuesMovementsEntity_.issuesManagerEntity).get(IssuesManagerEntity_.catalogIssueEntity).get(CatalogIssuesEntity_.initials)));
 		
 		cq.where( predicateAnd );
 

@@ -15,7 +15,7 @@ public class IssueUtil {
 
 	public IssueCurrentPricePojo getCurrentPrice(IssuesLastPriceTmpEntity tempIssuesLastPriceEntity, IssuesHistoricalEntity issuesHistoricalEntityLastRecord) {
 		
-		long dateHistorical = issuesHistoricalEntityLastRecord != null ? dateUtil.getMillis(issuesHistoricalEntityLastRecord.getIssuesHistoricalEntityId().getIdDate()) : 0;
+		long dateHistorical = issuesHistoricalEntityLastRecord != null ? dateUtil.getMillis(issuesHistoricalEntityLastRecord.getId().getIdDate()) : 0;
 		long dateTempLastPrice = tempIssuesLastPriceEntity != null && tempIssuesLastPriceEntity.getTimestamp() != null ? dateUtil.getMillis(tempIssuesLastPriceEntity.getTimestamp()) : 0;
 		
 		BigDecimal currentPrice = null;

@@ -17,15 +17,6 @@ public abstract class IssuesManagerEntity_ {
 	public static SingularAttribute<IssuesManagerEntity, CatalogStatusIssueEntity> catalogStatusIssueQuickEntity;
 	public static SingularAttribute<IssuesManagerEntity, IssuesManagerTrackPropertiesEntity> issuesManagerTrackPropertiesEntity;
 	public static ListAttribute<IssuesManagerEntity, TransactionIssueEntity> transactionIssueEntities;
-	
-	public static final String ID = "id";
-	public static final String TRANSACTION_ISSUE_ENTITIES = "transactionIssueEntities";
-	public static final String ID_STATUS_ISSUE_TRADING = "idStatusIssueTrading";
-	public static final String CATALOG_STATUS_ISSUE_TRADING_ENTITY = "catalogStatusIssueTradingEntity";
-	public static final String ID_STATUS_ISSUE_QUICK = "idStatusIssueQuick";
-	public static final String CATALOG_ISSUES_ENTITY = "catalogIssueEntity";
-	public static final String CATALOG_STATUS_ISSUE_QUICK_ENTITY = "catalogStatusIssueQuickEntity";
-	public static final String ISSUES_MANAGER_TRACK_PROPERTIES_ENTITY = "issuesManagerTrackPropertiesEntity";
 
 }
 
