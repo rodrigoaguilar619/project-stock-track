@@ -16,7 +16,7 @@ import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectIntegrationTest;
 import project.stock.track.app.beans.pojos.petition.data.LoadTransactionIssuesFileDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.LoadTransactionIssuesFileRequestPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
 
 @SuppressWarnings("unchecked")
 class LoadTransactionIssuesFileControllerTest extends ProjectIntegrationTest {
@@ -35,7 +35,7 @@ class LoadTransactionIssuesFileControllerTest extends ProjectIntegrationTest {
 		LoadTransactionIssuesFileRequestPojo requestPojo = new LoadTransactionIssuesFileRequestPojo();
 		requestPojo.setUserName(userName);
 		requestPojo.setFileTransactionIssues(mockFileTransactionIssues);
-		requestPojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
+		requestPojo.setIdBroker(CatalogBrokerEnum.CHARLES_SCHWAB.getValue());
 		
 		ResponseEntity<GenericResponsePojo<LoadTransactionIssuesFileDataPojo>> response = loadTransactionIssuesFileController.registerIssueTransactions(requestPojo);
 		

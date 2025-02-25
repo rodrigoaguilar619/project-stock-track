@@ -22,7 +22,9 @@ import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.repository.TempIssuesLastPriceRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.DateFinantialUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogIndexEnum;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
+import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
@@ -44,14 +46,14 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 
 		tempIssuesLastPriceRepository.deleteTempIssuesLastPrice();
 		
-		List<CatalogIssuesEntity> catalogIssuesEntities = issuesRepository.findAll(CatalogsEntity.CatalogStatusIssue.ACTIVE, CatalogsEntity.CatalogTypeStock.ISSUE);
+		List<CatalogIssuesEntity> catalogIssuesEntities = issuesRepository.findAll(CatalogStatusIssueEnum.ACTIVE.getValue(), CatalogTypeStockEnum.ISSUE.getValue());
 		
 		List<String> issuesStandardPoorsList = new ArrayList<>();
 		List<String> issuesOthersList = new ArrayList<>();
 		
 		for (CatalogIssuesEntity catalogIssuesEntity: catalogIssuesEntities) {
 			
-			if (catalogIssuesEntity.getIdIndex().equals(CatalogsEntity.CatalogIndex.SP500))
+			if (catalogIssuesEntity.getIdIndex().equals(CatalogIndexEnum.SP500.getValue()))
 				issuesStandardPoorsList.add(catalogIssuesEntity.getInitials());
 			else
 				issuesOthersList.add(catalogIssuesEntity.getInitials());

@@ -28,11 +28,11 @@ import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.repository.TransactionMoneyRepositoryImpl;
 import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeMovement;
-import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
+import project.stock.track.app.vo.entities.CatalogTypeMovementEnum;
 import project.stock.track.config.helpers.CurrencyDataHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssues;
@@ -56,23 +56,23 @@ private final GenericPersistence genericPersistance;
 
 	private CustomArraysUtil customArraysUtil = new CustomArraysUtil();
 	
-	private boolean validateRowRegistered(Integer idUser, Integer idIssue, int idBroker, LocalDateTime date, Integer idTypeMovement) {
+	private boolean validateRowRegistered(Integer idUser, Integer idIssue, int idBroker, LocalDateTime date, CatalogTypeMovementEnum catalogTypeMovementEnum) {
 		
-		return transactionMoneyRepository.findTransactionMoney(idUser, idIssue, idBroker, date, idTypeMovement) != null;
+		return transactionMoneyRepository.findTransactionMoney(idUser, idIssue, idBroker, date, catalogTypeMovementEnum.getValue()) != null;
 	}
 	
 	public ReadCsvTransactionIssues getReadTransactionMoney(Integer idBroker) throws BusinessException {
 		
-		if (idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER))
+		if (idBroker.equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()))
 			return new ReadCsvTransactionIssuesBrokerGbm();
-		else if (idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB))
+		else if (idBroker.equals(CatalogBrokerEnum.CHARLES_SCHWAB.getValue()))
 			return new ReadCsvTransactionIssuesBrokerSchwab();
 		else
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBrokerNotRegistered());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> registerMoneyTransactionIssue(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, int idTypeMovement) throws BusinessException {
+	public List<String> registerMoneyTransactionIssue(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, CatalogTypeMovementEnum catalogTypeMovementEnum) throws BusinessException {
 		
 		List<String> messages = new ArrayList<>();
 		
@@ -81,7 +81,7 @@ private final GenericPersistence genericPersistance;
 		if (catalogIssuesEntityVerify == null)
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileLoadIssueNotRegistered(transactionMoneyFilePojo.getIssue()));
 		
-		if(validateRowRegistered(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
+		if(validateRowRegistered(userEntity.getId(), catalogIssuesEntityVerify.getId(), catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), catalogTypeMovementEnum))
 			return messages;
 			
 		try {
@@ -102,7 +102,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
 			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
-			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
+			transactionMoneyEntity.setIdTypeMovement(catalogTypeMovementEnum.getValue());
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			
 			genericCustomPersistance.save(transactionMoneyEntity);
@@ -124,11 +124,11 @@ private final GenericPersistence genericPersistance;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> registerMoneyTransactionBank(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, int idTypeMovement) throws BusinessException {
+	public List<String> registerMoneyTransactionBank(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, CatalogTypeMovementEnum catalogTypeMovementEnum) throws BusinessException {
 		
 		List<String> messages = new ArrayList<>();
 		
-		if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
+		if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), catalogTypeMovementEnum))
 			return messages;
 			
 		try {
@@ -144,7 +144,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
 			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
-			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
+			transactionMoneyEntity.setIdTypeMovement(catalogTypeMovementEnum.getValue());
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			
 			genericCustomPersistance.save(transactionMoneyEntity);
@@ -166,13 +166,13 @@ private final GenericPersistence genericPersistance;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> registerMoneyDepositWithdraw(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, int idTypeMovement) throws BusinessException {
+	public List<String> registerMoneyDepositWithdraw(UserEntity userEntity, CatalogBrokerEntity catalogBrokerEntity, TransactionMoneyFilePojo transactionMoneyFilePojo, CatalogTypeMovementEnum catalogTypeMovementEnum) throws BusinessException {
 		
 		List<String> messages = new ArrayList<>();
 			
 		try {
 			
-			if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), idTypeMovement))
+			if(validateRowRegistered(userEntity.getId(), null, catalogBrokerEntity.getId(), dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()), catalogTypeMovementEnum))
 				return messages;
 			
 			genericCustomPersistance.startTransaction();
@@ -186,7 +186,7 @@ private final GenericPersistence genericPersistance;
 			transactionMoneyEntity.setAmount(currencyValuesPriceBuyPojo.getValueUsd());
 			transactionMoneyEntity.setAmountMxn(currencyValuesPriceBuyPojo.getValueMxn());
 			transactionMoneyEntity.setDateTransaction(dateUtil.getLocalDateTime(transactionMoneyFilePojo.getDate()));
-			transactionMoneyEntity.setIdTypeMovement(idTypeMovement);
+			transactionMoneyEntity.setIdTypeMovement(catalogTypeMovementEnum.getValue());
 			transactionMoneyEntity.setInformation(transactionMoneyFilePojo.getInformation());
 			
 			genericCustomPersistance.save(transactionMoneyEntity);
@@ -217,21 +217,21 @@ private final GenericPersistence genericPersistance;
 					continue;
 					
 				if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_TAX))
-					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.TAX));
+					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.TAX));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_BANK_INTEREST))
-					messages.addAll(registerMoneyTransactionBank(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.BANK_INTEREST));
+					messages.addAll(registerMoneyTransactionBank(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.BANK_INTEREST));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_BANK_FEE))
-					messages.addAll(registerMoneyTransactionBank(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.BANK_FEE));
+					messages.addAll(registerMoneyTransactionBank(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.BANK_FEE));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_DEPOSIT))
-					messages.addAll(registerMoneyDepositWithdraw(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.DEPOSIT));
+					messages.addAll(registerMoneyDepositWithdraw(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.DEPOSIT));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_WITHDRAW))
-					messages.addAll(registerMoneyDepositWithdraw(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.WITHDRAW));
+					messages.addAll(registerMoneyDepositWithdraw(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.WITHDRAW));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_DIVIDEND))
-					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.DIVIDEND));
+					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.DIVIDEND));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_CASH_IN_LIEU))
-					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.CASH_IN_LIEU));
+					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.CASH_IN_LIEU));
 				else if (transactionMoneyFilePojo.getTypeTransaction().contentEquals(ReadCsvTransactionIssues.TYPE_TRANSACTION_ISSUE_FEE))
-					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovement.ISSUE_FEE));
+					messages.addAll(registerMoneyTransactionIssue(userEntity, catalogBrokerEntity, transactionMoneyFilePojo, CatalogTypeMovementEnum.ISSUE_FEE));
 			}
 		
 		LoadTransactionIssuesFileDataPojo dataPojo = new LoadTransactionIssuesFileDataPojo();
@@ -252,8 +252,8 @@ private final GenericPersistence genericPersistance;
 		if (!header.isEmpty() && header.getLast().isEmpty())
 			header.remove(header.size() - 1);
 		
-		if ((idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) && !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER_MONEY)) ||
-				(idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB) && 
+		if ((idBroker.equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) && !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER_MONEY)) ||
+				(idBroker.equals(CatalogBrokerEnum.CHARLES_SCHWAB.getValue()) && 
 				(!customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
 				 !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_CHECKING_ACCOUNT)
 			)))

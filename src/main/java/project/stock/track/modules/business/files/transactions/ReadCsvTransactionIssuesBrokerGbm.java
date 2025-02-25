@@ -15,9 +15,10 @@ import org.joda.time.DateTime;
 import lib.base.backend.exception.data.BusinessException;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionMoneyFilePojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData.CsvReportsHeaders;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues {
 	
@@ -157,8 +158,8 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransactionIssues(rowRecord.get(3)));
 			transactionIssueFileDataPojo.setTitles(new BigDecimal(rowRecord.get(4).replace(",", "")));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
-			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.MXN);
-			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.GBM_HOMBROKER);
+			transactionIssueFileDataPojo.setTypeCurrency(CatalogTypeCurrencyEnum.MXN.getValue());
+			transactionIssueFileDataPojo.setBroker(CatalogBrokerEnum.GBM_HOMBROKER.getValue());
 			transactionIssueFileDataPojo.setIsSlice(numberDataUtil.hasFractionalPart(transactionIssueFileDataPojo.getTitles()));
 			
 			BigDecimal comissionPercentage = buildPrice(rowRecord.get(10)).divide(transactionIssueFileDataPojo.getTitles(), 5, RoundingMode.HALF_UP);
@@ -194,7 +195,7 @@ public class ReadCsvTransactionIssuesBrokerGbm extends ReadCsvTransactionIssues 
 			transactionMoneyFilePojo.setTypeTransaction(buildTypeTransactionMoney(rowRecord.get(4)));
 			transactionMoneyFilePojo.setIssue(buildIssue(rowRecord.get(5)));
 			transactionMoneyFilePojo.setAmount(buildPrice(rowRecord.get(6)).abs());
-			transactionMoneyFilePojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.MXN);
+			transactionMoneyFilePojo.setTypeCurrency(CatalogTypeCurrencyEnum.MXN.getValue());
 			
 			issueTransactionDataPojos.add(transactionMoneyFilePojo);
 		}

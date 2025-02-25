@@ -27,7 +27,7 @@ import project.stock.track.app.beans.entity.IssuesMovementsBuyEntity_;
 import project.stock.track.app.beans.entity.IssuesMovementsEntity;
 import project.stock.track.app.beans.entity.IssuesMovementsEntity_;
 import project.stock.track.app.beans.pojos.business.issues.IssuesMovementsFiltersPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogStatusIssueMovementEnum;
 
 @Repository
 public class IssuesMovementsRepositoryImpl {
@@ -157,7 +157,7 @@ public class IssuesMovementsRepositoryImpl {
 		
 		predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idIssue), idIssue));
 		predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idUser), idUser));
-		predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idStatus), CatalogsEntity.CatalogStatusIssueMovement.ACTIVE));
+		predicatesAnd.add(cb.equal(root.get(IssuesMovementsEntity_.idStatus), CatalogStatusIssueMovementEnum.ACTIVE.getValue()));
 		predicatesAnd.add(cb.notEqual(root.get(IssuesMovementsEntity_.id), idIssueMovement));
 		
 		cq.select(cb.count(root)).where(predicatesAnd.toArray(new Predicate[0]));

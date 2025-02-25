@@ -17,7 +17,7 @@ import jakarta.persistence.criteria.Root;
 import project.stock.track.app.beans.entity.CatalogBrokerEntity_;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity;
 import project.stock.track.app.beans.entity.TransactionMoneyEntity_;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 @Repository
 public class TransactionMoneyRepositoryImpl {
@@ -35,8 +35,8 @@ public class TransactionMoneyRepositoryImpl {
 		Root<TransactionMoneyEntity> root = cq.from(TransactionMoneyEntity.class);
 		
 		Expression<Object> amountSelection = cb.selectCase()
-				.when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(TransactionMoneyEntity_.amount))
-	            .when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(TransactionMoneyEntity_.amountMxn))
+				.when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.USD.getValue()), root.get(TransactionMoneyEntity_.amount))
+	            .when(cb.equal(root.get(TransactionMoneyEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.MXN.getValue()), root.get(TransactionMoneyEntity_.amountMxn))
 	            .otherwise(cb.nullLiteral(BigDecimal.class));
 		
 		cq.select(cb.sum(amountSelection.as(BigDecimal.class)));

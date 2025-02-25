@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.app.beans.rest.dollarprice.service.bancomexico.DollarPriceBancoMexicoBean;
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.ConfigControlEnum;
 import project.stock.track.services.dollarprice.DollarPriceService;
 
 @RequiredArgsConstructor
@@ -34,9 +34,9 @@ public class DollarPriceBancoMexicoServiceImpl implements DollarPriceService {
 	public DollarPriceBean getDollarPrice() throws ParseException {
 		
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-		map.add("token", configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_PRICE_DOLLAR_BANXICO_TOKEN).getValue());
+		map.add("token", configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_PRICE_DOLLAR_BANXICO_TOKEN.getValue()).getValue());
 		
-		String envPriceDollar = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_PRICE_DOLLAR_BANXICO_URI).getValue();
+		String envPriceDollar = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_PRICE_DOLLAR_BANXICO_URI.getValue()).getValue();
 		if (envPriceDollar == null)
 			envPriceDollar = "";
 		

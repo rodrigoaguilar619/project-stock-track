@@ -12,7 +12,7 @@ import project.stock.track.ProjectJpaTest;
 import project.stock.track.app.beans.entity.TransactionIssueEntity;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionResumeTuplePojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
 
 class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 
@@ -52,7 +52,7 @@ class TransactionIssueRepositoryImplTest extends ProjectJpaTest {
 		
 		Integer idUser = 1;
 		Integer idIssue = 102;
-		Integer idBroker = CatalogBroker.CHARLES_SCHWAB;
+		Integer idBroker = CatalogBrokerEnum.CHARLES_SCHWAB.getValue();
 		
 		List<TransactionIssueEntity> result = transactionIssueRepository.findTransactionIssuesNotSoldLower(idUser, idIssue, idBroker, false);
 		

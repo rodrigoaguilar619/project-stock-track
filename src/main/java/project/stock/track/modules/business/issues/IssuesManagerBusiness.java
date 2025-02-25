@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.vo.CrudOptionsEnum;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIndexEntity;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;

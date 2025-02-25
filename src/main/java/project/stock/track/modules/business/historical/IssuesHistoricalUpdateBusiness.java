@@ -31,8 +31,9 @@ import project.stock.track.app.beans.rest.exchangetrade.IssueHistoryDayBean;
 import project.stock.track.app.beans.rest.exchangetrade.service.IssueHistoricMainBean;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.utils.DateFinantialUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogIndexEnum;
+import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 import reactor.core.publisher.Flux;
@@ -142,11 +143,11 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 		IssueHistoricQueryPojo issueHistoricQueryPojo = new IssueHistoricQueryPojo();
 		issueHistoricQueryPojo.setIssue(catalogIssuesEntity.getInitials());
 		issueHistoricQueryPojo.setDateFrom(dateFrom);
-		issueHistoricQueryPojo.setIsStandarPoors(catalogIssuesEntity.getIdIndex() == CatalogsEntity.CatalogIndex.SP500);
+		issueHistoricQueryPojo.setIsStandarPoors(catalogIssuesEntity.getIdIndex().equals(CatalogIndexEnum.SP500.getValue()));
 
 		IssueHistoricMainBean historicBean = null;
 
-		if (catalogIssuesEntity.getIdTypeStock().equals(CatalogsEntity.CatalogTypeStock.ISSUE))
+		if (catalogIssuesEntity.getIdTypeStock().equals(CatalogTypeStockEnum.ISSUE.getValue()))
 			historicBean = issueTrackService.getIssueHistoric(null, issueHistoricQueryPojo);
 
 		if (log.isInfoEnabled()) {

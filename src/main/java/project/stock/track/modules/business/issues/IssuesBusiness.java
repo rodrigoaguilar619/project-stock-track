@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.vo.CrudOptionsEnum;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
@@ -26,9 +26,9 @@ import project.stock.track.app.beans.pojos.petition.request.GetIssueRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.UpdateIssueRequestPojo;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusQuick;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusTrading;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
+import project.stock.track.app.vo.entities.CatalogStatusQuickEnum;
+import project.stock.track.app.vo.entities.CatalogStatusTradingEnum;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -59,8 +59,8 @@ public class IssuesBusiness extends MainBusiness {
 		for (UserEntity userEntity: userEntities) {
 			
 			IssuesManagerEntity issuesManagerEntity = new IssuesManagerEntity(idIssue, userEntity.getId());
-			issuesManagerEntity.setIdStatusIssueQuick(CatalogStatusQuick.INACTIVE);
-			issuesManagerEntity.setIdStatusIssueTrading(CatalogStatusTrading.INACTIVE);
+			issuesManagerEntity.setIdStatusIssueQuick(CatalogStatusQuickEnum.INACTIVE.getValue());
+			issuesManagerEntity.setIdStatusIssueTrading(CatalogStatusTradingEnum.INACTIVE.getValue());
 
 			IssuesManagerTrackPropertiesEntity issuesManagerTrackPropertiesEntity = new IssuesManagerTrackPropertiesEntity();
 			issuesManagerTrackPropertiesEntity.setIssuesManagerEntity(issuesManagerEntity);

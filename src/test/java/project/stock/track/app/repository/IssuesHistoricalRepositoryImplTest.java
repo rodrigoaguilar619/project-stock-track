@@ -9,9 +9,9 @@ import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectJpaTest;
 import project.stock.track.app.beans.entity.IssuesManagerEntity;
 import project.stock.track.app.beans.pojos.business.historical.IssuesHistoricalFilterPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeStock;
+import project.stock.track.app.vo.entities.CatalogIndexEnum;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
+import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
 
 class IssuesHistoricalRepositoryImplTest extends ProjectJpaTest {
 	
@@ -25,11 +25,11 @@ class IssuesHistoricalRepositoryImplTest extends ProjectJpaTest {
 		
 		IssuesHistoricalFilterPojo filterPojo = new IssuesHistoricalFilterPojo();
 		filterPojo.setIdSector(idUser);
-		filterPojo.setIdStatusIssue(CatalogStatusIssue.ACTIVE);
+		filterPojo.setIdStatusIssue(CatalogStatusIssueEnum.ACTIVE.getValue());
 		filterPojo.setFairValuePriceOverPercentage(5);
-		filterPojo.setIdTypeStock(CatalogTypeStock.ISSUE);
+		filterPojo.setIdTypeStock(CatalogTypeStockEnum.ISSUE.getValue());
 		filterPojo.setIsInvest(false);
-		filterPojo.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		filterPojo.setIdIndex(CatalogIndexEnum.SP500.getValue());
 
 		List<IssuesManagerEntity> result = issuesHistoricalRepository.findAllWithStatusActive(idUser, 1, 10, filterPojo);
 		

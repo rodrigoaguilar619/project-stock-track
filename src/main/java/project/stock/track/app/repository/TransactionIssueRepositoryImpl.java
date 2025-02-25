@@ -38,8 +38,8 @@ import project.stock.track.app.beans.pojos.business.transaction.TransactionIssue
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionResumeTuplePojo;
 import project.stock.track.app.beans.pojos.tuple.IssueTransactionsByDateTuplePojo;
 import project.stock.track.app.utils.CalculatorUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 @Repository
 public class TransactionIssueRepositoryImpl {
@@ -62,8 +62,8 @@ public class TransactionIssueRepositoryImpl {
 		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalMxn = isSell ? TransactionIssueEntity_.priceTotalSellMxn : TransactionIssueEntity_.priceTotalBuyMxn;
 		
 		return cb.selectCase()
-				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
-				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.USD.getValue()), root.get(priceTotalUsd))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.MXN.getValue()), root.get(priceTotalMxn))
 				.otherwise(root.get(priceTotalUsd));
 	}
 	
@@ -73,8 +73,8 @@ public class TransactionIssueRepositoryImpl {
 		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalMxn = isSell ? TransactionIssueEntity_.priceSellMxn : TransactionIssueEntity_.priceBuyMxn;
 		
 		return cb.selectCase()
-				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.USD), root.get(priceTotalUsd))
-				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrency.MXN), root.get(priceTotalMxn))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.USD.getValue()), root.get(priceTotalUsd))
+				.when(cb.equal(root.get(TransactionIssueEntity_.catalogBrokerEntity).get(CatalogBrokerEntity_.idTypeCurrency), CatalogTypeCurrencyEnum.MXN.getValue()), root.get(priceTotalMxn))
 				.otherwise(root.get(priceTotalUsd));
 	}
 	
@@ -226,11 +226,11 @@ public class TransactionIssueRepositoryImpl {
 		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalBuy = null;
 		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalSell = null;
 		
-		if (idTypeCurrency == CatalogTypeCurrency.USD) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.USD.getValue()) {
 			priceTotalBuy = TransactionIssueEntity_.priceTotalBuy;
 			priceTotalSell = TransactionIssueEntity_.priceTotalSell;
 		}
-		else if (idTypeCurrency == CatalogTypeCurrency.MXN) {
+		else if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue()) {
 			priceTotalBuy = TransactionIssueEntity_.priceTotalBuyMxn;
 			priceTotalSell = TransactionIssueEntity_.priceTotalSellMxn;
 		}
@@ -262,14 +262,14 @@ public class TransactionIssueRepositoryImpl {
 		SingularAttribute<TransactionIssueEntity, BigDecimal> priceTotalSell = null;
 		BigDecimal dollarPrice = new BigDecimal(1);
 		
-		if (idTypeCurrency == CatalogTypeCurrency.USD) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.USD.getValue()) {
 			priceTotalSell = TransactionIssueEntity_.priceTotalSell;
 		}
-		else if (idTypeCurrency == CatalogTypeCurrency.MXN) {
+		else if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue()) {
 			priceTotalSell = TransactionIssueEntity_.priceTotalSellMxn;
 		}
 		
-		if (idTypeCurrency == CatalogTypeCurrency.MXN && !isSold) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue() && !isSold) {
 			DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 			dollarPrice = dollarHistoricalPriceEntity.getPrice();
 		}
@@ -309,16 +309,16 @@ public class TransactionIssueRepositoryImpl {
 		String priceTotalBuy = null;
 		String priceTotalSell = null;
 		
-		if (idTypeCurrency == CatalogTypeCurrency.USD) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.USD.getValue()) {
 			priceTotalBuy = TransactionIssueEntity_.priceTotalBuy.getName();
 			priceTotalSell = TransactionIssueEntity_.priceTotalSell.getName();
 		}
-		else if (idTypeCurrency == CatalogTypeCurrency.MXN) {
+		else if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue()) {
 			priceTotalBuy = TransactionIssueEntity_.priceTotalBuyMxn.getName();
 			priceTotalSell = TransactionIssueEntity_.priceTotalSellMxn.getName();
 		}
 		
-		if (idTypeCurrency == CatalogTypeCurrency.MXN && !isSold) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue() && !isSold) {
 			
 			DollarHistoricalPriceEntity dollarHistoricalPriceEntity = dollarHistoricalPriceRepository.findLastRecord();
 			dollarPrice = dollarHistoricalPriceEntity.getPrice();

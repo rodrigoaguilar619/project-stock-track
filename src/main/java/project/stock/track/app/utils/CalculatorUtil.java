@@ -3,7 +3,7 @@ package project.stock.track.app.utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 public class CalculatorUtil {
 	
@@ -39,7 +39,7 @@ public class CalculatorUtil {
 		
 		BigDecimal finalPrice = null;
 		
-		if (idTypeCurrency.equals(CatalogsEntity.CatalogTypeCurrency.MXN))
+		if (idTypeCurrency.equals(CatalogTypeCurrencyEnum.MXN.getValue()))
 			finalPrice = currentPrice.multiply(dollarPrice);
 		else
 			finalPrice = currentPrice;
