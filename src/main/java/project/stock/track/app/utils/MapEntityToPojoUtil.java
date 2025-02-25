@@ -17,7 +17,7 @@ import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityDesPojo;
 import project.stock.track.app.beans.pojos.entity.CatalogIssuesEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueLastPriceTmpEntityPojo;
 import project.stock.track.app.beans.pojos.entity.IssueMovementBuyEntityPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 public class MapEntityToPojoUtil {
 	
@@ -81,7 +81,7 @@ public class MapEntityToPojoUtil {
 		BigDecimal buyPrice = issueMovementBuyEntity.getBuyPrice();
 		BigDecimal sellPrice = issueMovementBuyEntity.getSellPrice();
 		
-		if (idTypeCurrency == CatalogTypeCurrency.MXN) {
+		if (idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue()) {
 			buyPrice = issueMovementBuyEntity.getBuyPriceMxn();
 			sellPrice = issueMovementBuyEntity.getSellPriceMxn();
 		}

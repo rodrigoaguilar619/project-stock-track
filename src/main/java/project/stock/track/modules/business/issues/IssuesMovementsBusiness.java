@@ -32,8 +32,8 @@ import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -205,7 +205,7 @@ public class IssuesMovementsBusiness extends MainBusiness {
 		
 		BigDecimal fairValue = dataUtil.getValueOrNull(managerIssuesEntity.getIssuesManagerTrackPropertiesEntity(), IssuesManagerTrackPropertiesEntity::getFairValue);
 		
-		if (fairValue != null && idTypeCurrency == CatalogTypeCurrency.MXN)
+		if (fairValue != null && idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue())
 			fairValue = dollarHistoricalPriceEntity.getPrice().multiply(fairValue);
 		
 		IssueMovementResumePojo issueMovementPojo = new IssueMovementResumePojo();

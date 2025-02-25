@@ -34,8 +34,8 @@ import project.stock.track.app.repository.IssuesHistoricalRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.IssueUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
 import project.stock.track.config.helpers.IssueHistoricalHelper;
 import project.stock.track.modules.business.MainBusiness;
 
@@ -60,8 +60,8 @@ public class IssuesHistoricalBusiness extends MainBusiness {
 
 		if (transactionIssueCalculatePojo.getSellDate() == null) {
 			
-			BigDecimal commision = transactionIssueCalculatePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
-			BigDecimal taxes = transactionIssueCalculatePojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
+			BigDecimal commision = transactionIssueCalculatePojo.getIdBroker().equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
+			BigDecimal taxes = transactionIssueCalculatePojo.getIdBroker().equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
 			
 			BigDecimal taxesOutcomeEstimate = sellEstimate.subtract(transactionIssueCalculatePojo.getPriceBuy()).multiply(taxes).divide(BigDecimal.valueOf(100));
 			BigDecimal commisionOutcomeEstimate = sellEstimate.multiply(commision).divide(BigDecimal.valueOf(100));

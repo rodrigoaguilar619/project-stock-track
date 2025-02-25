@@ -24,10 +24,9 @@ import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListD
 import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssueMovementRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesMovementsListRequestPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssueMovement;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
-
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
+import project.stock.track.app.vo.entities.CatalogStatusIssueMovementEnum;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 @SuppressWarnings("unchecked")
 class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 	
@@ -44,7 +43,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		GetIssuesMovementsListRequestPojo requestPojo = new GetIssuesMovementsListRequestPojo();
 		requestPojo.setUserName(userName);
 		requestPojo.setDataTableConfig(dataTablePojo);
-		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		
 		ResponseEntity<GenericResponsePojo<GetIssuesMovementsListDataPojo>> response = issuesMovementsController.getIssuesMovementsList(requestPojo);
 		
@@ -58,7 +57,7 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 		GetIssueMovementRequestPojo requestPojo = new GetIssueMovementRequestPojo();
 		requestPojo.setUserName(userName);
 		requestPojo.setIdIssueMovement(1);
-		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		
 		ResponseEntity<GenericResponsePojo<GetIssueMovementDataPojo>> response = issuesMovementsController.getIssueMovement(requestPojo);
 		
@@ -87,12 +86,12 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 
 		AddEditIssueMovementRequestPojo requestPojo = new AddEditIssueMovementRequestPojo();
 		requestPojo.setUserName(userName);
-		requestPojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
+		requestPojo.setIdBroker(CatalogBrokerEnum.CHARLES_SCHWAB.getValue());
 		requestPojo.setIdIssueMovement(null);
-		requestPojo.setIdStatus(CatalogStatusIssueMovement.ACTIVE);
+		requestPojo.setIdStatus(CatalogStatusIssueMovementEnum.ACTIVE.getValue());
 		requestPojo.setIssue("AAL");
 		requestPojo.setIssueMovementBuysList(issueMovementBuysList);
-		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		
 		ResponseEntity<GenericResponsePojo<Void>> response = issuesMovementsController.saveIssueMovement(requestPojo);
 		
@@ -120,12 +119,12 @@ class IssuesMovementsControllerTest extends ProjectIntegrationTest {
 
 		AddEditIssueMovementRequestPojo requestPojo = new AddEditIssueMovementRequestPojo();
 		requestPojo.setUserName(userName);
-		requestPojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
+		requestPojo.setIdBroker(CatalogBrokerEnum.CHARLES_SCHWAB.getValue());
 		requestPojo.setIdIssueMovement(1);
-		requestPojo.setIdStatus(CatalogStatusIssueMovement.ACTIVE);
+		requestPojo.setIdStatus(CatalogStatusIssueMovementEnum.ACTIVE.getValue());
 		requestPojo.setIssue("AAL");
 		requestPojo.setIssueMovementBuysList(issueMovementBuysList);
-		requestPojo.setIdTypeCurrency(CatalogTypeCurrency.USD);
+		requestPojo.setIdTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		
 		ResponseEntity<GenericResponsePojo<Void>> response = issuesMovementsController.updateIssueMovement(requestPojo);
 		

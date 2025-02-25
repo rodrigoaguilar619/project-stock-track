@@ -26,7 +26,7 @@ import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntityPk_;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity_;
 import project.stock.track.app.beans.pojos.business.issues.IssuesFiltersPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
 
 @Repository
 public class IssuesRepositoryImpl {
@@ -157,7 +157,7 @@ public class IssuesRepositoryImpl {
 			predicatesOr.add(cb.equal(joinIssuesManager.get(IssuesHistoricalEntity_.id).get(IssuesHistoricalEntityPk_.idDate), sub));
 		
 		List<Predicate> predicatesAnd = new ArrayList<>();
-		predicatesAnd.add(cb.and(cb.equal(root.get(CatalogIssuesEntity_.idStatusIssue), CatalogsEntity.CatalogStatusIssue.ACTIVE), cb.or(predicatesOr.toArray(new Predicate[0]))));
+		predicatesAnd.add(cb.and(cb.equal(root.get(CatalogIssuesEntity_.idStatusIssue), CatalogStatusIssueEnum.ACTIVE.getValue()), cb.or(predicatesOr.toArray(new Predicate[0]))));
 		
 		cq.where( predicatesAnd.toArray(new Predicate[0]) );
 

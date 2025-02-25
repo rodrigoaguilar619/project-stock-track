@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.modules.security.jwt.entity.UserEntity;
 import lib.base.backend.modules.security.jwt.repository.UserRepositoryImpl;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.vo.CrudOptionsEnum;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
@@ -31,10 +31,10 @@ import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsBuyRepositoryImpl;
 import project.stock.track.app.repository.IssuesMovementsRepositoryImpl;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusIssue;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData.StaticData;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
+import project.stock.track.app.vo.entities.CatalogStatusIssueMovementEnum;
 import project.stock.track.config.helpers.CurrencyDataHelper;
 import project.stock.track.modules.business.MainBusiness;
 
@@ -56,14 +56,14 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 		
 		IssuesManagerTrackPropertiesEntity issuesManagerTrackPropertiesEntity = issuesManagerEntity.getIssuesManagerTrackPropertiesEntity();
 		
-		if(idStatus.equals(CatalogStatusIssue.ACTIVE)) {
+		if(idStatus.equals(CatalogStatusIssueEnum.ACTIVE.getValue())) {
 			
 			if(issuesManagerTrackPropertiesEntity == null)
 				issuesManagerTrackPropertiesEntity = new IssuesManagerTrackPropertiesEntity(issuesManagerEntity.getId());
 			
 			issuesManagerTrackPropertiesEntity.setIsInvest(true);
 		}
-		else if(idStatus.equals(CatalogStatusIssue.INACTIVE) &&
+		else if(idStatus.equals(CatalogStatusIssueEnum.INACTIVE.getValue()) &&
 				!issuesMovementsRepository.existIssueMovementInvested(issuesManagerEntity.getId().getIdUser(), issuesManagerEntity.getId().getIdIssue(), idIssueMovement)){
 				issuesManagerTrackPropertiesEntity.setIsInvest(false);
 		}
@@ -196,7 +196,7 @@ public class IssuesMovementsCrudBusiness extends MainBusiness {
 	public void executeInactivateIssueMovement(GetIssueMovementRequestPojo requestPojo) {
 		
 		IssuesMovementsEntity issueMovementEntity = (IssuesMovementsEntity) genericPersistance.findById(IssuesMovementsEntity.class, requestPojo.getIdIssueMovement());
-		issueMovementEntity.setIdStatus(CatalogsEntity.CatalogStatusIssueMovement.INACTIVE);
+		issueMovementEntity.setIdStatus(CatalogStatusIssueMovementEnum.INACTIVE.getValue());
 		
 		genericPersistance.update(issueMovementEntity);
 		genericPersistance.flush();

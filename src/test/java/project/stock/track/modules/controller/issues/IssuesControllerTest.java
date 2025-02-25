@@ -24,8 +24,11 @@ import project.stock.track.app.beans.pojos.petition.request.AddMultipleIssuesReq
 import project.stock.track.app.beans.pojos.petition.request.GetIssueRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.UpdateIssueRequestPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
+import project.stock.track.app.vo.entities.CatalogIndexEnum;
+import project.stock.track.app.vo.entities.CatalogSectorEnum;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
+import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
 
 @SuppressWarnings("unchecked")
 class IssuesControllerTest extends ProjectIntegrationTest {
@@ -49,13 +52,13 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 	void testUpdateIssueData() throws BusinessException {
 		
 		CatalogIssuesEntityPojo catalogIssuesEntityPojo = new CatalogIssuesEntityPojo();
-		catalogIssuesEntityPojo.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		catalogIssuesEntityPojo.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		catalogIssuesEntityPojo.setIdIssue(2);
 		catalogIssuesEntityPojo.setInitials("AAL1");
 		catalogIssuesEntityPojo.setDescription("Test description");
-		catalogIssuesEntityPojo.setIdStatusIssue(CatalogsEntity.CatalogStatusIssue.ACTIVE);
-		catalogIssuesEntityPojo.setIdTypeStock(CatalogsEntity.CatalogTypeStock.ISSUE);
-		catalogIssuesEntityPojo.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		catalogIssuesEntityPojo.setIdStatusIssue(CatalogStatusIssueEnum.ACTIVE.getValue());
+		catalogIssuesEntityPojo.setIdTypeStock(CatalogTypeStockEnum.ISSUE.getValue());
+		catalogIssuesEntityPojo.setIdIndex(CatalogIndexEnum.SP500.getValue());
 		
 		UpdateIssueRequestPojo requestDto = new UpdateIssueRequestPojo();
 		requestDto.setUserName(userName);
@@ -75,19 +78,19 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		IssuesElementMultiplePojo issuesElementMultiplePojoC = new IssuesElementMultiplePojo();
 		
 		issuesElementMultiplePojoA.setDescription("Test description A");
-		issuesElementMultiplePojoA.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		issuesElementMultiplePojoA.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		issuesElementMultiplePojoA.setInitials("AAA");
-		issuesElementMultiplePojoA.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		issuesElementMultiplePojoA.setIdIndex(CatalogIndexEnum.SP500.getValue());
 		
 		issuesElementMultiplePojoB.setDescription("Test description B");
-		issuesElementMultiplePojoB.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		issuesElementMultiplePojoB.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		issuesElementMultiplePojoB.setInitials("BBB");
-		issuesElementMultiplePojoB.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		issuesElementMultiplePojoB.setIdIndex(CatalogIndexEnum.SP500.getValue());
 		
 		issuesElementMultiplePojoC.setDescription("Test description C");
-		issuesElementMultiplePojoC.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		issuesElementMultiplePojoC.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		issuesElementMultiplePojoC.setInitials("CCC");
-		issuesElementMultiplePojoC.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		issuesElementMultiplePojoC.setIdIndex(CatalogIndexEnum.SP500.getValue());
 
 		List<IssuesElementMultiplePojo> issues = new ArrayList<>();
 		issues.add(issuesElementMultiplePojoA);
@@ -97,8 +100,8 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		AddMultipleIssuesRequestPojo requestDto = new AddMultipleIssuesRequestPojo();
 		requestDto.setUserName(userName);
 		requestDto.setIssues(issues);
-		requestDto.setIdStatusIssue(CatalogsEntity.CatalogStatusIssue.ACTIVE);
-		requestDto.setIdTypeStock(CatalogsEntity.CatalogTypeStock.ISSUE);
+		requestDto.setIdStatusIssue(CatalogStatusIssueEnum.ACTIVE.getValue());
+		requestDto.setIdTypeStock(CatalogTypeStockEnum.ISSUE.getValue());
 		
 		ResponseEntity<GenericResponsePojo<Void>> response = issuesController.addMultipleIssuesData(requestDto);
 		
@@ -112,14 +115,14 @@ class IssuesControllerTest extends ProjectIntegrationTest {
 		IssuesElementMultiplePojo issuesElementMultiplePojoB = new IssuesElementMultiplePojo();
 		
 		issuesElementMultiplePojoA.setDescription("Test description AAL");
-		issuesElementMultiplePojoA.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		issuesElementMultiplePojoA.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		issuesElementMultiplePojoA.setInitials("AAL");
-		issuesElementMultiplePojoA.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		issuesElementMultiplePojoA.setIdIndex(CatalogIndexEnum.SP500.getValue());
 		
 		issuesElementMultiplePojoB.setDescription("Test description BBB");
-		issuesElementMultiplePojoB.setIdSector(CatalogsEntity.CatalogSector.ENERGY);
+		issuesElementMultiplePojoB.setIdSector(CatalogSectorEnum.ENERGY.getValue());
 		issuesElementMultiplePojoB.setInitials("BBB");
-		issuesElementMultiplePojoB.setIdIndex(CatalogsEntity.CatalogIndex.SP500);
+		issuesElementMultiplePojoB.setIdIndex(CatalogIndexEnum.SP500.getValue());
 
 		List<IssuesElementMultiplePojo> issues = new ArrayList<>();
 		issues.add(issuesElementMultiplePojoA);

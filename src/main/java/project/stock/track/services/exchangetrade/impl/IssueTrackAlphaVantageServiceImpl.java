@@ -21,8 +21,8 @@ import project.stock.track.app.beans.rest.exchangetrade.service.IssueIexMainBean
 import project.stock.track.app.beans.rest.exchangetrade.service.alphavantage.IssueHistoricAlphaVantageBean;
 import project.stock.track.app.beans.rest.exchangetrade.service.alphavantage.ShareHistoryDayAlphaVantageBean;
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.ConfigControlEnum;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
 @RequiredArgsConstructor
@@ -39,9 +39,9 @@ public class IssueTrackAlphaVantageServiceImpl implements IssueTrackService {
 	    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 	    map.add("function", "TIME_SERIES_DAILY");
 		map.add("symbol", issueHistoricQueryPojo.getIssue());
-		map.add("apikey", configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_ALPHA_TOKEN).getValue());
+		map.add("apikey", configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_ALPHA_TOKEN.getValue()).getValue());
 		
-		String envAlpha = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_ALPHA_URI).getValue();
+		String envAlpha = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_ALPHA_URI.getValue()).getValue();
 		if (envAlpha == null)
 				envAlpha = "";
 		

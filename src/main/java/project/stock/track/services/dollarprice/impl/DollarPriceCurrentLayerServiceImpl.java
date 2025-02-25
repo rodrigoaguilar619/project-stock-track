@@ -18,8 +18,8 @@ import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.DollarPriceCurrentLayerBean;
 import project.stock.track.app.beans.rest.dollarprice.service.currentlayer.QuoteBean;
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.ConfigControlEnum;
 import project.stock.track.services.dollarprice.DollarPriceService;
 
 @RequiredArgsConstructor
@@ -44,11 +44,11 @@ public class DollarPriceCurrentLayerServiceImpl implements DollarPriceService {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add("source", "USD");
 		map.add("currencies", "MXN");
-		map.add("access_key", configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_PRICE_DOLLAR_CURRENT_LAYER_TOKEN).getValue());
+		map.add("access_key", configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_PRICE_DOLLAR_CURRENT_LAYER_TOKEN.getValue()).getValue());
 		map.add("start_date", dateFormatUtil.formatLocalDate(dateStart, CatalogsStaticData.PriceDollar.DATE_FORMAT_DEFAULT_CURRENT_LAYER));
 		map.add("end_date", dateFormatUtil.formatLocalDate(dateEnd, CatalogsStaticData.PriceDollar.DATE_FORMAT_DEFAULT_CURRENT_LAYER));
 		
-		String envPriceDollar = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_PRICE_DOLLAR_CURRENT_LAYER_URI).getValue();
+		String envPriceDollar = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_PRICE_DOLLAR_CURRENT_LAYER_URI.getValue()).getValue();
 		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(envPriceDollar + "/timeframe").queryParams(map);
 		

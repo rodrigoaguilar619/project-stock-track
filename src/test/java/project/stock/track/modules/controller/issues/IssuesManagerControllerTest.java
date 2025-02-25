@@ -19,8 +19,8 @@ import project.stock.track.app.beans.pojos.petition.data.UpdateIssueManagerDataP
 import project.stock.track.app.beans.pojos.petition.request.GetIssueManagerRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetIssuesManagerListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.UpdateIssueManagerRequestPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusQuick;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogStatusTrading;
+import project.stock.track.app.vo.entities.CatalogStatusQuickEnum;
+import project.stock.track.app.vo.entities.CatalogStatusTradingEnum;
 
 @SuppressWarnings("unchecked")
 class IssuesManagerControllerTest extends ProjectIntegrationTest {
@@ -45,8 +45,8 @@ class IssuesManagerControllerTest extends ProjectIntegrationTest {
 
 		UpdateIssueManagerPojo updateIssueManagerPojo = new UpdateIssueManagerPojo();
 		updateIssueManagerPojo.setIdIssue(1);
-		updateIssueManagerPojo.setIdStatusIssueQuick(CatalogStatusQuick.ACTIVE);
-		updateIssueManagerPojo.setIdStatusIssueTrading(CatalogStatusTrading.ACTIVE);
+		updateIssueManagerPojo.setIdStatusIssueQuick(CatalogStatusQuickEnum.ACTIVE.getValue());
+		updateIssueManagerPojo.setIdStatusIssueTrading(CatalogStatusTradingEnum.ACTIVE.getValue());
 		updateIssueManagerPojo.setFairValue(new BigDecimal("10"));
 
 		UpdateIssueManagerRequestPojo requestPojo = new UpdateIssueManagerRequestPojo();

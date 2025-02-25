@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lib.base.backend.enumerators.CrudOptionsEnum;
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.utils.RestUtil;
+import lib.base.backend.vo.CrudOptionsEnum;
 import project.stock.track.app.beans.pojos.petition.data.GetIssueMovementDataPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetIssuesMovementsListDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.AddEditIssueMovementRequestPojo;

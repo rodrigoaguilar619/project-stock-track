@@ -32,7 +32,7 @@ import project.stock.track.app.beans.pojos.services.IssueHistoricQueryPojo;
 import project.stock.track.app.beans.rest.exchangetrade.IssueHistoryDayBean;
 import project.stock.track.app.beans.rest.exchangetrade.service.IssueHistoricMainBean;
 import project.stock.track.app.repository.IssuesRepositoryImpl;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeStock;
+import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
 @SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ class IssuesHistoricalControllerTest extends ProjectIntegrationTest {
 		CatalogIssuesEntity catalogIssuesEntity = new CatalogIssuesEntity();
 		catalogIssuesEntity.setId(1);
 		catalogIssuesEntity.setInitials("A");
-		catalogIssuesEntity.setIdTypeStock(CatalogTypeStock.ISSUE);
+		catalogIssuesEntity.setIdTypeStock(CatalogTypeStockEnum.ISSUE.getValue());
 		
 		List<CatalogIssuesEntity> catalogIssuesEntities = new ArrayList<>();
 		catalogIssuesEntities.add(catalogIssuesEntity);

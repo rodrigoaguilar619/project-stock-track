@@ -12,8 +12,9 @@ import org.joda.time.DateTime;
 import lib.base.backend.exception.data.BusinessException;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionIssueFilePojo;
 import project.stock.track.app.beans.pojos.business.transaction.TransactionMoneyFilePojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssues {
 	
@@ -114,7 +115,7 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 		transactionMoneyFilePojo.setTypeTransaction(buildTypeTransactionMoney(rowRecord.get(1)));
 		transactionMoneyFilePojo.setIssue(buildIssueCommon(rowRecord.get(2)));
 		transactionMoneyFilePojo.setAmount(buildPrice(rowRecord.get(7)).abs());
-		transactionMoneyFilePojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.USD);
+		transactionMoneyFilePojo.setTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		transactionMoneyFilePojo.setInformation(rowRecord.get(1));
 		
 		return transactionMoneyFilePojo;
@@ -127,7 +128,7 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 		transactionMoneyFilePojo.setDate(buildDate(rowRecord.get(0).split(" ")[0], ++timeSeconds));
 		transactionMoneyFilePojo.setTypeTransaction(buildTypeTransactionMoney(rowRecord.get(2)));
 		transactionMoneyFilePojo.setAmount(buildPrice(amount).abs());
-		transactionMoneyFilePojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.USD);
+		transactionMoneyFilePojo.setTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 		transactionMoneyFilePojo.setInformation(rowRecord.get(4));
 		
 		return transactionMoneyFilePojo;
@@ -156,9 +157,9 @@ public class ReadCsvTransactionIssuesBrokerSchwab extends ReadCsvTransactionIssu
 			transactionIssueFileDataPojo.setTypeTransaction(buildTypeTransactionIssues(rowRecord.get(1)));
 			transactionIssueFileDataPojo.setTitles(new BigDecimal(rowRecord.get(4)));
 			transactionIssueFileDataPojo.setPrice(buildPrice(rowRecord.get(5)));
-			transactionIssueFileDataPojo.setTypeCurrency(CatalogsEntity.CatalogTypeCurrency.USD);
+			transactionIssueFileDataPojo.setTypeCurrency(CatalogTypeCurrencyEnum.USD.getValue());
 			transactionIssueFileDataPojo.setComissionPercentage(BigDecimal.valueOf(0));
-			transactionIssueFileDataPojo.setBroker(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB);
+			transactionIssueFileDataPojo.setBroker(CatalogBrokerEnum.CHARLES_SCHWAB.getValue());
 			transactionIssueFileDataPojo.setIsSlice(numberDataUtil.hasFractionalPart(transactionIssueFileDataPojo.getTitles()));
 			
 			issueTransactionDataPojos.add(transactionIssueFileDataPojo);

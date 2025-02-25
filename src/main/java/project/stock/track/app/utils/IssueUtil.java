@@ -7,7 +7,7 @@ import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.entity.IssuesHistoricalEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
 import project.stock.track.app.beans.pojos.business.issues.IssueCurrentPricePojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 public class IssueUtil {
 	
@@ -40,7 +40,7 @@ public class IssueUtil {
 		
 		IssueCurrentPricePojo issueCurrentPricePojo = getCurrentPrice(tempIssuesLastPriceEntity, issuesHistoricalEntityLastRecord);
 		
-		if(idTypeCurrency == CatalogTypeCurrency.MXN)
+		if(idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue())
 			issueCurrentPricePojo.setCurrentPrice(issueCurrentPricePojo.getCurrentPrice() != null ? issueCurrentPricePojo.getCurrentPrice().multiply(dollarHistoricalPriceEntity.getPrice()) : null);
 		
 		return issueCurrentPricePojo;

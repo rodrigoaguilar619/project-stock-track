@@ -21,7 +21,7 @@ import project.stock.track.app.beans.pojos.petition.request.GetPortfolioRequestP
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.repository.TransactionMoneyRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogTypeMovementEnum;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -38,8 +38,8 @@ public class PortfolioBusiness extends MainBusiness {
 	
 	public BigDecimal getTotalMoneyDeposits(int idBroker, int idUser) {
 		
-		BigDecimal deposits = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.DEPOSIT, idBroker, idUser);
-		BigDecimal withdraws = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.WITHDRAW, idBroker, idUser);
+		BigDecimal deposits = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.DEPOSIT.getValue(), idBroker, idUser);
+		BigDecimal withdraws = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.WITHDRAW.getValue(), idBroker, idUser);
 		
 		return deposits.subtract(withdraws);
 	}
@@ -47,12 +47,12 @@ public class PortfolioBusiness extends MainBusiness {
 	public PortfolioResumePojo getTotalPortfolio(CatalogBrokerEntity catalogBrokerEntity, UserEntity userEntity) {
 		
 		BigDecimal totalMoneyDeposits = getTotalMoneyDeposits(catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalDividends = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.DIVIDEND, catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalDividendTaxes = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.TAX, catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalCashInLieu = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.CASH_IN_LIEU, catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalIssueFee = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.ISSUE_FEE, catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalBankInterest = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.BANK_INTEREST, catalogBrokerEntity.getId(), userEntity.getId());
-		BigDecimal totalBankFee = transactionMoneyRepository.findTotalMovementMoney(CatalogsEntity.CatalogTypeMovement.BANK_FEE, catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalDividends = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.DIVIDEND.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalDividendTaxes = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.TAX.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalCashInLieu = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.CASH_IN_LIEU.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalIssueFee = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.ISSUE_FEE.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalBankInterest = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.BANK_INTEREST.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
+		BigDecimal totalBankFee = transactionMoneyRepository.findTotalMovementMoney(CatalogTypeMovementEnum.BANK_FEE.getValue(), catalogBrokerEntity.getId(), userEntity.getId());
 		
 		BigDecimal totalMoney = totalMoneyDeposits.add(totalDividends).subtract(totalDividendTaxes).add(totalCashInLieu).subtract(totalIssueFee).add(totalBankInterest).subtract(totalBankFee);
 		

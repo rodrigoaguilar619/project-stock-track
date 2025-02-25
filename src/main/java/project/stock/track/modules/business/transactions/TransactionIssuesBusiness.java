@@ -24,8 +24,8 @@ import project.stock.track.app.beans.pojos.petition.request.GetTransactionIssues
 import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
 import project.stock.track.modules.business.MainBusiness;
 
 @RequiredArgsConstructor
@@ -55,8 +55,8 @@ public class TransactionIssuesBusiness extends MainBusiness {
 			IssuesLastPriceTmpEntity issuesLastPriceTmpEntity = (IssuesLastPriceTmpEntity) genericPersistance.findById(IssuesLastPriceTmpEntity.class, transactionIssueNotSoldPojo.getIdIssue());
 			CatalogBrokerEntity catalogBrokerEntity = (CatalogBrokerEntity) genericPersistance.findById(CatalogBrokerEntity.class, transactionIssueNotSoldPojo.getIdBroker());
 			
-			BigDecimal commision = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
-			BigDecimal taxes = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
+			BigDecimal commision = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) ? CatalogsStaticData.StaticData.DEFAULT_COMMISION_GBM : CatalogsStaticData.StaticData.DEFAULT_COMMISION_CHARLES_SCHWAB;
+			BigDecimal taxes = transactionIssueNotSoldPojo.getIdBroker().equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) ? CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_GBM : CatalogsStaticData.StaticData.DEFAULT_TAXES_PERCENTAGE_CHARLES_SCHWAB; 
 			
 			if (issuesLastPriceTmpEntity == null)
 				continue;

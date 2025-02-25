@@ -13,7 +13,7 @@ import project.stock.track.app.beans.pojos.petition.data.GetPortfolioDataPojo;
 import project.stock.track.app.beans.pojos.petition.data.GetPortfolioListDataPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetPortfolioListRequestPojo;
 import project.stock.track.app.beans.pojos.petition.request.GetPortfolioRequestPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogBroker;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
 
 @SuppressWarnings("unchecked")
 class PortfolioControllerTest  extends ProjectIntegrationTest {
@@ -38,7 +38,7 @@ class PortfolioControllerTest  extends ProjectIntegrationTest {
 
 		GetPortfolioRequestPojo requestPojo = new GetPortfolioRequestPojo();
 		requestPojo.setUserName(userName);
-		requestPojo.setIdBroker(CatalogBroker.CHARLES_SCHWAB);
+		requestPojo.setIdBroker(CatalogBrokerEnum.CHARLES_SCHWAB.getValue());
 		
 		ResponseEntity<GenericResponsePojo<GetPortfolioDataPojo>> response = portfolioController.getPortfolioData(requestPojo);
 		

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.pojos.business.transaction.CurrencyValuesPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 
 @RequiredArgsConstructor
 @Component
@@ -16,11 +16,11 @@ public class CurrencyDataHelper {
 		
 		CurrencyValuesPojo currencyValuesPojo = new CurrencyValuesPojo();
 		
-		if(idTypeCurrency == CatalogTypeCurrency.USD) {
+		if(idTypeCurrency == CatalogTypeCurrencyEnum.USD.getValue()) {
 			currencyValuesPojo.setValueUsd(currentPrice);
 			currencyValuesPojo.setValueMxn(currentPrice.multiply(dollarPrice));
 		}
-		else if(idTypeCurrency == CatalogTypeCurrency.MXN) {
+		else if(idTypeCurrency == CatalogTypeCurrencyEnum.MXN.getValue()) {
 			currencyValuesPojo.setValueUsd(currentPrice.divide(dollarPrice, 5, RoundingMode.HALF_DOWN));
 			currencyValuesPojo.setValueMxn(currentPrice);
 		}

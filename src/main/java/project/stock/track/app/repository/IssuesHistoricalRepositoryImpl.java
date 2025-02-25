@@ -28,7 +28,7 @@ import project.stock.track.app.beans.entity.IssuesManagerEntity_;
 import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity;
 import project.stock.track.app.beans.entity.IssuesManagerTrackPropertiesEntity_;
 import project.stock.track.app.beans.pojos.business.historical.IssuesHistoricalFilterPojo;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
+import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
 
 @Repository
 public class IssuesHistoricalRepositoryImpl {
@@ -127,7 +127,7 @@ public class IssuesHistoricalRepositoryImpl {
 			}
 		}
 		
-		predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idStatusIssue), CatalogsEntity.CatalogStatusIssue.ACTIVE));
+		predicatesAnd.add(cb.equal(joinIssues.get(CatalogIssuesEntity_.idStatusIssue), CatalogStatusIssueEnum.ACTIVE.getValue()));
 		
 		return predicatesAnd;
 	}

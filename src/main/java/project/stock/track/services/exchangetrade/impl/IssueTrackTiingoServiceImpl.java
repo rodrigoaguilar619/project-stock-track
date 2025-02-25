@@ -34,9 +34,9 @@ import project.stock.track.app.beans.rest.exchangetrade.service.tiingo.IssueIexD
 import project.stock.track.app.beans.rest.exchangetrade.service.tiingo.ShareHistoryDayTiingoBean;
 import project.stock.track.app.repository.ConfigControlRepositoryImpl;
 import project.stock.track.app.utils.DateFinantialUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.ConfigControlEnum;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
 @RequiredArgsConstructor
@@ -81,7 +81,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	private Map<String, Object> getIssueHistorical(MultiValueMap<String, String> map, IssueHistoricQueryPojo issueHistoricQueryPojo, String token) {
 		
 		map.add("token", token);
-		String envTiingo = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_TIINGO_HISTORICAL_ISSUE).getValue();
+		String envTiingo = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_TIINGO_HISTORICAL_ISSUE.getValue()).getValue();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(envTiingo != null ? envTiingo.replace("<ticker>", issueHistoricQueryPojo.getIssue()) : "")
 				.queryParams(map);
 		
@@ -100,9 +100,9 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	private String getTokenForStockType(Boolean isStandardPoors) {
 		
 		if (Boolean.TRUE.equals(isStandardPoors))
-			return configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_TIINGO_TOKEN_ONE).getValue();
+			return configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_TIINGO_TOKEN_ONE.getValue()).getValue();
 		else
-			return configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_TIINGO_TOKEN_TWO).getValue();
+			return configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_TIINGO_TOKEN_TWO.getValue()).getValue();
 	}
 	
 	private  Map<String, Object> getIssueHistorical(MultiValueMap<String, String> map, IssueHistoricQueryPojo issueHistoricQueryPojo) {
@@ -167,7 +167,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 	
 	private List<IssueIexDataTiingoBean> getIssudeDataBeans(MultiValueMap<String, String> map, List<String> issues) {
 		
-		String envTiingo = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_TIINGO_IEX).getValue();
+		String envTiingo = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_TIINGO_IEX.getValue()).getValue();
 		
 		if (envTiingo == null)
 				envTiingo = "";
@@ -247,7 +247,7 @@ public class IssueTrackTiingoServiceImpl implements IssueTrackService {
 		MultiValueMap<String, String> map = getDataQuery(issueHistoricQueryPojo, "2018-01-01");
 		map.add("resampleFreq", "1day");
 		
-		String envTiingo = configControlRepositoryImpl.getParameterValue(CatalogsEntity.ConfigControl.API_STOCK_TIINGO_HISTORICAL_CRYPTO).getValue();
+		String envTiingo = configControlRepositoryImpl.getParameterValue(ConfigControlEnum.API_STOCK_TIINGO_HISTORICAL_CRYPTO.getValue()).getValue();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(envTiingo != null ? envTiingo.replace("<ticker>", issueHistoricQueryPojo.getIssue()) : "")
 				.queryParams(map);
 		

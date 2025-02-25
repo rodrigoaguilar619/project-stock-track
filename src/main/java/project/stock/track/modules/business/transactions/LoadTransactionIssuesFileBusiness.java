@@ -30,10 +30,10 @@ import project.stock.track.app.repository.TransactionIssueRepositoryImpl;
 import project.stock.track.app.utils.CalculatorUtil;
 import project.stock.track.app.utils.CustomArraysUtil;
 import project.stock.track.app.utils.ReadCsvFileUtil;
-import project.stock.track.app.vo.catalogs.CatalogsEntity;
-import project.stock.track.app.vo.catalogs.CatalogsEntity.CatalogTypeCurrency;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
+import project.stock.track.app.vo.entities.CatalogBrokerEnum;
+import project.stock.track.app.vo.entities.CatalogTypeCurrencyEnum;
 import project.stock.track.config.helpers.CurrencyDataHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.modules.business.files.transactions.ReadCsvTransactionIssues;
@@ -98,9 +98,9 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		transactionIssueEntity.setSellGainLossTotal(transactionIssueEntity.getPriceTotalSell().subtract(transactionIssueEntity.getPriceTotalBuy()));
 		transactionIssueEntity.setSellGainLossTotalMxn(transactionIssueEntity.getPriceTotalSellMxn().subtract(transactionIssueEntity.getPriceTotalBuyMxn()));
 		
-		if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrency.USD))
+		if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrencyEnum.USD.getValue()))
 			transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuy(), transactionIssueEntity.getPriceTotalSell()));
-		else if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrency.MXN))
+		else if(transactionIssueEntity.getCatalogBrokerEntity().getIdTypeCurrency().equals(CatalogTypeCurrencyEnum.MXN.getValue()))
 			transactionIssueEntity.setSellGainLossPercentage(new CalculatorUtil().calculatePercentageUpDown(transactionIssueEntity.getPriceTotalBuyMxn(), transactionIssueEntity.getPriceTotalSellMxn()));
 		
 		return transactionIssueEntity;
@@ -306,8 +306,8 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 		if (!header.isEmpty() && header.getLast().isEmpty())
 			header.remove(header.size() - 1);
 		
-		if ((idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER) && !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER_ISSUES)) ||
-				(idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB) && 
+		if ((idBroker.equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()) && !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_HOMEBROKER_ISSUES)) ||
+				(idBroker.equals(CatalogBrokerEnum.CHARLES_SCHWAB.getValue()) && 
 				(!customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB) &&
 				 !customArraysUtil.compareList(header, CatalogsStaticData.CsvReportsHeaders.CSV_HEADER_CHARLES_SCHWAB_CHECKING_ACCOUNT)
 			)))
@@ -316,9 +316,9 @@ public class LoadTransactionIssuesFileBusiness extends MainBusiness {
 	
 	public ReadCsvTransactionIssues getReadTransactionIssues(Integer idBroker) throws BusinessException {
 		
-		if (idBroker.equals(CatalogsEntity.CatalogBroker.GBM_HOMBROKER))
+		if (idBroker.equals(CatalogBrokerEnum.GBM_HOMBROKER.getValue()))
 			return new ReadCsvTransactionIssuesBrokerGbm();
-		else if (idBroker.equals(CatalogsEntity.CatalogBroker.CHARLES_SCHWAB))
+		else if (idBroker.equals(CatalogBrokerEnum.CHARLES_SCHWAB.getValue()))
 			return new ReadCsvTransactionIssuesBrokerSchwab();
 		else
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgFileBrokerNotRegistered());
