@@ -9,4 +9,5 @@ import project.stock.track.config.starter.AppStockTrack;
 @SpringBootTest(classes = AppStockTrack.class)
 public abstract class ProjectIntegrationTest extends ProjectConfigFlywayTest {
 
+	protected static String userName = "ADMIN";
 }

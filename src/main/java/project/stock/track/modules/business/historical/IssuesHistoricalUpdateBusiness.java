@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.pojo.rest.security.UserRequestPojo;
 import lib.base.backend.utils.RestUtil;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
@@ -34,6 +35,7 @@ import project.stock.track.app.utils.DateFinantialUtil;
 import project.stock.track.app.vo.catalogs.CatalogsStaticData;
 import project.stock.track.app.vo.entities.CatalogIndexEnum;
 import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
+import project.stock.track.config.helpers.ValidationRolHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 import reactor.core.publisher.Flux;
@@ -50,6 +52,7 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 	private final GenericPersistence genericCustomPersistance;
 	private final IssuesRepositoryImpl issuesRepository;
 	private final IssueTrackService issueTrackService;
+	private final ValidationRolHelper validationRolHelper;
 	
 	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
 	
@@ -193,7 +196,9 @@ public class IssuesHistoricalUpdateBusiness extends MainBusiness {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Flux<ResponseEntity> executeUpdateIssuesHistoricalsFlux() throws BusinessException {
+	public Flux<ResponseEntity> executeUpdateIssuesHistoricalsFlux(UserRequestPojo requestPojo) throws BusinessException {
+		
+		validationRolHelper.validateOperationUserAsAdmin(requestPojo.getUserName());
 	    
 		List<CatalogIssuesEntity> catalogIssuesEntities = getIssuesToUpdate();
 	    AtomicInteger currentStock = new AtomicInteger(0);

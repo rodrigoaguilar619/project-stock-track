@@ -10,7 +10,9 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.pojo.rest.security.UserRequestPojo;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.CatalogIssuesEntity;
 import project.stock.track.app.beans.entity.IssuesLastPriceTmpEntity;
@@ -25,6 +27,7 @@ import project.stock.track.app.utils.DateFinantialUtil;
 import project.stock.track.app.vo.entities.CatalogIndexEnum;
 import project.stock.track.app.vo.entities.CatalogStatusIssueEnum;
 import project.stock.track.app.vo.entities.CatalogTypeStockEnum;
+import project.stock.track.config.helpers.ValidationRolHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.exchangetrade.IssueTrackService;
 
@@ -37,6 +40,7 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 	private final IssueTrackService issueTrackService;
 	private final TempIssuesLastPriceRepositoryImpl tempIssuesLastPriceRepository;
 	private final IssuesRepositoryImpl issuesRepository;
+	private final ValidationRolHelper validationRolHelper;
 	
 	CalculatorUtil calculatorUtil = new CalculatorUtil();
 	DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
@@ -134,8 +138,10 @@ public class IssuesLastPriceBusiness extends MainBusiness {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public void executeStoreIssuesLastPrice() {
+	public void executeStoreIssuesLastPrice(UserRequestPojo requestPojo) throws BusinessException {
 
+		validationRolHelper.validateOperationUserAsAdmin(requestPojo.getUserName());
+		
 		storeIssuesLastPrice();
 	}
 	

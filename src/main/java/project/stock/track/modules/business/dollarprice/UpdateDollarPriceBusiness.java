@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.persistance.GenericPersistence;
+import lib.base.backend.pojo.rest.security.UserRequestPojo;
 import lombok.RequiredArgsConstructor;
 import project.stock.track.app.beans.entity.DollarHistoricalPriceEntity;
 import project.stock.track.app.beans.pojos.petition.data.UpdateDollarPriceDataPojo;
 import project.stock.track.app.beans.rest.dollarprice.DollarPriceBean;
 import project.stock.track.app.repository.DollarHistoricalPriceRepositoryImpl;
 import project.stock.track.app.utils.DateFinantialUtil;
+import project.stock.track.config.helpers.ValidationRolHelper;
 import project.stock.track.modules.business.MainBusiness;
 import project.stock.track.services.dollarprice.DollarPriceService;
 
@@ -29,6 +32,7 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 	private final DollarPriceService dollarPriceService;
 	@Qualifier("dollarPriceServiceCurrentLayer") private final DollarPriceService dollarPriceServiceCurrentLayer;
 	private final DollarHistoricalPriceRepositoryImpl dollarHistoricalPriceRepository;
+	private final ValidationRolHelper validationRolHelper;
 	
 	private DateFinantialUtil dateFinantialUtil = new DateFinantialUtil();
 
@@ -71,7 +75,9 @@ public class UpdateDollarPriceBusiness extends MainBusiness {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(rollbackFor = Exception.class)
-	public UpdateDollarPriceDataPojo executeUpdateDollarPriceHistorical() throws ParseException {
+	public UpdateDollarPriceDataPojo executeUpdateDollarPriceHistorical(UserRequestPojo requestPojo) throws ParseException, BusinessException {
+		
+		validationRolHelper.validateOperationUserAsAdmin(requestPojo.getUserName());
 		
 		Boolean isNewRegister = true;
 		LocalDate dateCurrent = dateFinantialUtil.getLastBusinessDay(LocalDateTime.now()).toLocalDate();
