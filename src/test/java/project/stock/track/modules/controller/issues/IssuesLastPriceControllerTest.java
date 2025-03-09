@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.pojo.rest.GenericResponsePojo;
+import lib.base.backend.pojo.rest.security.UserRequestPojo;
 import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectIntegrationTest;
 import project.stock.track.app.beans.pojos.petition.data.GetTempIssuesLastPriceDataPojo;
@@ -46,7 +48,10 @@ class IssuesLastPriceControllerTest extends ProjectIntegrationTest {
 	}
 
 	@Test
-	void testUpdateTempLastPrices() {
+	void testUpdateTempLastPrices() throws BusinessException {
+		
+		UserRequestPojo userRequestPojo = new UserRequestPojo();
+		userRequestPojo.setUserName(userName);
 		
 		List<String> issuesSp500 = new ArrayList<>( Arrays.asList( "AAL" ) );
 		List<String> issuesNotSp500 = new ArrayList<>( Arrays.asList( "AZN", "BYND" ) );
@@ -77,7 +82,7 @@ class IssuesLastPriceControllerTest extends ProjectIntegrationTest {
 		
 		when(issueTrackService.getIssuesLastPrice(eq(null), any(IssuesLastPriceQueryPojo.class))).thenReturn(mapNotSp500, mapSp500);
 		
-		ResponseEntity<GenericResponsePojo<String>> response = issuesLastPriceController.updateTempLastPrices();
+		ResponseEntity<GenericResponsePojo<String>> response = issuesLastPriceController.updateTempLastPrices(userRequestPojo);
 		
 		Assessment.assertResponseData(response);
 	}

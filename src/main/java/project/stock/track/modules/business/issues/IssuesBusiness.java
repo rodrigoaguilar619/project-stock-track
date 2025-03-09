@@ -29,6 +29,7 @@ import project.stock.track.app.repository.IssuesRepositoryImpl;
 import project.stock.track.app.vo.catalogs.CatalogsErrorMessage;
 import project.stock.track.app.vo.entities.CatalogStatusQuickEnum;
 import project.stock.track.app.vo.entities.CatalogStatusTradingEnum;
+import project.stock.track.config.helpers.ValidationRolHelper;
 import project.stock.track.modules.business.MainBusiness;
 
 @Component
@@ -39,6 +40,7 @@ public class IssuesBusiness extends MainBusiness {
 	private final GenericPersistence genericPersistance;
 	private final UserRepositoryImpl userRepository;
 	private final IssuesRepositoryImpl issuesRepository;
+	private final ValidationRolHelper validationRolHelper;
 	
 	@SuppressWarnings("unchecked")
 	public CatalogIssuesEntity setAddUpdateIssue(CatalogIssuesEntity catalogIssuesEntity, CatalogIssuesEntityPojo catalogIssuesEntityPojo, CrudOptionsEnum crudOptionsEnum) {
@@ -92,6 +94,8 @@ public class IssuesBusiness extends MainBusiness {
 	@Transactional(rollbackFor = Exception.class)
 	public UpdateIssueDataPojo executeUpdateIssue(UpdateIssueRequestPojo requestPojo) throws BusinessException {
 		
+		validationRolHelper.validateOperationUserAsAdmin(requestPojo.getUserName());
+		
 		if (!issuesRepository.existsIssue(requestPojo.getIssueData().getIdIssue()))
 			throw new BusinessException(CatalogsErrorMessage.getErrorMsgIssueNotRegistered());
 		
@@ -107,6 +111,8 @@ public class IssuesBusiness extends MainBusiness {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public void executeAddMultipleIssues(AddMultipleIssuesRequestPojo requestPojo) throws BusinessException {
+		
+		validationRolHelper.validateOperationUserAsAdmin(requestPojo.getUserName());
 		
 		List<String> issuesRegitered = new ArrayList<>();
 		

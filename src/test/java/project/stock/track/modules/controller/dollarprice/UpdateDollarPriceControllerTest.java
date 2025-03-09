@@ -18,7 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import lib.base.backend.exception.data.BusinessException;
 import lib.base.backend.pojo.rest.GenericResponsePojo;
+import lib.base.backend.pojo.rest.security.UserRequestPojo;
 import lib.base.backend.test.assessment.Assessment;
 import project.stock.track.ProjectIntegrationTest;
 import project.stock.track.app.beans.pojos.petition.data.UpdateDollarPriceDataPojo;
@@ -36,8 +38,10 @@ class UpdateDollarPriceControllerTest extends ProjectIntegrationTest {
 	RestTemplate restTemplate;
 
 	@Test
-	void testUpdateDollarPrice() throws ParseException {
+	void testUpdateDollarPrice() throws ParseException, BusinessException {
 		
+		UserRequestPojo userRequestPojo = new UserRequestPojo();
+		userRequestPojo.setUserName(userName);
 		
 		QuoteBean quoteBean = new QuoteBean();
 		quoteBean.setMxn(new BigDecimal("17.0000"));
@@ -50,7 +54,7 @@ class UpdateDollarPriceControllerTest extends ProjectIntegrationTest {
 		
 		when(restTemplate.getForObject(anyString(), any(Class.class))).thenReturn(dollarPriceCurrentLayerBean);
 		
-		ResponseEntity<GenericResponsePojo<UpdateDollarPriceDataPojo>> response = updateDollarPriceController.updateDollarPrice();
+		ResponseEntity<GenericResponsePojo<UpdateDollarPriceDataPojo>> response = updateDollarPriceController.updateDollarPrice(userRequestPojo);
 		
 		Assessment.assertResponseData(response);
 		assertNotNull(response.getBody().getData().getPrice());
