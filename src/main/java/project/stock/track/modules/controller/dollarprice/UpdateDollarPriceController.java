@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lib.base.backend.exception.data.BusinessException;
@@ -24,7 +25,7 @@ public class UpdateDollarPriceController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(CatalogsUri.API_SERVICE_DOLLAR_UPDATE)
-	public ResponseEntity updateDollarPrice(UserRequestPojo requestPojo) throws ParseException, BusinessException {
+	public ResponseEntity updateDollarPrice(@RequestBody UserRequestPojo requestPojo) throws ParseException, BusinessException {
 		
 		UpdateDollarPriceDataPojo dataPojo = updateDollarPriceBusiness.executeUpdateDollarPriceHistorical(requestPojo);
 		return new RestUtil().buildResponseSuccess(dataPojo, "Dollar price historical updated");
